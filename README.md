@@ -89,4 +89,4 @@ While this is a personal portfolio, suggestions and feedback are welcome! Feel f
 
 For any questions or inquiries, please reach out through the contact form on the website or directly via email.
 
-17arhaan@gmail.com
+17arhaa.connect@gmail.com
