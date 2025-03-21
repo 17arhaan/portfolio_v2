@@ -14,21 +14,21 @@ import { cn } from "@/lib/utils"
 const projectsData = [
   {
     id: 1,
-    title: "AI-Powered Image Recognition System",
+    title: "J.A.R.V.I.S",
     description:
-      "A deep learning-based image recognition system that can identify objects, faces, and scenes with high accuracy using convolutional neural networks.",
+      "• Developed a sophisticated AI assistant supporting 20+ languages for enhanced productivity\n\n• Implemented real-time object detection using YOLOv8 and advanced speech recognition\n\n• Integrated CNN-based face authentication system supporting multi-user access\n\n• Built with modular architecture for seamless task automation and system integration",
     image: "/placeholder.svg?height=400&width=600",
     tags: ["Python", "TensorFlow", "Computer Vision", "CNN"],
-    demoLink: "https://example.com/image-recognition",
-    githubLink: "https://github.com/arhaanhamid/image-recognition",
-    category: "ai",
+    demoLink: null,
+    githubLink: "https://github.com/arhaanhamid/J.A.R.V.I.S",
+    category: "cv",
     featured: true,
   },
   {
     id: 2,
     title: "Personal Portfolio Website",
     description:
-      "A modern, responsive portfolio website built with Next.js and Tailwind CSS to showcase my projects, skills, and professional experience.",
+      "• Engineered a modern, responsive portfolio using Next.js and Tailwind CSS\n\n• Implemented smooth animations and transitions with Framer Motion\n\n• Optimized for performance with server-side rendering and image optimization\n\n• Designed with accessibility and SEO best practices in mind",
     image: "/placeholder.svg?height=400&width=600",
     tags: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
     demoLink: "https://arhaanportfolio.in",
@@ -40,7 +40,7 @@ const projectsData = [
     id: 3,
     title: "Natural Language Processing Chatbot",
     description:
-      "An intelligent chatbot that uses NLP techniques to understand and respond to user queries with contextual awareness and sentiment analysis.",
+      "• Developed an intelligent chatbot using state-of-the-art NLP techniques\n\n• Implemented contextual awareness and sentiment analysis for natural conversations\n\n• Integrated with Flask backend for scalable deployment\n\n• Enhanced with custom training data for domain-specific responses",
     image: "/placeholder.svg?height=400&width=600",
     tags: ["Python", "NLTK", "Transformers", "Flask"],
     demoLink: "https://example.com/nlp-chatbot",
@@ -52,7 +52,7 @@ const projectsData = [
     id: 4,
     title: "Data Visualization Dashboard",
     description:
-      "An interactive dashboard for visualizing complex datasets with customizable charts, filters, and real-time updates.",
+      "• Created an interactive dashboard for complex data visualization\n\n• Implemented real-time data updates and custom filtering capabilities\n\n• Built with D3.js for advanced charting and data manipulation\n\n• Integrated MongoDB for efficient data storage and retrieval",
     image: "/placeholder.svg?height=400&width=600",
     tags: ["D3.js", "React", "Node.js", "MongoDB"],
     demoLink: "https://example.com/data-viz",
@@ -64,7 +64,7 @@ const projectsData = [
     id: 5,
     title: "E-Learning Platform",
     description:
-      "A comprehensive e-learning platform with course management, video lectures, quizzes, and progress tracking for students.",
+      "• Developed a comprehensive e-learning platform with course management\n\n• Implemented video streaming, quiz system, and progress tracking\n\n• Built with React and Redux for state management\n\n• Integrated Firebase for authentication and real-time updates",
     image: "/placeholder.svg?height=400&width=600",
     tags: ["React", "Firebase", "Redux", "Material UI"],
     demoLink: "https://example.com/e-learning",
@@ -76,22 +76,24 @@ const projectsData = [
     id: 6,
     title: "Predictive Analytics for Stock Market",
     description:
-      "A machine learning model that predicts stock market trends using historical data, sentiment analysis, and economic indicators.",
+      "• Engineered a machine learning model for stock market trend prediction\n\n• Integrated sentiment analysis from news and social media data\n\n• Implemented time series analysis for historical pattern recognition\n\n• Built with scikit-learn and pandas for efficient data processing",
     image: "/placeholder.svg?height=400&width=600",
     tags: ["Python", "Scikit-learn", "Pandas", "Time Series Analysis"],
     demoLink: "https://example.com/stock-prediction",
     githubLink: "https://github.com/arhaanhamid/stock-prediction",
-    category: "data",
+    category: "ml",
     featured: false,
   },
 ]
 
 const categories = [
   { id: "all", name: "All" },
-  { id: "ai", name: "AI & ML" },
   { id: "web", name: "Web Development" },
+  { id: "ai", name: "Artificial Intelligence" },
+  { id: "ml", name: "Machine Learning" },
+  { id: "cv", name: "Computer Vision" },
+  { id: "dl", name: "Deep & Reinforcement Learning" },
   { id: "data", name: "Data Science" },
-  { id: "mobile", name: "Mobile Apps" },
 ]
 
 export default function Projects() {
@@ -223,7 +225,7 @@ export default function Projects() {
                     className="h-full overflow-hidden group cursor-pointer border border-border/50 hover:border-primary/50 transition-colors duration-300"
                     onClick={() => setSelectedProject(project.id)}
                   >
-                    <div className="relative overflow-hidden h-48">
+                    <div className="relative overflow-hidden h-56">
                       <Image
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
@@ -232,22 +234,26 @@ export default function Projects() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
-                    <CardHeader>
-                      <CardTitle className="group-hover:text-primary transition-colors duration-300">
+                    <CardHeader className="space-y-4">
+                      <CardTitle className="group-hover:text-primary transition-colors duration-300 text-xl">
                         {project.title}
                       </CardTitle>
-                      <CardDescription className="line-clamp-2">{project.description}</CardDescription>
+                      <CardDescription className="line-clamp-2 [&>p]:mb-2 last:[&>p]:mb-0 text-sm">
+                        {project.description.split('\n\n').map((line, index) => (
+                          <p key={index}>{line}</p>
+                        ))}
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pb-4">
                       <div className="flex flex-wrap gap-2">
                         {project.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary">
+                          <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-xs">
                             {tag}
                           </Badge>
                         ))}
                       </div>
                     </CardContent>
-                    <CardFooter className="flex justify-between">
+                    <CardFooter className="flex justify-between pb-6">
                       <Button variant="ghost" size="sm" className="gap-1" asChild>
                         <a
                           href={project.githubLink}
@@ -335,7 +341,14 @@ export default function Projects() {
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-2">{selectedProjectData.title}</h3>
-                <p className="text-muted-foreground mb-4">{selectedProjectData.description}</p>
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Description</h3>
+                  <div className="text-muted-foreground space-y-2">
+                    {selectedProjectData.description.split('\n\n').map((line, index) => (
+                      <p key={index}>{line}</p>
+                    ))}
+                  </div>
+                </div>
 
                 <div className="flex flex-wrap gap-2 mb-6">
                   {selectedProjectData.tags.map((tag) => (
