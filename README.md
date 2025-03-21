@@ -4,7 +4,7 @@ A modern, responsive portfolio website showcasing my work and skills. Built with
 
 ![Portfolio Preview](public/preview.png)
 
-## 🌟 Features
+##  Features
 
 - Responsive design that works on all devices
 - Dark/Light mode support
@@ -14,7 +14,7 @@ A modern, responsive portfolio website showcasing my work and skills. Built with
 - Blog section for sharing insights
 - Performance optimized
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Framework:** Next.js 15
 - **Language:** TypeScript
@@ -24,7 +24,7 @@ A modern, responsive portfolio website showcasing my work and skills. Built with
 - **Email:** Nodemailer
 - **Deployment:** Vercel
 
-## 🚀 Getting Started
+##  Getting Started
 
 1. Clone the repository
    ```bash
@@ -49,7 +49,7 @@ A modern, responsive portfolio website showcasing my work and skills. Built with
 
 5. Open arhaanportfolio.in in your browser
 
-## 📝 Available Scripts
+##  Available Scripts
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -57,7 +57,7 @@ A modern, responsive portfolio website showcasing my work and skills. Built with
 - `npm run lint` - Run ESLint
 - `npm run format` - Format code with Prettier
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 portfolio/
@@ -69,7 +69,7 @@ portfolio/
 └── styles/          # Global styles
 ```
 
-## 🔧 Environment Variables
+##  Environment Variables
 
 Create a `.env.local` file with the following variables:
 
@@ -81,15 +81,11 @@ SMTP_USER=your-smtp-user
 SMTP_PASSWORD=your-smtp-password
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 While this is a personal portfolio, suggestions and feedback are welcome! Feel free to open an issue or submit a pull request.
 
-## 📄 License
-
-Private - All rights reserved
-
-## 📞 Contact
+##  Contact
 
 For any questions or inquiries, please reach out through the contact form on the website or directly via email.
 
