@@ -2,14 +2,15 @@
 
 import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
-import { Code, Brain, Rocket, Target, Mail, MapPin, GraduationCap } from "lucide-react"
+import { Code, Brain, Rocket, Target, Mail, MapPin, GraduationCap, Users } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 const summaryPoints = [
   {
-    icon: Code,
-    title: "Full Stack Development",
-    description: "Proficient in building modern web applications using Next.js, React, and TypeScript. Experienced with both frontend and backend technologies."
+    icon: Target,
+    title: "Career Goals",
+    description: "Aspiring Software Engineer with a focus on AI & ML, seeking opportunities to contribute to innovative projects and solve complex challenges."
   },
   {
     icon: Brain,
@@ -22,9 +23,9 @@ const summaryPoints = [
     description: "Strong analytical and problem-solving skills, demonstrated through competitive programming and real-world project implementations."
   },
   {
-    icon: Target,
-    title: "Career Goals",
-    description: "Aspiring Software Engineer with a focus on AI & ML, seeking opportunities to contribute to innovative projects and solve complex challenges."
+    icon: Users,
+    title: "Leadership and Project Management",
+    description: "Experienced in leading teams and managing projects, with a track record of successful project deliveries and effective team collaboration."
   }
 ]
 
@@ -32,17 +33,20 @@ const profileInfo = [
   {
     icon: GraduationCap,
     label: "Education",
-    value: "B.Tech in Computer Science"
+    value: "B.Tech in Computer Science",
+    href: "https://admissions.manipal.edu/engineering/?utm_source=google&utm_medium=gsn&utm_campaign=new-engg-all-btech-common-brand-lv1kwds-zone0&gad_source=1&gclid=Cj0KCQjw4v6-BhDuARIsALprm3389qgmm2FlOac3PclOV5cdx4JivgE1N_XpLo9N_2jPzs6sANuL8pUaAtvQEALw_wcB#about"
   },
   {
     icon: MapPin,
     label: "Location",
-    value: "Noida, India"
+    value: "Noida, India",
+    href: "https://www.google.com/maps/place/Noida,+Uttar+Pradesh/@28.5359551,77.3910263,12z/"
   },
   {
     icon: Mail,
     label: "Email",
-    value: "17arhaan.connect@gmail.com"
+    value: "17arhaan.connect@gmail.com",
+    href: "mailto:17arhaan.connect@gmail.com"
   }
 ]
 
@@ -57,10 +61,24 @@ export default function Summary() {
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold mb-6">About Me</h2>
-          <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
+          <motion.h2 
+            className="text-4xl font-bold mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            About Me
+          </motion.h2>
+          <motion.p 
+            className="text-muted-foreground max-w-3xl mx-auto text-lg"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
             A passionate developer with a strong foundation in software engineering and a keen interest in artificial intelligence.
-          </p>
+          </motion.p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
@@ -75,29 +93,64 @@ export default function Summary() {
             <Card className="h-full hover:border-primary/50 transition-colors duration-300">
               <CardContent className="p-8">
                 <div className="flex flex-col items-center text-center">
-                  <div className="relative w-48 h-48 mb-8 rounded-full overflow-hidden border-4 border-primary/20">
+                  <motion.div 
+                    className="relative w-48 h-48 mb-8 rounded-full overflow-hidden border-4 border-primary/20"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
                     <Image
                       src="/pfp.png"
                       alt="Arhaan Girdhar"
                       fill
                       className="object-cover"
                     />
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-3">Arhaan Girdhar</h3>
-                  <p className="text-muted-foreground mb-8 text-lg">
+                  </motion.div>
+                  <motion.h3 
+                    className="text-2xl font-semibold mb-3"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    viewport={{ once: true }}
+                  >
+                    Arhaan Girdhar
+                  </motion.h3>
+                  <motion.p 
+                    className="text-muted-foreground mb-8 text-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    viewport={{ once: true }}
+                  >
                     Software Engineer & AI Enthusiast
-                  </p>
+                  </motion.p>
                   <div className="space-y-6 w-full">
-                    {profileInfo.map((info) => (
-                      <div key={info.label} className="flex items-center gap-4 text-base">
-                        <div className="p-2.5 rounded-lg bg-primary/10">
+                    {profileInfo.map((info, index) => (
+                      <motion.div
+                        key={info.label}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+                        viewport={{ once: true }}
+                        whileHover={{ scale: 1.02 }}
+                        className="flex items-center gap-4 text-base p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                      >
+                        <motion.div 
+                          className="p-2.5 rounded-lg bg-primary/10"
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        >
                           <info.icon className="h-5 w-5 text-primary" />
-                        </div>
-                        <div className="text-left">
+                        </motion.div>
+                        <Link 
+                          href={info.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-left flex-1 hover:text-primary transition-colors"
+                        >
                           <p className="text-muted-foreground">{info.label}</p>
                           <p className="font-medium">{info.value}</p>
-                        </div>
-                      </div>
+                        </Link>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
@@ -112,7 +165,7 @@ export default function Summary() {
                 key={point.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.02, y: -5 }}
                 transition={{ 
                   duration: 0.5, 
                   delay: index * 0.1,
@@ -125,9 +178,13 @@ export default function Summary() {
                 <Card className="h-full hover:border-primary/50 transition-colors duration-300">
                   <CardContent className="p-8">
                     <div className="flex items-start gap-6">
-                      <div className="p-3 rounded-lg bg-primary/10">
+                      <motion.div 
+                        className="p-3 rounded-lg bg-primary/10"
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      >
                         <point.icon className="h-8 w-8 text-primary" />
-                      </div>
+                      </motion.div>
                       <div>
                         <h3 className="text-xl font-semibold mb-3">{point.title}</h3>
                         <p className="text-muted-foreground text-base leading-relaxed">{point.description}</p>

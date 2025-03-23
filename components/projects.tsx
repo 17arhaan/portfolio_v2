@@ -17,7 +17,7 @@ const projectsData = [
     title: "J.A.R.V.I.S",
     description:
       "• Developed a sophisticated AI assistant supporting 20+ languages for enhanced productivity\n\n• Implemented real-time object detection using YOLOv8 and advanced speech recognition\n\n• Integrated CNN-based face authentication system supporting multi-user access\n\n• Built with modular architecture for seamless task automation and system integration.",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/jarvis.png",
     tags: ["Python", "TensorFlow","NLP","YOLOv8", "Speech Recognition", "Hugging Face", "CNN","RNN","LSTM","GRU"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/J.A.R.V.I.S",
@@ -184,6 +184,7 @@ export default function Projects() {
                 <button
                   onClick={() => setSearchQuery("")}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  aria-label="Clear search"
                 >
                   <X className="h-4 w-4" />
                 </button>
