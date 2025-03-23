@@ -136,7 +136,7 @@ export default function Projects() {
 
   return (
     <section id="projects" ref={sectionRef} className="py-20 bg-muted/30">
-      <div className="container px-4">
+      <div className="container px-4 max-w-[2000px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -157,7 +157,7 @@ export default function Projects() {
           viewport={{ once: true, margin: "-100px" }}
           className="mb-8"
         >
-          <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+          <div className="flex flex-col md:flex-row gap-4 justify-between items-center max-w-7xl mx-auto">
             <div className="flex flex-wrap justify-center gap-2">
               {categories.map((category) => (
                 <Button
@@ -201,7 +201,7 @@ export default function Projects() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[2000px] mx-auto"
             >
               {filteredProjects.map((project, index) => (
                 <motion.div
@@ -217,7 +217,7 @@ export default function Projects() {
                     className="h-full overflow-hidden group cursor-pointer border border-border/50 hover:border-primary/50 transition-colors duration-300"
                     onClick={() => setSelectedProject(project.id)}
                   >
-                    <div className="relative overflow-hidden h-56">
+                    <div className="relative overflow-hidden h-64">
                       <Image
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
@@ -315,7 +315,7 @@ export default function Projects() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="bg-card w-full max-w-4xl max-h-[90vh] overflow-auto rounded-xl shadow-xl"
+              className="bg-card w-full max-w-5xl max-h-[90vh] overflow-auto rounded-xl shadow-xl"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative aspect-video">

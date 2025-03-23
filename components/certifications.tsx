@@ -97,8 +97,8 @@ export default function Certifications() {
   }
 
   return (
-    <section id="certifications" className="py-20">
-      <div className="container px-4">
+    <section id="certifications" className="py-20 bg-muted/30">
+      <div className="container px-4 max-w-[2000px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -112,7 +112,7 @@ export default function Certifications() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[2000px] mx-auto">
           {certificationsData.map((cert, index) => (
             <motion.div
               key={cert.id}

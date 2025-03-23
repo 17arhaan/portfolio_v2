@@ -32,27 +32,54 @@ export default function Navbar() {
   const handleScroll = useCallback(() => {
     setIsScrolled(window.scrollY > 10)
 
-    // Determine active section based on scroll position
-    const sections = navItems.map((item) => item.href.substring(1))
-
-    for (const section of sections.reverse()) {
-      const element = document.getElementById(section)
-      if (element) {
-        const rect = element.getBoundingClientRect()
-        if (rect.top <= 100) {
-          setActiveSection(section)
-          break
-        }
+    // Get all sections
+    const sections = navItems.map((item) => {
+      const element = document.getElementById(item.href.substring(1))
+      return {
+        id: item.href.substring(1),
+        element,
+        top: element?.offsetTop ?? 0,
+        bottom: (element?.offsetTop ?? 0) + (element?.offsetHeight ?? 0)
       }
+    })
+
+    // Get current scroll position with offset for navbar height
+    const scrollPosition = window.scrollY + 80 // Adjusted offset for navbar height
+
+    // Find the current section with more precise boundaries
+    const currentSection = sections.find(section => {
+      const sectionTop = section.top - 80 // Adjust for navbar height
+      const sectionBottom = section.bottom - 80 // Adjust for navbar height
+      const isInSection = scrollPosition >= sectionTop && scrollPosition < sectionBottom
+      
+      // Add a small buffer zone at the top of each section
+      const isNearTop = Math.abs(scrollPosition - sectionTop) < 100
+      
+      return isInSection || isNearTop
+    })
+
+    if (currentSection) {
+      setActiveSection(currentSection.id)
     }
   }, [])
 
   useEffect(() => {
+    // Initial check for active section
+    handleScroll()
+
+    // Add a small delay to ensure all elements are properly loaded
+    const timeoutId = setTimeout(() => {
+      handleScroll()
+    }, 100)
+
     window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      clearTimeout(timeoutId)
+    }
   }, [handleScroll])
 
-  // Handle smooth scrolling
+  // Handle smooth scrolling with improved offset
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     setMobileMenuOpen(false)
@@ -61,8 +88,11 @@ export default function Navbar() {
     const element = document.getElementById(targetId)
 
     if (element) {
+      const offset = 80 // Consistent offset for navbar height
+      const elementPosition = element.offsetTop - offset
+
       window.scrollTo({
-        top: element.offsetTop - 80, // Adjust for navbar height
+        top: elementPosition,
         behavior: "smooth",
       })
 
