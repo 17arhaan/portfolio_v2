@@ -9,14 +9,16 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
 
-// Update the navItems array to include the certifications section
+// Update the navItems array to include all sections including About Me
 const navItems = [
   { name: "Home", href: "#home" },
+  { name: "About", href: "#about" },
   { name: "Projects", href: "#projects" },
   { name: "Experience", href: "#experience" },
   { name: "Skills", href: "#skills" },
   { name: "Certifications", href: "#certifications" },
   { name: "Resume", href: "#resume" },
+  { name: "Code Stats", href: "#code-stats" },
   { name: "Contact", href: "#contact" },
 ]
 

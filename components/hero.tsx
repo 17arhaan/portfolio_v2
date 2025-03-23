@@ -220,22 +220,6 @@ export default function Hero() {
 
       <motion.div className="container relative z-10 px-4 py-32 md:py-40" style={{ opacity, scale, y }}>
         <div className="max-w-3xl mx-auto text-center">
-          {/* Profile Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="mb-8 mx-auto"
-          >
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-primary/20 mx-auto">
-              <img
-                src="/placeholder.svg?height=160&width=160"
-                alt="Arhaan Girdhar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </motion.div>
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

@@ -6,6 +6,7 @@ import Certifications from "@/components/certifications"
 import Resume from "@/components/resume"
 import CodeStats from "@/components/code-stats"
 import Contact from "@/components/contact"
+import Summary from "@/components/summary"
 import { Toaster } from "@/components/ui/toaster"
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
     <main className="min-h-screen bg-background">
       <Toaster />
       <Hero />
+      <Summary />
       <Projects />
       <Experience />
       <Skills />
