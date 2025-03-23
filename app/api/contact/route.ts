@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend('re_hCMDXs7S_72zri38BbkRMbyVNiyZ1dMzo')
 
 export async function POST(req: Request) {
   try {
@@ -17,16 +17,23 @@ export async function POST(req: Request) {
 
     // Send email using Resend
     const data = await resend.emails.send({
-      from: "Portfolio Contact Form <onboarding@resend.dev>",
+      from: "Arhaan Girdhar <onboarding@resend.dev>",
       to: ["17arhaan.connect@gmail.com"],
       subject: `New Contact Form Submission: ${subject}`,
-      text: `
-Name: ${name}
-Email: ${email}
-Subject: ${subject}
-
-Message:
-${message}
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #333; margin-bottom: 20px;">New Contact Form Submission</h2>
+          <div style="background-color: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+            <p style="margin: 0;"><strong>Name:</strong> ${name}</p>
+            <p style="margin: 10px 0;"><strong>Email:</strong> ${email}</p>
+            <p style="margin: 10px 0;"><strong>Subject:</strong> ${subject}</p>
+            <div style="margin-top: 15px;">
+              <strong>Message:</strong>
+              <p style="white-space: pre-line; margin: 10px 0;">${message}</p>
+            </div>
+          </div>
+          <p style="color: #666; font-size: 14px;">This message was sent from your portfolio contact form.</p>
+        </div>
       `,
       reply_to: email,
     })
