@@ -23,37 +23,63 @@ export default function Footer() {
     { name: "LeetCode", href: "https://leetcode.com/arhaan17/", icon: "code" },
   ]
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  }
+
   return (
-    <footer className="border-t py-12 md:py-16 bg-muted/30">
-      <div className="container px-4 mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <div>
-            <Link href="/" className="text-2xl font-bold">
-              <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+    <footer className="border-t py-8 bg-muted/30">
+      <motion.div
+        className="container px-4 mx-auto"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={containerVariants}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <motion.div variants={itemVariants} className="space-y-4">
+            <Link href="/" className="inline-block">
+              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
                 Arhaan Girdhar
               </span>
             </Link>
-            <p className="mt-4 text-muted-foreground max-w-xs">
+            <p className="text-muted-foreground max-w-md">
               Aspiring Software Engineer specializing in creating beautiful, functional, and user-friendly applications
               with a focus on AI & ML.
             </p>
-
-            <div className="mt-6 flex gap-4">
+            <div className="flex gap-4">
               {socialLinks.map((social) => (
                 <motion.a
                   key={social.name}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-10 w-10 flex items-center justify-center rounded-full bg-muted hover:bg-primary/10 transition-colors"
-                  whileHover={{ y: -5 }}
+                  className="h-9 w-9 flex items-center justify-center rounded-full bg-muted hover:bg-primary/10 transition-all duration-300"
+                  whileHover={{ y: -3, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label={social.name}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -64,8 +90,7 @@ export default function Footer() {
                   >
                     {social.icon === "github" && (
                       <>
-                        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0-2-1.5-3-1.5-3-1.5-.28 1.15-.28 2.35 0 3.5C4 9 3 11 3 13c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                        <path d="M9 18c-4.51 2-5-2-7-2" />
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                       </>
                     )}
                     {social.icon === "linkedin" && (
@@ -85,55 +110,66 @@ export default function Footer() {
                 </motion.a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="md:col-span-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-                <ul className="space-y-2 grid grid-cols-1 sm:grid-cols-2">
-                  {footerLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.href}
-                        className="text-muted-foreground hover:text-primary transition-colors inline-block py-1"
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Contact</h3>
-                <ul className="space-y-2">
-                  <li>
-                    <a
-                      href="mailto:arhaan.girdhar@gmail.com"
-                      className="text-muted-foreground hover:text-primary transition-colors inline-block py-1"
+          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-sm font-medium mb-4 text-muted-foreground">Navigation</h3>
+              <ul className="space-y-2">
+                {footerLinks.map((link) => (
+                  <motion.li
+                    key={link.name}
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <Link
+                      href={link.href}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
-                      arhaan.girdhar@gmail.com
-                    </a>
-                  </li>
-                  <li className="text-muted-foreground py-1">Manipal, Karnataka, India</li>
-                </ul>
-              </div>
+                      {link.name}
+                    </Link>
+                  </motion.li>
+                ))}
+              </ul>
             </div>
-          </div>
+
+            <div>
+              <h3 className="text-sm font-medium mb-4 text-muted-foreground">Contact</h3>
+              <ul className="space-y-2">
+                <motion.li
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <a
+                    href="mailto:17arhaan.connect@gmail.com"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    17arhaan.connect@gmail.com
+                  </a>
+                </motion.li>
+                <motion.li
+                  className="text-sm text-muted-foreground"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  Noida, Uttar Pradesh, India
+                </motion.li>
+              </ul>
+            </div>
+          </motion.div>
         </div>
 
-        <div className="border-t pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <motion.div
+          variants={itemVariants}
+          className="border-t mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <span>&copy; {currentYear} Arhaan Girdhar. All rights reserved.</span>
+            <span>&copy; {currentYear} Arhaan Girdhar</span>
+            <span className="hidden md:inline">•</span>
+            <span className="hidden md:inline">All rights reserved</span>
           </div>
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <span>Made with</span>
-            <Heart className="h-4 w-4 text-red-500 fill-red-500" />
-            <span>using Next.js & Tailwind CSS</span>
-          </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </footer>
   )
 }

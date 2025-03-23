@@ -240,10 +240,10 @@ export default function Contact() {
                   <div>
                     <h3 className="font-medium">Email</h3>
                     <a
-                      href="mailto:arhaan.girdhar@gmail.com"
+                      href="mailto:17arhaan.connect@gmail.com"
                       className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
-                      arhaan.girdhar@gmail.com
+                      17arhaan.connect@gmail.com
                     </a>
                   </div>
                 </motion.div>
@@ -259,10 +259,10 @@ export default function Contact() {
                   <div>
                     <h3 className="font-medium">Phone</h3>
                     <a
-                      href="tel:+919876543210"
+                      href="tel:+919650984445"
                       className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
-                      +91 98765 43210
+                      +91 96509 84445
                     </a>
                   </div>
                 </motion.div>
@@ -277,7 +277,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-medium">Location</h3>
-                    <p className="text-sm text-muted-foreground">Manipal, Karnataka, India</p>
+                    <p className="text-sm text-muted-foreground">Noida , Uttar Pradesh , India</p>
                   </div>
                 </motion.div>
 
@@ -313,8 +313,7 @@ export default function Contact() {
                         >
                           {social.icon === "github" && (
                             <>
-                              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0-2-1.5-3-1.5-3-1.5-.28 1.15-.28 2.35 0 3.5C4 9 3 11 3 13c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                              <path d="M9 18c-4.51 2-5-2-7-2" />
+                              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                             </>
                           )}
                           {social.icon === "linkedin" && (

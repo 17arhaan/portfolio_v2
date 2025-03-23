@@ -37,33 +37,78 @@ export default function CodeStats() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate API fetch with timeout
-    const timer = setTimeout(() => {
-      // Mock GitHub data
-      setGithubStats({
-        totalRepos: 32,
-        totalStars: 128,
-        totalForks: 47,
-        totalContributions: 1243,
-        languages: [
-          { name: "JavaScript", percentage: 40 },
-          { name: "TypeScript", percentage: 25 },
-          { name: "HTML", percentage: 15 },
-          { name: "CSS", percentage: 12 },
-          { name: "Python", percentage: 8 },
-        ],
-        recentActivity: [
-          { date: "2023-03-01", commits: 5 },
-          { date: "2023-03-02", commits: 3 },
-          { date: "2023-03-03", commits: 7 },
-          { date: "2023-03-04", commits: 2 },
-          { date: "2023-03-05", commits: 4 },
-          { date: "2023-03-06", commits: 6 },
-          { date: "2023-03-07", commits: 3 },
-        ],
-      })
+    const fetchGitHubStats = async () => {
+      try {
+        // Fetch user data
+        const userResponse = await fetch('https://api.github.com/users/17arhaan', {
+          headers: {
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        const userData = await userResponse.json();
 
-      // Mock LeetCode data
+        // Fetch repositories
+        const reposResponse = await fetch('https://api.github.com/users/17arhaan/repos', {
+          headers: {
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        const reposData = await reposResponse.json();
+
+        // Calculate stats
+        const totalStars = reposData.reduce((acc: number, repo: any) => acc + repo.stargazers_count, 0);
+        const totalForks = reposData.reduce((acc: number, repo: any) => acc + repo.forks_count, 0);
+
+        // Fetch language stats
+        const languagePromises = reposData.map(async (repo: any) => {
+          const langResponse = await fetch(repo.languages_url, {
+            headers: {
+              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+          const langData = await langResponse.json();
+          return langData;
+        });
+
+        const languagesData = await Promise.all(languagePromises);
+        
+        // Calculate language percentages
+        const totalBytes = languagesData.reduce((acc: number, langData: any) => {
+          return acc + Object.values(langData).reduce((sum: number, bytes: number) => sum + bytes, 0);
+        }, 0);
+
+        const languageStats = Object.entries(
+          languagesData.reduce((acc: any, langData: any) => {
+            Object.entries(langData).forEach(([lang, bytes]: [string, number]) => {
+              acc[lang] = (acc[lang] || 0) + bytes;
+            });
+            return acc;
+          }, {})
+        ).map(([name, bytes]: [string, number]) => ({
+          name,
+          percentage: Math.round((bytes as number / totalBytes) * 100)
+        }));
+
+        setGithubStats({
+          totalRepos: userData.public_repos,
+          totalStars,
+          totalForks,
+          totalContributions: 0, // This requires additional API calls to get contribution data
+          languages: languageStats,
+          recentActivity: [] // This would require additional API calls to get commit history
+        });
+      } catch (error) {
+        console.error('Error fetching GitHub stats:', error);
+      }
+    };
+
+    fetchGitHubStats();
+
+    // Simulate LeetCode data fetch
+    const timer = setTimeout(() => {
       setLeetcodeStats({
         totalSolved: 187,
         totalQuestions: 2500,
@@ -80,13 +125,12 @@ export default function CodeStats() {
           { title: "Merge k Sorted Lists", difficulty: "Hard", date: "2023-03-01" },
           { title: "Valid Parentheses", difficulty: "Easy", date: "2023-02-28" },
         ],
-      })
+      });
+      setLoading(false);
+    }, 1500);
 
-      setLoading(false)
-    }, 1500)
-
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   // Function to render loading skeletons
   const renderSkeletons = () => (

@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Briefcase, Calendar, MapPin } from "lucide-react"
+import { useState } from "react"
 
 // Updated experience data
 const experienceData = [
@@ -21,7 +22,7 @@ const experienceData = [
     id: 2,
     role: "Internship Trainee",
     company: "Bharat Electronics Limited",
-    location: "India",
+    location: "On-Site | DEL , IN",
     period: "Jun 2024 - Jul 2024",
     description:
       "• Developed 7 JavaFX interfaces handling 500+ daily cybersecurity operations\n\n• Implemented VM management system for 25+ virtual machines achieving 99.99% uptime\n\n• Reduced manual processing time from 45 minutes to 27 minutes through automation\n\n• Enhanced system security by implementing AES-256 encryption across all interfaces\n\n• Established standardized testing procedures for all new features",
@@ -31,15 +32,25 @@ const experienceData = [
     id: 3,
     role: "Frontend Developer",
     company: "Invisible Mechanics",
-    location: "Remote",
+    location: "Hybrid | BLR , IN",
     period: "Jan 2024 - Mar 2024",
     description:
       "• Developed responsive website serving 50,000+ monthly active users\n\n• Reduced page load time from 3.2s to 1.8s through caching optimization\n\n• Maintained 99% on-time delivery rate across 15 sprint cycles\n\n• Decreased application bundle size from 2.8MB to 1.7MB through code splitting\n\n• Implemented comprehensive error handling and monitoring systems",
-    skills: ["Frontend Development", "Performance Optimization", "Team Collaboration"],
+    skills: ["Frontend Development", "Performance Optimization", "Digital AM"],
   }
 ]
 
 export default function Experience() {
+  const [activeDot, setActiveDot] = useState<number | null>(null)
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+
+  const handleCardClick = (index: number) => {
+    setActiveDot(index)
+    setTimeout(() => {
+      setActiveDot(null)
+    }, 500)
+  }
+
   return (
     <section id="experience" className="py-20">
       <div className="container px-4">
@@ -97,6 +108,19 @@ export default function Experience() {
             </div>
           </motion.div>
 
+          {/* Main timeline line */}
+          <motion.div 
+            className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 top-0 bottom-0 w-0.5 bg-border"
+            initial={{ scaleY: 0, originY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            transition={{ 
+              duration: 1.5,
+              ease: "easeOut",
+              delay: 0.2
+            }}
+            viewport={{ once: false, margin: "-100px" }}
+          />
+
           {experienceData.map((experience, index) => (
             <motion.div
               key={experience.id}
@@ -112,33 +136,30 @@ export default function Experience() {
                 index % 2 === 0 ? "md:pr-10 md:ml-0 ml-6" : "md:pl-10 md:ml-auto ml-6"
               }`}
             >
-              {/* Timeline line segment */}
-              <motion.div
-                className="absolute top-0 left-0 md:left-1/2 transform md:-translate-x-1/2 w-0.5 bg-border"
-                style={{
-                  height: '100%',
-                  top: index === 0 ? '24px' : '0',
-                }}
-                initial={{ scaleY: 0, originY: 0 }}
-                whileInView={{ scaleY: 1 }}
-                transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.2 }}
-                viewport={{ once: true, margin: "-100px" }}
-              />
-
               {/* Timeline dot with animation */}
               <motion.div
                 className="absolute top-5 left-[-8px] md:left-auto md:right-[-8px] w-4 h-4 rounded-full bg-primary z-10"
                 style={{ [index % 2 === 0 ? "right" : "left"]: "-8px" }}
                 initial={{ scale: 0 }}
                 whileInView={{ scale: 1 }}
+                animate={activeDot === index ? { scale: [1, 1.5, 1] } : hoveredCard === index ? { scale: 1.2 } : {}}
                 transition={{ 
-                  duration: 0.3, 
-                  delay: index * 0.2 + 0.5,
+                  duration: 0.5,
                   type: "spring",
-                  stiffness: 200
+                  stiffness: 300
                 }}
                 viewport={{ once: true, margin: "-100px" }}
-              />
+              >
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-primary/20"
+                  animate={hoveredCard === index ? { scale: [1, 1.5, 1] } : {}}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -149,82 +170,47 @@ export default function Experience() {
                 }}
                 viewport={{ once: true, margin: "-100px" }}
               >
-                <Card className="relative hover:shadow-lg transition-shadow duration-300">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-2">
-                      <CardTitle className="text-xl">{experience.role}</CardTitle>
-                      <Badge variant="outline" className="ml-2">
-                        <Calendar className="mr-1 h-3 w-3" />
-                        {experience.period}
-                      </Badge>
-                    </div>
-                    <CardDescription className="flex items-center">
-                      <Briefcase className="mr-1 h-4 w-4" />
-                      {experience.company}
-                      <span className="mx-2">•</span>
-                      <MapPin className="mr-1 h-4 w-4" />
-                      {experience.location}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="mb-4 whitespace-pre-line">{experience.description}</div>
-                    <div className="flex flex-wrap gap-2">
-                      {experience.skills.map((skill) => (
-                        <Badge key={skill} variant="secondary">
-                          {skill}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Card 
+                    className="relative hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                    onClick={() => handleCardClick(index)}
+                    onMouseEnter={() => setHoveredCard(index)}
+                    onMouseLeave={() => setHoveredCard(null)}
+                  >
+                    <CardHeader>
+                      <div className="flex items-center justify-between mb-2">
+                        <CardTitle className="text-xl">{experience.role}</CardTitle>
+                        <Badge variant="outline" className="ml-2">
+                          <Calendar className="mr-1 h-3 w-3" />
+                          {experience.period}
                         </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                      </div>
+                      <CardDescription className="flex items-center">
+                        <Briefcase className="mr-1 h-4 w-4" />
+                        {experience.company}
+                        <span className="mx-2">•</span>
+                        <MapPin className="mr-1 h-4 w-4" />
+                        {experience.location}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="mb-4 whitespace-pre-line">{experience.description}</div>
+                      <div className="flex flex-wrap gap-2">
+                        {experience.skills.map((skill) => (
+                          <Badge key={skill} variant="secondary">
+                            {skill}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </motion.div>
             </motion.div>
           ))}
-
-          {/* Timeline start decoration at bottom */}
-          <motion.div
-            className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 bottom-0"
-            initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.5,
-              type: "spring",
-              stiffness: 200,
-              delay: 0.5
-            }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <div className="w-16 h-16 relative flex items-center justify-center">
-              <motion.div
-                className="absolute inset-0 rounded-full bg-primary/20"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.7, 0.4, 0.7]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              <motion.div
-                className="absolute inset-2 rounded-full bg-primary/30"
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.7, 0.4, 0.7]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 0.3
-                }}
-              />
-              <div className="w-10 h-10 rounded-full bg-primary relative z-10 flex items-center justify-center text-white font-bold shadow-lg">
-                <span className="text-sm">2024</span>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </div>
     </section>

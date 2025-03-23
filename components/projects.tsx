@@ -16,72 +16,60 @@ const projectsData = [
     id: 1,
     title: "J.A.R.V.I.S",
     description:
-      "• Developed a sophisticated AI assistant supporting 20+ languages for enhanced productivity\n\n• Implemented real-time object detection using YOLOv8 and advanced speech recognition\n\n• Integrated CNN-based face authentication system supporting multi-user access\n\n• Built with modular architecture for seamless task automation and system integration",
+      "• Developed a sophisticated AI assistant supporting 20+ languages for enhanced productivity\n\n• Implemented real-time object detection using YOLOv8 and advanced speech recognition\n\n• Integrated CNN-based face authentication system supporting multi-user access\n\n• Built with modular architecture for seamless task automation and system integration.",
     image: "/placeholder.svg?height=400&width=600",
-    tags: ["Python", "TensorFlow", "Computer Vision", "CNN"],
+    tags: ["Python", "TensorFlow","NLP","YOLOv8", "Speech Recognition", "Hugging Face", "CNN","RNN","LSTM","GRU"],
     demoLink: null,
-    githubLink: "https://github.com/arhaanhamid/J.A.R.V.I.S",
-    category: "cv",
+    githubLink: "https://github.com/17arhaan/J.A.R.V.I.S",
+    category: "dl",
     featured: true,
   },
   {
     id: 2,
-    title: "Personal Portfolio Website",
+    title: "W.E.A.L.T.H",
     description:
-      "• Engineered a modern, responsive portfolio using Next.js and Tailwind CSS\n\n• Implemented smooth animations and transitions with Framer Motion\n\n• Optimized for performance with server-side rendering and image optimization\n\n• Designed with accessibility and SEO best practices in mind",
+      "• Developed W.E.A.L.T.H, a modern finance tracking web app for efficient personal finance management\n\n• Enabled users to monitor income, expenses, budgets, and savings goals through an intuitive interface\n\n• Leveraged advanced web technologies to deliver real-time financial insights and seamless performance\n\n• Focused on data security, responsive design, and an accessible user experience.",
     image: "/placeholder.svg?height=400&width=600",
-    tags: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
-    demoLink: "https://arhaanportfolio.in",
-    githubLink: "https://github.com/arhaanhamid/portfolio",
+    tags: ["Next.js", "React.js", "Express.js","Tailwind CSS", "PostgreSQL","jQuery","Bootstrap"],
+    demoLink: null,
+    githubLink: "https://github.com/17arhaan/W.E.A.L.T.H",
     category: "web",
     featured: true,
   },
   {
     id: 3,
-    title: "Natural Language Processing Chatbot",
+    title: "Sentiment Analysis",
     description:
-      "• Developed an intelligent chatbot using state-of-the-art NLP techniques\n\n• Implemented contextual awareness and sentiment analysis for natural conversations\n\n• Integrated with Flask backend for scalable deployment\n\n• Enhanced with custom training data for domain-specific responses",
+      "• Architected a high-performance, real-time news and trend analysis pipeline integrating NewsAPI, GDELT, and Wikipedia, capable of processing over 1M articles daily\n\n• Engineered a Kafka-based streaming infrastructure to deliver low-latency insights with execution times consistently under 5 seconds\n\n• Optimized system throughput and responsiveness using advanced caching, parallel processing, and modular data pipelines\n\n• Enhanced scalability and fault tolerance, enabling robust, data-driven trend detection and decision-making at scale.",
     image: "/placeholder.svg?height=400&width=600",
-    tags: ["Python", "NLTK", "Transformers", "Flask"],
-    demoLink: "https://example.com/nlp-chatbot",
-    githubLink: "https://github.com/arhaanhamid/nlp-chatbot",
-    category: "ai",
-    featured: false,
-  },
-  {
-    id: 4,
-    title: "Data Visualization Dashboard",
-    description:
-      "• Created an interactive dashboard for complex data visualization\n\n• Implemented real-time data updates and custom filtering capabilities\n\n• Built with D3.js for advanced charting and data manipulation\n\n• Integrated MongoDB for efficient data storage and retrieval",
-    image: "/placeholder.svg?height=400&width=600",
-    tags: ["D3.js", "React", "Node.js", "MongoDB"],
-    demoLink: "https://example.com/data-viz",
-    githubLink: "https://github.com/arhaanhamid/data-viz",
+    tags: ["Python", "Kafka", "NewsAPI", "Wiki API", "Transformers", "Real-Time Streaming", "Data Pipeline", "Trend Analysis"],
+    demoLink: null,
+    githubLink: "https://github.com/17arhaan/Sentiment_Analysis",
     category: "data",
     featured: false,
   },
   {
-    id: 5,
-    title: "E-Learning Platform",
+    id: 4,
+    title: "SnakeCV",
     description:
-      "• Developed a comprehensive e-learning platform with course management\n\n• Implemented video streaming, quiz system, and progress tracking\n\n• Built with React and Redux for state management\n\n• Integrated Firebase for authentication and real-time updates",
+      "• Built an interactive Snake Game with Python and React, featuring manual, AI, and gesture-controlled modes for dynamic gameplay\n\n• Integrated OpenCV and webcam-based gesture recognition to enable real-time control via hand movements in the Python version\n\n• Developed a responsive web version using React for accessible browser-based play with intuitive keyboard controls\n\n• Implemented features including AI mode (Q-learning), live webcam feed, game replays, leaderboard tracking, and a modular game menu system",
     image: "/placeholder.svg?height=400&width=600",
-    tags: ["React", "Firebase", "Redux", "Material UI"],
-    demoLink: "https://example.com/e-learning",
-    githubLink: "https://github.com/arhaanhamid/e-learning",
-    category: "web",
+    tags: ["Python", "OpenCV", "Pygame", "Gesture Control", "Computer Vision", "Game Development", "Real-Time Interaction"],
+    demoLink: null,
+    githubLink: "https://github.com/17arhaan/Snake_CV_ML",
+    categories: ["cv", "ml"],
     featured: true,
   },
   {
-    id: 6,
-    title: "Predictive Analytics for Stock Market",
+    id: 5,
+    title: "TherapAI",
     description:
-      "• Engineered a machine learning model for stock market trend prediction\n\n• Integrated sentiment analysis from news and social media data\n\n• Implemented time series analysis for historical pattern recognition\n\n• Built with scikit-learn and pandas for efficient data processing",
+      "• Developed a cutting-edge AI-driven platform focused on delivering accessible and personalized mental health support\n\n• Integrated advanced natural language processing with expert-verified therapeutic methodologies to enable responsive and empathetic user interactions\n\n• Designed a scalable architecture to ensure availability, security, and seamless access to mental health resources across devices\n\n• Championed the mission to democratize mental wellness, offering on-demand care to users anytime, anywhere",
     image: "/placeholder.svg?height=400&width=600",
-    tags: ["Python", "Scikit-learn", "Pandas", "Time Series Analysis"],
-    demoLink: "https://example.com/stock-prediction",
-    githubLink: "https://github.com/arhaanhamid/stock-prediction",
-    category: "ml",
+    tags: ["AI", "Mental Health", "NLP", "Chatbot", "Therapeutic Support", "Personalization", "Python", "Flask"]    ,
+    demoLink: null,
+    githubLink: "https://github.com/17arhaan/TherapAI",
+    category: "ai",
     featured: false,
   },
 ]
@@ -105,16 +93,19 @@ export default function Projects() {
 
   // Filter projects based on category and search query
   const filteredProjects = projectsData
-    .filter((project) => activeCategory === "all" || project.category === activeCategory)
     .filter((project) => {
-      if (!searchQuery) return true
-      const query = searchQuery.toLowerCase()
+      if (activeCategory === "all") return true;
+      return project.categories?.includes(activeCategory) || project.category === activeCategory;
+    })
+    .filter((project) => {
+      if (!searchQuery) return true;
+      const query = searchQuery.toLowerCase();
       return (
         project.title.toLowerCase().includes(query) ||
         project.description.toLowerCase().includes(query) ||
         project.tags.some((tag) => tag.toLowerCase().includes(query))
-      )
-    })
+      );
+    });
 
   // Handle escape key to close modal
   useEffect(() => {
@@ -265,15 +256,16 @@ export default function Projects() {
                           <span className="sr-only md:not-sr-only">Code</span>
                         </a>
                       </Button>
-                      <Button variant="ghost" size="sm" className="gap-1" asChild>
+                      <Button variant="ghost" size="sm" className="gap-1" asChild disabled={!project.demoLink}>
                         <a
-                          href={project.demoLink}
+                          href={project.demoLink || "#"}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
+                          className={!project.demoLink ? "pointer-events-none opacity-50" : ""}
                         >
                           <ExternalLink className="h-4 w-4" />
-                          <span className="sr-only md:not-sr-only">Demo</span>
+                          <span className="sr-only md:not-sr-only">Working on Demo</span>
                         </a>
                       </Button>
                     </CardFooter>
@@ -335,63 +327,73 @@ export default function Projects() {
                 <button
                   onClick={() => setSelectedProject(null)}
                   className="absolute top-4 right-4 bg-background/50 backdrop-blur-sm text-foreground rounded-full p-2 hover:bg-background/80 transition-colors"
+                  title="Close"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2">{selectedProjectData.title}</h3>
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Description</h3>
-                  <div className="text-muted-foreground space-y-2">
-                    {selectedProjectData.description.split('\n\n').map((line, index) => (
-                      <p key={index}>{line}</p>
-                    ))}
+              <div className="p-8">
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <h3 className="text-3xl font-bold">{selectedProjectData.title}</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedProjectData.tags.map((tag) => (
+                        <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-sm px-3 py-1">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {selectedProjectData.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <h4 className="font-semibold mb-2">Features</h4>
-                    <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                      <li>Responsive design for all devices</li>
-                      <li>Intuitive user interface</li>
-                      <li>High performance and optimization</li>
-                      <li>Secure authentication system</li>
-                    </ul>
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Description</h3>
+                    <div className="text-muted-foreground space-y-3">
+                      {selectedProjectData.description.split('\n\n').map((line, index) => (
+                        <p key={index}>{line}</p>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Technical Details</h4>
-                    <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                      <li>Frontend: React with TypeScript</li>
-                      <li>Backend: Node.js with Express</li>
-                      <li>Database: MongoDB</li>
-                      <li>Deployment: Vercel</li>
-                    </ul>
-                  </div>
-                </div>
 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button asChild className="flex-1">
-                    <a href={selectedProjectData.demoLink} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Live Demo
-                    </a>
-                  </Button>
-                  <Button variant="outline" asChild className="flex-1">
-                    <a href={selectedProjectData.githubLink} target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-2 h-4 w-4" />
-                      View Code
-                    </a>
-                  </Button>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <h4 className="font-semibold">Features</h4>
+                      <ul className="list-disc list-inside text-muted-foreground space-y-2">
+                        <li>Responsive design for all devices</li>
+                        <li>Intuitive user interface</li>
+                        <li>High performance and optimization</li>
+                        <li>Secure authentication system</li>
+                      </ul>
+                    </div>
+                    <div className="space-y-3">
+                      <h4 className="font-semibold">Technical Details</h4>
+                      <ul className="list-disc list-inside text-muted-foreground space-y-2">
+                        <li>Frontend: React with TypeScript</li>
+                        <li>Backend: Node.js with Express</li>
+                        <li>Database: MongoDB</li>
+                        <li>Deployment: Vercel</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <Button asChild className="flex-1" disabled={!selectedProjectData.demoLink}>
+                      <a 
+                        href={selectedProjectData.demoLink || "#"} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={!selectedProjectData.demoLink ? "pointer-events-none opacity-50" : ""}
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Working on Demo
+                      </a>
+                    </Button>
+                    <Button variant="outline" asChild className="flex-1">
+                      <a href={selectedProjectData.githubLink} target="_blank" rel="noopener noreferrer">
+                        <Github className="mr-2 h-4 w-4" />
+                        View Code
+                      </a>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </motion.div>
