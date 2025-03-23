@@ -5,11 +5,24 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, Award, ExternalLink, CheckCircle } from "lucide-react"
+import { Calendar, Award, ExternalLink, CheckCircle, Clock } from "lucide-react"
 import Image from "next/image"
 
 // Sample certifications data
 const certificationsData = [
+  {
+    id: 7,
+    title: "Digital Marketing Specialization",
+    issuer: "Illinois",
+    date: "May 2025",
+    expiryDate: null,
+    description:
+      "Strategic digital marketing training focusing on data analysis, consumer behavior, brand measurement, and campaign attribution through practical application of tools and visualization techniques.",
+    credentialId: null,
+    credentialURL: "",
+    skills: ["Data Analysis", "Consumer Behavior", "Brand Measurement", "Campaign Attribution", "Data Visualization", "Marketing Analytics", "Storytelling", "Business Impact"],
+    image: "/igies.png?height=200&width=200",
+  },
   {
     id: 6,
     title: "Foundations of Project Management",
@@ -17,8 +30,8 @@ const certificationsData = [
     date: "May 2025",
     expiryDate: null,
     description:
-      "Introduces foundational project management concepts like project selection, resource allocation, and risk management.",
-    credentialId: "ML-SPEC-2023",
+      "Essential project management concepts including project selection, resource allocation, risk management, and team leadership for successful project delivery.",
+    credentialId: null,
     credentialURL: "",
     skills: ["Problem Solving", "Leadership", "Project Management", "Risk Management","Responsiblity"],
     image: "/google.png?height=200&width=200",
@@ -30,8 +43,8 @@ const certificationsData = [
     date: "April 2025",
     expiryDate: null,
     description:
-      "A comprehensive introduction to AI & ML infrastructure, covering data pipelines, model frameworks, and deployment strategies",
-    credentialId: "TF-DEV-2023",
+      "Comprehensive introduction to AI & ML infrastructure, covering data pipelines, model frameworks, deployment strategies, and cloud computing solutions.",
+    credentialId: null,
     credentialURL: "",
     skills: ["AI", "ML", "Data Management", "Model Frameworks", "Model Deployment", "Cloud Computing", "AI Infrastructure", "Version Control", "Scalability"],
     image: "/microsoft.svg?height=200&width=200",
@@ -43,8 +56,8 @@ const certificationsData = [
     date: "Jan 2025",
     expiryDate: null,
     description:
-    "Fundamentals of Generative AI with Large Language Models (LLMs), covering model training, fine-tuning, and deployment.",
-    credentialId: "FSWD-2023",
+      "Advanced training in Generative AI and LLMs, covering model training, fine-tuning, deployment, and optimization for real-world applications.",
+    credentialId: "6763NRR61X28",
     credentialURL: "https://www.coursera.org/account/accomplishments/certificate/6763NRR61X28",
     skills: ["Generative AI", "Large Language Models", "Transformer Architecture", "Model Training", "Fine-Tuning", "AI Deployment", "Inference Optimization", "Scaling Laws", "Python", "Machine Learning"],
     image: "/aws.webp?height=200&width=200",
@@ -56,8 +69,8 @@ const certificationsData = [
     date: "Dec 2024",
     expiryDate: null,
     description:
-      "Introduces Generative AI, its applications, and how it differs from traditional machine learning.",
-    credentialId: "FSWD-2023",
+      "Fundamental concepts of Generative AI, exploring its applications, differences from traditional ML, and practical implementation strategies.",
+    credentialId: "5VKU3Z5HMB2G",
     credentialURL: "https://www.coursera.org/account/accomplishments/certificate/5VKU3Z5HMB2G",
     skills: ["Generative AI", "Machine Learning", "AI Applications", "Google AI Tools", "Deep Learning", "Model Development"],
     image: "/google.png?height=200&width=200",
@@ -68,8 +81,9 @@ const certificationsData = [
     issuer: "DeepLearning.AI",
     date: "Dec 2024",
     expiryDate: null,
-    description: "Validates deep learning fundamentals, covering neural network architectures, training techniques, and key hyperparameters.",
-    credentialId: "AWS-ML-2023",
+    description:
+      "Comprehensive deep learning fundamentals covering neural network architectures, training techniques, and optimization strategies for AI applications.",
+    credentialId: "1XMZBVRYNKB2",
     credentialURL: "https://www.coursera.org/account/accomplishments/certificate/1XMZBVRYNKB2",
     skills: ["Deep Learning", "Neural Networks", "AI", "Machine Learning", "Model Training", "Vectorization", "Hyperparameter Tuning", "AI Applications", "Model Optimization"],
     image: "/deeplearningai.png?height=200&width=200",
@@ -81,8 +95,8 @@ const certificationsData = [
     date: "Dec 2024",
     expiryDate: null,
     description:
-    "Fundamentals of machine learning, focusing on data retrieval, cleaning, feature engineering, and preprocessing.",
-    credentialId: "FSWD-2023",
+      "Essential data analysis techniques for machine learning, including data cleaning, feature engineering, and statistical analysis methods.",
+    credentialId: "Y53G36TKQGCU",
     credentialURL: "https://www.coursera.org/account/accomplishments/certificate/Y53G36TKQGCU",
     skills: ["Machine Learning", "Data Preprocessing", "Feature Engineering", "Data Cleaning", "SQL", "NoSQL", "APIs", "Outlier Detection", "Feature Scaling", "Hypothesis Testing"],
     image: "/ibm.png?height=200&width=200",
@@ -184,11 +198,18 @@ export default function Certifications() {
                 </CardContent>
                 <CardFooter className="pt-0">
                   <Button variant="outline" size="sm" className="w-full gap-2" asChild>
-                    <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
-                      <CheckCircle className="h-4 w-4" />
-                      Verify Credential
-                      <ExternalLink className="h-3 w-3 ml-1" />
-                    </a>
+                    {[5, 6, 7].includes(cert.id) ? (
+                      <span className="flex items-center justify-center">
+                        <Clock className="h-4 w-4" />
+                        Ongoing
+                      </span>
+                    ) : (
+                      <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
+                        <CheckCircle className="h-4 w-4" />
+                        Verify Credential
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </a>
+                    )}
                   </Button>
                 </CardFooter>
               </Card>

@@ -1,71 +1,43 @@
 import { NextResponse } from "next/server"
-import nodemailer from "nodemailer"
+import { Resend } from "resend"
 
-// Configure nodemailer with your email service
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-  secure: true,
-})
+const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const data = await request.json()
-    const { name, email, subject, message } = data
+    const { name, email, subject, message } = await req.json()
 
-    // Validate the data
+    // Validate the input
     if (!name || !email || !subject || !message) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+      return NextResponse.json(
+        { error: "All fields are required" },
+        { status: 400 }
+      )
     }
 
-    // Email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return NextResponse.json({ error: "Invalid email address" }, { status: 400 })
-    }
-
-    // Prepare email content
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: "arhaan.girdhar@gmail.com", // Your email where you want to receive messages
-      replyTo: email,
-      subject: `Portfolio Contact: ${subject}`,
+    // Send email using Resend
+    const data = await resend.emails.send({
+      from: "Portfolio Contact Form <onboarding@resend.dev>",
+      to: ["17arhaan.connect@gmail.com"],
+      subject: `New Contact Form Submission: ${subject}`,
       text: `
-        Name: ${name}
-        Email: ${email}
-        
-        Message:
-        ${message}
-      `,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Subject:</strong> ${subject}</p>
-          <div style="margin-top: 20px; padding: 15px; background-color: #f5f5f5; border-radius: 5px;">
-            <p style="margin-top: 0;"><strong>Message:</strong></p>
-            <p style="white-space: pre-line;">${message}</p>
-          </div>
-        </div>
-      `,
-    }
+Name: ${name}
+Email: ${email}
+Subject: ${subject}
 
-    // Send email
-    if (process.env.NODE_ENV === "production") {
-      await transporter.sendMail(mailOptions)
-    } else {
-      // In development, just log the email content
-      console.log("Email would be sent in production:", mailOptions)
-    }
+Message:
+${message}
+      `,
+      reply_to: email,
+    })
 
-    return NextResponse.json({ success: true, message: "Message sent successfully!" })
+    return NextResponse.json({ success: true, data })
   } catch (error) {
-    console.error("Error processing contact form:", error)
-    return NextResponse.json({ error: "Failed to send message. Please try again later." }, { status: 500 })
+    console.error("Contact form error:", error)
+    return NextResponse.json(
+      { error: "Failed to send message. Please try again later." },
+      { status: 500 }
+    )
   }
 }
 
