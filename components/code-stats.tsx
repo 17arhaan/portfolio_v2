@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Github, Code, CheckCircle2 } from "lucide-react"
+import { Github, Code, CheckCircle2, GitCommit, ChevronDown } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 // Types for GitHub data
 interface GitHubStats {
@@ -14,8 +15,8 @@ interface GitHubStats {
   totalStars: number
   totalForks: number
   totalContributions: number
-  languages: { name: string; percentage: number }[]
-  recentActivity: { date: string; commits: number }[]
+  languages: { name: string; percentage: number; color: string }[]
+  recentActivity: { date: string; commits: number; repo: string }[]
 }
 
 // Types for LeetCode data
@@ -31,10 +32,35 @@ interface LeetCodeStats {
   recentSubmissions: { title: string; difficulty: string; date: string }[]
 }
 
+// Add language colors mapping
+const languageColors: { [key: string]: string } = {
+  JavaScript: '#f1e05a',
+  TypeScript: '#2b7489',
+  Python: '#3572A5',
+  Java: '#b07219',
+  C: '#555555',
+  'C++': '#f34b7d',
+  Go: '#00ADD8',
+  Rust: '#dea584',
+  Ruby: '#701516',
+  PHP: '#4F5B93',
+  Swift: '#ffac45',
+  Kotlin: '#F18E33',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  Shell: '#89e051',
+  'C#': '#178600',
+  R: '#198CE7',
+  Dart: '#00B4AB',
+  Scala: '#c22d40',
+  Haskell: '#5e5086'
+};
+
 export default function CodeStats() {
   const [githubStats, setGithubStats] = useState<GitHubStats | null>(null)
   const [leetcodeStats, setLeetcodeStats] = useState<LeetCodeStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showAllActivities, setShowAllActivities] = useState(false)
 
   useEffect(() => {
     const fetchGitHubStats = async () => {
@@ -61,6 +87,52 @@ export default function CodeStats() {
         const totalStars = reposData.reduce((acc: number, repo: any) => acc + repo.stargazers_count, 0);
         const totalForks = reposData.reduce((acc: number, repo: any) => acc + repo.forks_count, 0);
 
+        // Fetch contributions using GraphQL API
+        const contributionsQuery = {
+          query: `
+            query {
+              user(login: "17arhaan") {
+                contributionsCollection {
+                  totalCommitContributions
+                  contributionCalendar {
+                    totalContributions
+                  }
+                }
+              }
+            }
+          `
+        };
+
+        const contributionsResponse = await fetch('https://api.github.com/graphql', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(contributionsQuery),
+        });
+        const contributionsData = await contributionsResponse.json();
+        const totalContributions = contributionsData.data.user.contributionsCollection.contributionCalendar.totalContributions;
+
+        // Fetch recent activity
+        const activityResponse = await fetch('https://api.github.com/users/17arhaan/events', {
+          headers: {
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        const activityData = await activityResponse.json();
+
+        // Process recent activity
+        const recentActivity = activityData
+          .filter((event: any) => event.type === 'PushEvent')
+          .slice(0, 7)
+          .map((event: any) => ({
+            date: new Date(event.created_at).toLocaleDateString(),
+            commits: event.payload.commits.length,
+            repo: event.repo.name.split('/')[1]
+          }));
+
         // Fetch language stats
         const languagePromises = reposData.map(async (repo: any) => {
           const langResponse = await fetch(repo.languages_url, {
@@ -83,25 +155,33 @@ export default function CodeStats() {
         const languageStats = Object.entries(
           languagesData.reduce((acc: any, langData: any) => {
             Object.entries(langData).forEach(([lang, bytes]: [string, number]) => {
-              acc[lang] = (acc[lang] || 0) + bytes;
+              // Only include languages that are in our color mapping
+              if (languageColors[lang]) {
+                acc[lang] = (acc[lang] || 0) + bytes;
+              }
             });
             return acc;
           }, {})
         ).map(([name, bytes]: [string, number]) => ({
           name,
-          percentage: Math.round((bytes as number / totalBytes) * 100)
-        }));
+          percentage: Math.round((bytes as number / totalBytes) * 100),
+          color: languageColors[name]
+        }))
+        .sort((a, b) => b.percentage - a.percentage)
+        .slice(0, 5);
 
         setGithubStats({
           totalRepos: userData.public_repos,
           totalStars,
           totalForks,
-          totalContributions: 0, // This requires additional API calls to get contribution data
+          totalContributions,
           languages: languageStats,
-          recentActivity: [] // This would require additional API calls to get commit history
+          recentActivity
         });
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching GitHub stats:', error);
+        setLoading(false);
       }
     };
 
@@ -126,7 +206,6 @@ export default function CodeStats() {
           { title: "Valid Parentheses", difficulty: "Easy", date: "2023-02-28" },
         ],
       });
-      setLoading(false);
     }, 1500);
 
     return () => clearTimeout(timer);
@@ -233,12 +312,53 @@ export default function CodeStats() {
                             {githubStats.languages.map((language) => (
                               <div key={language.name}>
                                 <div className="flex justify-between mb-1">
-                                  <span className="text-sm font-medium">{language.name}</span>
+                                  <div className="flex items-center gap-2">
+                                    <div 
+                                      className="w-3 h-3 rounded-full" 
+                                      style={{ backgroundColor: language.color }}
+                                    />
+                                    <span className="text-sm font-medium">{language.name}</span>
+                                  </div>
                                   <span className="text-sm text-muted-foreground">{language.percentage}%</span>
                                 </div>
                                 <Progress value={language.percentage} className="h-2" />
                               </div>
                             ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Recent Activity</CardTitle>
+                          <CardDescription>My latest commits across repositories</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            {githubStats.recentActivity
+                              .slice(0, showAllActivities ? undefined : 2)
+                              .map((activity, index) => (
+                                <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                                  <GitCommit className="h-5 w-5 text-primary flex-shrink-0" />
+                                  <div className="flex-1">
+                                    <p className="font-medium">{activity.repo}</p>
+                                    <p className="text-sm text-muted-foreground">{activity.date}</p>
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {activity.commits} commit{activity.commits !== 1 ? 's' : ''}
+                                  </div>
+                                </div>
+                            ))}
+                            {githubStats.recentActivity.length > 2 && (
+                              <Button
+                                variant="ghost"
+                                className="w-full"
+                                onClick={() => setShowAllActivities(!showAllActivities)}
+                              >
+                                <ChevronDown className={`h-4 w-4 mr-2 transition-transform ${showAllActivities ? 'rotate-180' : ''}`} />
+                                {showAllActivities ? 'Show Less' : `Show ${githubStats.recentActivity.length - 2} More`}
+                              </Button>
+                            )}
                           </div>
                         </CardContent>
                       </Card>
