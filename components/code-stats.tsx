@@ -314,8 +314,8 @@ export default function CodeStats() {
 
                           <Card>
                             <CardHeader>
-                              <CardTitle>Difficulty Breakdown</CardTitle>
-                              <CardDescription>Problems solved by difficulty level</CardDescription>
+                              <CardTitle>Problem Breakdown</CardTitle>
+                              <CardDescription>By Difficulty Level</CardDescription>
                             </CardHeader>
                             <CardContent>
                               <div className="space-y-4">
