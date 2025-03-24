@@ -30,9 +30,44 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      const scrollPosition = window.scrollY
+      setIsScrolled(scrollPosition > 20)
+      
+      // Update active section based on scroll position
+      const sections = navItems.map(item => ({
+        id: item.href.replace("/", ""),
+        element: document.getElementById(item.href.replace("/", "")),
+      }))
+      
+      // Find the section that's most visible in the viewport
+      let currentSection = sections[0]
+      let maxVisibleHeight = 0
+      
+      sections.forEach(section => {
+        if (!section.element) return
+        
+        const rect = section.element.getBoundingClientRect()
+        const viewportHeight = window.innerHeight
+        const navbarHeight = 64 // Height of the navbar
+        
+        // Calculate how much of the section is visible
+        const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, navbarHeight)
+        
+        if (visibleHeight > maxVisibleHeight) {
+          maxVisibleHeight = visibleHeight
+          currentSection = section
+        }
+      })
+      
+      if (currentSection) {
+        setActiveSection(currentSection.id)
+      }
     }
-    window.addEventListener("scroll", handleScroll)
+    
+    // Initial check
+    handleScroll()
+    
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -72,7 +107,7 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 w-full z-[100] transition-all duration-300",
+        "fixed top-0 left-0 right-0 w-full z-[100] transition-all duration-300 ease-in-out",
         isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent",
       )}
     >
