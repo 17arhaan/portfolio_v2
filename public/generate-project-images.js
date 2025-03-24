@@ -9,9 +9,9 @@ const projects = [
     color: '#4F46E5',
     icon: '🤖',
     elements: [
-      { type: 'circle', x: 200, y: 150, radius: 50, color: '#6366F1' },
-      { type: 'circle', x: 600, y: 150, radius: 50, color: '#818CF8' },
-      { type: 'line', x1: 200, y1: 300, x2: 600, y2: 300, color: '#6366F1' },
+      { type: 'circle', x: 400, y: 250, radius: 80, color: '#6366F1' },
+      { type: 'circle', x: 400, y: 250, radius: 60, color: '#818CF8' },
+      { type: 'circle', x: 400, y: 250, radius: 40, color: '#A5B4FC' },
       { type: 'text', text: 'AI Assistant', x: 400, y: 400, color: '#818CF8' }
     ]
   },
@@ -21,10 +21,10 @@ const projects = [
     color: '#10B981',
     icon: '💰',
     elements: [
-      { type: 'rect', x: 150, y: 150, width: 500, height: 200, color: '#34D399' },
-      { type: 'line', x1: 150, y1: 250, x2: 650, y2: 250, color: '#6EE7B7' },
-      { type: 'line', x1: 150, y1: 350, x2: 650, y2: 350, color: '#6EE7B7' },
-      { type: 'text', text: 'Finance Tracker', x: 400, y: 400, color: '#6EE7B7' }
+      { type: 'rect', x: 300, y: 250, width: 200, height: 40, color: '#34D399' },
+      { type: 'rect', x: 300, y: 310, width: 150, height: 40, color: '#6EE7B7' },
+      { type: 'rect', x: 300, y: 370, width: 100, height: 40, color: '#A7F3D0' },
+      { type: 'text', text: 'Finance Tracker', x: 400, y: 450, color: '#6EE7B7' }
     ]
   },
   {
@@ -33,10 +33,10 @@ const projects = [
     color: '#F59E0B',
     icon: '📊',
     elements: [
-      { type: 'bar', x: 200, y: 200, width: 60, height: 150, color: '#FBBF24' },
-      { type: 'bar', x: 300, y: 200, width: 60, height: 100, color: '#FCD34D' },
-      { type: 'bar', x: 400, y: 200, width: 60, height: 200, color: '#FBBF24' },
-      { type: 'text', text: 'Data Analytics', x: 400, y: 400, color: '#FCD34D' }
+      { type: 'bar', x: 300, y: 350, width: 40, height: 200, color: '#FBBF24' },
+      { type: 'bar', x: 400, y: 350, width: 40, height: 150, color: '#FCD34D' },
+      { type: 'bar', x: 500, y: 350, width: 40, height: 250, color: '#FDE68A' },
+      { type: 'text', text: 'Data Analytics', x: 400, y: 450, color: '#FCD34D' }
     ]
   },
   {
@@ -45,10 +45,11 @@ const projects = [
     color: '#EF4444',
     icon: '🐍',
     elements: [
-      { type: 'grid', x: 150, y: 150, size: 20, color: '#F87171' },
-      { type: 'circle', x: 400, y: 300, radius: 10, color: '#F87171' },
-      { type: 'circle', x: 420, y: 300, radius: 10, color: '#F87171' },
-      { type: 'text', text: 'Computer Vision Game', x: 400, y: 400, color: '#F87171' }
+      { type: 'grid', x: 250, y: 200, size: 30, color: '#F87171' },
+      { type: 'circle', x: 400, y: 350, radius: 15, color: '#F87171' },
+      { type: 'circle', x: 430, y: 350, radius: 15, color: '#F87171' },
+      { type: 'circle', x: 460, y: 350, radius: 15, color: '#F87171' },
+      { type: 'text', text: 'Computer Vision Game', x: 400, y: 450, color: '#F87171' }
     ]
   },
   {
@@ -57,10 +58,10 @@ const projects = [
     color: '#8B5CF6',
     icon: '🧠',
     elements: [
-      { type: 'wave', x: 150, y: 200, width: 500, height: 100, color: '#A78BFA' },
-      { type: 'wave', x: 150, y: 300, width: 500, height: 100, color: '#C4B5FD' },
-      { type: 'circle', x: 400, y: 150, radius: 30, color: '#A78BFA' },
-      { type: 'text', text: 'Mental Health AI', x: 400, y: 400, color: '#C4B5FD' }
+      { type: 'wave', x: 200, y: 250, width: 400, height: 40, color: '#A78BFA' },
+      { type: 'wave', x: 200, y: 300, width: 400, height: 40, color: '#C4B5FD' },
+      { type: 'circle', x: 400, y: 200, radius: 40, color: '#A78BFA' },
+      { type: 'text', text: 'Mental Health AI', x: 400, y: 450, color: '#C4B5FD' }
     ]
   }
 ];
@@ -68,8 +69,8 @@ const projects = [
 function drawWave(ctx, x, y, width, height, color) {
   ctx.beginPath();
   ctx.moveTo(x, y);
-  for (let i = 0; i <= width; i += 10) {
-    ctx.lineTo(x + i, y + Math.sin(i / 20) * height);
+  for (let i = 0; i <= width; i += 20) {
+    ctx.lineTo(x + i, y + Math.sin(i / 30) * height);
   }
   ctx.strokeStyle = color;
   ctx.lineWidth = 2;
@@ -84,8 +85,8 @@ function drawBar(ctx, x, y, width, height, color) {
 function drawGrid(ctx, x, y, size, color) {
   ctx.strokeStyle = color;
   ctx.lineWidth = 1;
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
       ctx.strokeRect(x + i * size, y + j * size, size, size);
     }
   }
@@ -101,15 +102,6 @@ function generateProjectImage(project) {
     // Background
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, width, height);
-
-    // Grid Pattern
-    ctx.fillStyle = '#2a2a2a';
-    for (let i = 0; i <= width; i += 100) {
-      ctx.fillRect(i, 0, 1, height);
-    }
-    for (let i = 0; i <= height; i += 100) {
-      ctx.fillRect(0, i, width, 1);
-    }
 
     // Draw project-specific elements
     project.elements.forEach(element => {
@@ -155,12 +147,12 @@ function generateProjectImage(project) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = project.color;
-    ctx.fillText(project.icon, width / 2, height / 2 - 50);
+    ctx.fillText(project.icon, width / 2, 150);
 
     // Project Title
     ctx.font = 'bold 48px Arial';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(project.title, width / 2, height / 2 + 50);
+    ctx.fillText(project.title, width / 2, 500);
 
     // Save the image
     const buffer = canvas.toBuffer('image/png');
