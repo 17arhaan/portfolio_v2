@@ -140,11 +140,6 @@ export async function GET() {
                     url
                   }
                   occurredAt
-                  commitMessage
-                  commitUrl
-                  additions
-                  deletions
-                  changedFiles
                 }
               }
             }
@@ -178,12 +173,11 @@ export async function GET() {
           repo: repo.repository.name,
           repoUrl: repo.repository.url,
           commits: [{
-            message: node.commitMessage || `${node.commitCount} commit${node.commitCount > 1 ? 's' : ''}`,
-            url: node.commitUrl || `${repo.repository.url}/commits`,
+            message: `${node.commitCount} commit${node.commitCount > 1 ? 's' : ''}`,
+            url: `${repo.repository.url}/commits`,
             changes: {
-              additions: node.additions || 0,
-              deletions: node.deletions || 0,
-              files: node.changedFiles || 0
+              additions: 0,
+              deletions: 0
             }
           }]
         }))

@@ -244,14 +244,10 @@ export default function CodeStats() {
                                           href={commit.url}
                                           target="_blank"
                                           rel="noopener noreferrer"
-                                          className="text-sm hover:text-primary transition-colors block mb-1"
+                                          className="text-sm hover:text-primary transition-colors block"
                                         >
                                           {commit.message}
                                         </a>
-                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                          <span className="text-green-500">+{commit.changes.additions}</span>
-                                          <span className="text-red-500">-{commit.changes.deletions}</span>
-                                        </div>
                                       </div>
                                     ))}
                                   </div>
