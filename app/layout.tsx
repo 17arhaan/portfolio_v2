@@ -29,10 +29,10 @@ export const metadata: Metadata = {
     siteName: "Arhaan Girdhar Portfolio",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/pfp.png",
         width: 1200,
-        height: 630,
-        alt: "Arhaan Girdhar Portfolio",
+        height: 1200,
+        alt: "Arhaan Girdhar",
       },
     ],
   },
@@ -40,14 +40,19 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Arhaan Girdhar | Portfolio",
     description: "A showcase of my work, skills, and professional experience as a software engineer specializing in AI & ML.",
-    creator: "@arhaangirdhar",
-    images: ["/og-image.jpg"],
+    creator: "@Arrhhaan",
+    images: ["/pfp.png"],
   },
   robots: {
     index: true,
     follow: true,
   },
-  generator: 'v0.dev'
+  icons: {
+    icon: "/pfp.png",
+    shortcut: "/pfp.png",
+    apple: "/pfp.png",
+  },
+  generator: null,
 }
 
 export default function RootLayout({
