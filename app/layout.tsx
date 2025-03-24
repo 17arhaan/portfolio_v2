@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -61,11 +61,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#000000" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <body className={`${inter.className} min-h-screen bg-background`}>
+        <ThemeProvider defaultTheme="system" storageKey="theme">
           <div className="relative flex min-h-screen flex-col">
             <Navbar />
-            <div className="flex-1">{children}</div>
+            <main className="flex-1">{children}</main>
             <Footer />
           </div>
           <Toaster />
