@@ -65,7 +65,7 @@ const projectsData = [
     title: "TherapAI",
     description:
       "• Developed a cutting-edge AI-driven platform focused on delivering accessible and personalized mental health support\n\n• Integrated advanced natural language processing with expert-verified therapeutic methodologies to enable responsive and empathetic user interactions\n\n• Designed a scalable architecture to ensure availability, security, and seamless access to mental health resources across devices\n\n• Championed the mission to democratize mental wellness, offering on-demand care to users anytime, anywhere",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/therapai.png?height=400&width=600",
     tags: ["AI", "Mental Health", "NLP", "Chatbot", "Therapeutic Support", "Personalization", "Python", "Flask"]    ,
     demoLink: null,
     githubLink: "https://github.com/17arhaan/TherapAI",
