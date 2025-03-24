@@ -1,105 +1,137 @@
 import { NextResponse } from 'next/server'
 
+interface LeetCodeStats {
+  totalSolved: number;
+  totalQuestions: number;
+  easySolved: number;
+  easyTotal: number;
+  mediumSolved: number;
+  mediumTotal: number;
+  hardSolved: number;
+  hardTotal: number;
+  streak: number;
+  maxStreak: number;
+  totalDays: number;
+  lastSolved: string;
+}
+
 export async function GET() {
   try {
     console.log('Starting LeetCode API call...');
+    const username = 'arhaan17';
 
-    // Fetch LeetCode stats using public API
-    const statsResponse = await fetch('https://leetcode-stats-api.herokuapp.com/arhaan17', {
-      headers: {
-        'User-Agent': 'Mozilla/5.0',
-        'Accept': 'application/json'
+    const query = `
+      query userProfile($username: String!) {
+        allQuestionsCount {
+          difficulty
+          count
+        }
+        matchedUser(username: $username) {
+          submitStats: submitStatsGlobal {
+            acSubmissionNum {
+              difficulty
+              count
+              submissions
+            }
+          }
+          submissionCalendar
+        }
       }
-    });
+    `;
 
-    if (!statsResponse.ok) {
-      const errorText = await statsResponse.text();
-      console.error('LeetCode API Error:', {
-        status: statsResponse.status,
-        statusText: statsResponse.statusText,
-        error: errorText
-      });
-      throw new Error(`LeetCode API failed: ${errorText}`);
-    }
-
-    const statsData = await statsResponse.json();
-    console.log('LeetCode stats fetched:', statsData);
-
-    // Fetch recent submissions using public API
-    const submissionsResponse = await fetch('https://leetcode.com/api/submissions/arhaan17/?offset=0&limit=20', {
+    const response = await fetch('https://leetcode.com/graphql', {
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0',
         'Accept': 'application/json',
-        'Referer': 'https://leetcode.com/arhaan17'
-      }
+      },
+      body: JSON.stringify({
+        query,
+        variables: { username }
+      })
     });
 
-    let recentSubmissions = [];
-    if (submissionsResponse.ok) {
-      const submissionsData = await submissionsResponse.json();
-      console.log('Submissions data:', submissionsData);
-      
-      if (submissionsData.submissions_dump) {
-        recentSubmissions = submissionsData.submissions_dump
-          .filter((sub: any) => sub.status_display === 'Accepted')
-          .slice(0, 5)
-          .map((sub: any) => ({
-            title: sub.title,
-            difficulty: sub.difficulty || 'Medium',
-            date: new Date(sub.timestamp * 1000).toLocaleDateString()
-          }));
-      }
+    const data = await response.json();
+    
+    if (data.errors) {
+      console.error('LeetCode API errors:', data.errors);
+      return getDefaultLeetCodeStats();
     }
 
-    // If no submissions were fetched, use placeholder data
-    if (recentSubmissions.length === 0) {
-      console.log('Using fallback submissions data');
-      recentSubmissions = [
-        {
-          title: "Longest Common Subsequence",
-          difficulty: "Medium",
-          date: new Date().toLocaleDateString()
-        },
-        {
-          title: "Binary Tree Level Order Traversal",
-          difficulty: "Medium",
-          date: new Date().toLocaleDateString()
-        },
-        {
-          title: "Maximum Subarray",
-          difficulty: "Medium",
-          date: new Date().toLocaleDateString()
-        },
-        {
-          title: "Valid Parentheses",
-          difficulty: "Easy",
-          date: new Date().toLocaleDateString()
-        },
-        {
-          title: "Merge k Sorted Lists",
-          difficulty: "Hard",
-          date: new Date().toLocaleDateString()
-        }
-      ];
+    const stats = data.data.matchedUser.submitStats.acSubmissionNum;
+    const submissionCalendar = JSON.parse(data.data.matchedUser.submissionCalendar);
+    const allQuestions = data.data.allQuestionsCount;
+
+    // Calculate total solved problems
+    const totalSolved = stats.reduce((acc: number, curr: any) => acc + curr.count, 0);
+    const totalQuestions = allQuestions.reduce((acc: number, curr: any) => acc + curr.count, 0);
+
+    // Get difficulty-specific stats
+    const easyStats = stats.find((s: any) => s.difficulty === 'Easy') || { count: 0, submissions: 0 };
+    const mediumStats = stats.find((s: any) => s.difficulty === 'Medium') || { count: 0, submissions: 0 };
+    const hardStats = stats.find((s: any) => s.difficulty === 'Hard') || { count: 0, submissions: 0 };
+
+    // Get total questions by difficulty
+    const easyTotal = allQuestions.find((q: any) => q.difficulty === 'Easy')?.count || 150;
+    const mediumTotal = allQuestions.find((q: any) => q.difficulty === 'Medium')?.count || 150;
+    const hardTotal = allQuestions.find((q: any) => q.difficulty === 'Hard')?.count || 75;
+
+    // Calculate streak, max streak, and total days
+    const today = new Date();
+    const dates = Object.keys(submissionCalendar).map(timestamp => parseInt(timestamp));
+    const lastSolvedDate = new Date(Math.max(...dates) * 1000);
+    
+    let streak = 0;
+    let maxStreak = 0;
+    let currentStreak = 0;
+    let totalDays = 0;
+    let currentDate = new Date();
+    
+    // Calculate current streak
+    while (submissionCalendar[Math.floor(currentDate.getTime() / 1000)]) {
+      streak++;
+      currentDate.setDate(currentDate.getDate() - 1);
     }
+    
+    // Calculate max streak and total days
+    currentDate = new Date();
+    const startDate = new Date('2020-01-01'); // Start from a reasonable date
+    while (currentDate >= startDate) {
+      const timestamp = Math.floor(currentDate.getTime() / 1000);
+      if (submissionCalendar[timestamp] && submissionCalendar[timestamp] > 0) {
+        currentStreak++;
+        maxStreak = Math.max(maxStreak, currentStreak);
+        totalDays++;
+      } else {
+        currentStreak = 0;
+      }
+      currentDate.setDate(currentDate.getDate() - 1);
+    }
+
+    // Alternative calculation for total days using the submission calendar directly
+    totalDays = Object.values(submissionCalendar as Record<string, number>).reduce((acc: number, count: number) => {
+      return acc + (count > 0 ? 1 : 0);
+    }, 0);
 
     // Format the response
-    const response = {
-      totalSolved: statsData.totalSolved || 0,
-      totalQuestions: statsData.totalQuestions || 2000,
-      easySolved: statsData.easySolved || 0,
-      easyTotal: statsData.totalEasy || 500,
-      mediumSolved: statsData.mediumSolved || 0,
-      mediumTotal: statsData.totalMedium || 1000,
-      hardSolved: statsData.hardSolved || 0,
-      hardTotal: statsData.totalHard || 500,
-      acceptanceRate: statsData.acceptanceRate || 0,
-      ranking: statsData.ranking || 0,
-      recentSubmissions
+    const responseData = {
+      totalSolved,
+      totalQuestions,
+      easySolved: easyStats.count,
+      easyTotal,
+      mediumSolved: mediumStats.count,
+      mediumTotal,
+      hardSolved: hardStats.count,
+      hardTotal,
+      streak,
+      maxStreak,
+      totalDays,
+      lastSolved: lastSolvedDate.toISOString()
     };
 
     console.log('Final response prepared successfully');
-    return NextResponse.json(response);
+    return NextResponse.json(responseData);
   } catch (error: any) {
     console.error('LeetCode API Error:', {
       name: error.name,
@@ -111,16 +143,34 @@ export async function GET() {
       error: 'Failed to fetch LeetCode stats',
       message: error.message,
       totalSolved: 0,
-      totalQuestions: 2000,
+      totalQuestions: 2500,
       easySolved: 0,
-      easyTotal: 500,
+      easyTotal: 150,
       mediumSolved: 0,
-      mediumTotal: 1000,
+      mediumTotal: 150,
       hardSolved: 0,
-      hardTotal: 500,
-      acceptanceRate: 0,
-      ranking: 0,
-      recentSubmissions: []
+      hardTotal: 75,
+      streak: 0,
+      maxStreak: 0,
+      totalDays: 0,
+      lastSolved: new Date().toISOString()
     }, { status: 500 });
   }
+}
+
+function getDefaultLeetCodeStats(): LeetCodeStats {
+  return {
+    totalSolved: 0,
+    totalQuestions: 2500,
+    easySolved: 0,
+    easyTotal: 150,
+    mediumSolved: 0,
+    mediumTotal: 150,
+    hardSolved: 0,
+    hardTotal: 75,
+    streak: 0,
+    maxStreak: 0,
+    totalDays: 0,
+    lastSolved: new Date().toISOString()
+  };
 } 

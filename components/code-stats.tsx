@@ -41,7 +41,10 @@ interface LeetCodeStats {
   mediumTotal: number
   hardSolved: number
   hardTotal: number
-  recentSubmissions: { title: string; difficulty: string; date: string }[]
+  streak: number
+  maxStreak: number
+  totalDays: number
+  lastSolved: string
 }
 
 export default function CodeStats() {
@@ -352,31 +355,32 @@ export default function CodeStats() {
 
                       <Card>
                         <CardHeader>
-                          <CardTitle>Recent Submissions</CardTitle>
-                          <CardDescription>My latest solved problems on LeetCode</CardDescription>
+                          <CardTitle>Problem Solving Streak</CardTitle>
+                          <CardDescription>Your consistency in solving LeetCode problems</CardDescription>
                         </CardHeader>
                         <CardContent>
-                          <div className="space-y-4">
-                            {leetcodeStats.recentSubmissions.map((submission, index) => (
-                              <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-                                <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
-                                <div className="flex-1">
-                                  <p className="font-medium">{submission.title}</p>
-                                  <p className="text-sm text-muted-foreground">{submission.date}</p>
-                                </div>
-                                <div
-                                  className={`text-sm px-2 py-1 rounded-full ${
-                                    submission.difficulty === "Easy"
-                                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                      : submission.difficulty === "Medium"
-                                        ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                                  }`}
-                                >
-                                  {submission.difficulty}
-                                </div>
-                              </div>
-                            ))}
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="text-center p-4 rounded-lg bg-muted/50">
+                              <p className="text-sm text-muted-foreground mb-1">Current Streak</p>
+                              <p className="text-3xl font-bold text-primary">{leetcodeStats.streak} days</p>
+                            </div>
+                            <div className="text-center p-4 rounded-lg bg-muted/50">
+                              <p className="text-sm text-muted-foreground mb-1">Max Streak</p>
+                              <p className="text-3xl font-bold text-primary">{leetcodeStats.maxStreak} days</p>
+                            </div>
+                            <div className="text-center p-4 rounded-lg bg-muted/50">
+                              <p className="text-sm text-muted-foreground mb-1">Total Days</p>
+                              <p className="text-3xl font-bold text-primary">{leetcodeStats.totalDays} days</p>
+                            </div>
+                            <div className="text-center p-4 rounded-lg bg-muted/50">
+                              <p className="text-sm text-muted-foreground mb-1">Last Solved</p>
+                              <p className="text-3xl font-bold text-primary">
+                                {new Date(leetcodeStats.lastSolved).toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric'
+                                })}
+                              </p>
+                            </div>
                           </div>
                         </CardContent>
                       </Card>
