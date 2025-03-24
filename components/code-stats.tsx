@@ -44,30 +44,6 @@ interface LeetCodeStats {
   recentSubmissions: { title: string; difficulty: string; date: string }[]
 }
 
-// Add language colors mapping
-const languageColors: { [key: string]: string } = {
-  JavaScript: '#f1e05a',
-  TypeScript: '#2b7489',
-  Python: '#3572A5',
-  Java: '#b07219',
-  C: '#555555',
-  'C++': '#f34b7d',
-  Go: '#00ADD8',
-  Rust: '#dea584',
-  Ruby: '#701516',
-  PHP: '#4F5B93',
-  Swift: '#ffac45',
-  Kotlin: '#F18E33',
-  HTML: '#e34c26',
-  CSS: '#563d7c',
-  Shell: '#89e051',
-  'C#': '#178600',
-  R: '#198CE7',
-  Dart: '#00B4AB',
-  Scala: '#c22d40',
-  Haskell: '#5e5086'
-};
-
 export default function CodeStats() {
   const [githubStats, setGithubStats] = useState<GitHubStats | null>(null)
   const [leetcodeStats, setLeetcodeStats] = useState<LeetCodeStats | null>(null)
@@ -250,9 +226,15 @@ export default function CodeStats() {
                                         rel="noopener noreferrer"
                                         className="font-medium hover:text-primary transition-colors"
                                       >
-                                        {activity.repo}
+                                        {activity.repo.split('/')[1]}
                                       </a>
-                                      <p className="text-sm text-muted-foreground">{activity.date}</p>
+                                      <p className="text-sm text-muted-foreground">
+                                        {new Date(activity.date).toLocaleDateString('en-US', {
+                                          year: 'numeric',
+                                          month: 'short',
+                                          day: 'numeric'
+                                        })}
+                                      </p>
                                     </div>
                                   </div>
                                   <div className="ml-7 space-y-2">

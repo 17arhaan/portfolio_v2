@@ -1,5 +1,29 @@
 import { NextResponse } from 'next/server'
 
+// Standard GitHub language colors
+const languageColors = {
+  JavaScript: '#f1e05a',
+  TypeScript: '#2b7489',
+  Python: '#3572A5',
+  Java: '#b07219',
+  'C++': '#f34b7d',
+  C: '#555555',
+  'C#': '#178600',
+  Go: '#00ADD8',
+  Rust: '#dea584',
+  Swift: '#ffac45',
+  Kotlin: '#F18E33',
+  Ruby: '#701516',
+  PHP: '#4F5B93',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  Shell: '#89e051',
+  Jupyter: '#DA5B0B',
+  Dart: '#00B4AB',
+  R: '#198CE7',
+  Vue: '#41b883'
+};
+
 export async function GET() {
   try {
     // Check if token exists
@@ -9,167 +33,170 @@ export async function GET() {
 
     const headers = {
       'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+      'Content-Type': 'application/json',
       'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': '17arhaan',
       'X-GitHub-Api-Version': '2022-11-28'
     };
 
     console.log('Starting GitHub API calls...');
 
-    // Fetch user data
-    console.log('Fetching user data...');
-    const userResponse = await fetch('https://api.github.com/users/17arhaan', { headers });
-    
-    if (!userResponse.ok) {
-      const errorText = await userResponse.text();
-      const rateLimitRemaining = userResponse.headers.get('X-RateLimit-Remaining');
-      const rateLimitReset = userResponse.headers.get('X-RateLimit-Reset');
-      
-      console.error('User API Error:', {
-        status: userResponse.status,
-        statusText: userResponse.statusText,
-        rateLimitRemaining,
-        rateLimitReset,
-        error: errorText
-      });
-      
-      if (userResponse.status === 403 && rateLimitRemaining === '0') {
-        const resetTime = new Date(parseInt(rateLimitReset || '0') * 1000).toLocaleString();
-        throw new Error(`GitHub API rate limit exceeded. Resets at ${resetTime}`);
+    // GraphQL query for user data, repositories, and contributions
+    const query = `
+      query {
+        user(login: "17arhaan") {
+          repositories(first: 100, privacy: PUBLIC) {
+            nodes {
+              name
+              stargazerCount
+              forkCount
+              languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+                edges {
+                  size
+                  node {
+                    name
+                  }
+                }
+              }
+            }
+          }
+          contributionsCollection {
+            totalCommitContributions
+            totalIssueContributions
+            totalPullRequestContributions
+            totalPullRequestReviewContributions
+            restrictedContributionsCount
+          }
+        }
       }
-      
-      throw new Error(`GitHub API failed: ${errorText}`);
+    `;
+
+    const response = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ query })
+    });
+
+    if (!response.ok) {
+      throw new Error('GitHub API request failed');
     }
 
-    const userData = await userResponse.json();
-    console.log('User data fetched successfully:', userData.login);
-
-    // Fetch repositories
-    console.log('Fetching repositories...');
-    const reposResponse = await fetch('https://api.github.com/users/17arhaan/repos?per_page=100', { headers });
+    const data = await response.json();
     
-    if (!reposResponse.ok) {
-      const errorText = await reposResponse.text();
-      const rateLimitRemaining = reposResponse.headers.get('X-RateLimit-Remaining');
-      const rateLimitReset = reposResponse.headers.get('X-RateLimit-Reset');
-      
-      console.error('Repos API Error:', {
-        status: reposResponse.status,
-        statusText: reposResponse.statusText,
-        rateLimitRemaining,
-        rateLimitReset,
-        error: errorText
-      });
-      
-      if (reposResponse.status === 403 && rateLimitRemaining === '0') {
-        const resetTime = new Date(parseInt(rateLimitReset || '0') * 1000).toLocaleString();
-        throw new Error(`GitHub API rate limit exceeded. Resets at ${resetTime}`);
-      }
-      
-      throw new Error(`Repos API failed: ${errorText}`);
+    if (data.errors) {
+      console.error('GitHub API errors:', data.errors);
+      throw new Error('Failed to fetch GitHub data');
     }
 
-    const reposData = await reposResponse.json();
-    console.log('Repositories fetched:', reposData.length);
+    const repositories = data.data.user.repositories.nodes;
+    const contributions = data.data.user.contributionsCollection;
 
-    // Calculate stats
-    const totalStars = reposData.reduce((acc: number, repo: any) => acc + repo.stargazers_count, 0);
-    const totalForks = reposData.reduce((acc: number, repo: any) => acc + repo.forks_count, 0);
-    console.log('Stats calculated:', { totalStars, totalForks });
-
-    // Fetch recent activity
-    console.log('Fetching recent activity...');
-    const activityResponse = await fetch('https://api.github.com/users/17arhaan/events/public', { headers });
+    // Calculate total stats
+    const totalRepos = repositories.length;
+    const totalStars = repositories.reduce((acc: number, repo: any) => acc + repo.stargazerCount, 0);
+    const totalForks = repositories.reduce((acc: number, repo: any) => acc + repo.forkCount, 0);
     
+    // Calculate total contributions properly
+    const totalContributions = 
+      contributions.totalCommitContributions +
+      contributions.totalIssueContributions +
+      contributions.totalPullRequestContributions +
+      contributions.totalPullRequestReviewContributions +
+      contributions.restrictedContributionsCount;
+
+    // Calculate language stats with proper sizing
+    const languageTotals: { [key: string]: number } = {};
+    repositories.forEach((repo: any) => {
+      repo.languages.edges.forEach((edge: any) => {
+        const langName = edge.node.name;
+        languageTotals[langName] = (languageTotals[langName] || 0) + edge.size;
+      });
+    });
+
+    const totalBytes = Object.values(languageTotals).reduce((a: number, b: number) => a + b, 0);
+    const languages = Object.entries(languageTotals)
+      .map(([name, size]) => ({
+        name,
+        percentage: Math.round((size / totalBytes) * 100),
+        color: languageColors[name as keyof typeof languageColors] || '#8b8b8b'
+      }))
+      .filter(lang => lang.percentage > 0)
+      .sort((a, b) => b.percentage - a.percentage);
+
+    // Fetch recent activity with more details
+    const activityQuery = `
+      query {
+        user(login: "17arhaan") {
+          contributionsCollection {
+            commitContributionsByRepository {
+              repository {
+                name
+                url
+              }
+              contributions(first: 5) {
+                nodes {
+                  commitCount
+                  repository {
+                    name
+                    url
+                  }
+                  occurredAt
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const activityResponse = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ query: activityQuery })
+    });
+
     if (!activityResponse.ok) {
-      const errorText = await activityResponse.text();
-      const rateLimitRemaining = activityResponse.headers.get('X-RateLimit-Remaining');
-      const rateLimitReset = activityResponse.headers.get('X-RateLimit-Reset');
-      
-      console.error('Activity API Error:', {
-        status: activityResponse.status,
-        statusText: activityResponse.statusText,
-        rateLimitRemaining,
-        rateLimitReset,
-        error: errorText
-      });
-      
-      if (activityResponse.status === 403 && rateLimitRemaining === '0') {
-        const resetTime = new Date(parseInt(rateLimitReset || '0') * 1000).toLocaleString();
-        throw new Error(`GitHub API rate limit exceeded. Resets at ${resetTime}`);
-      }
-      
-      throw new Error(`Activity API failed: ${errorText}`);
+      throw new Error('Failed to fetch GitHub activity');
     }
 
     const activityData = await activityResponse.json();
-    console.log('Activity events fetched:', activityData.length);
+    
+    if (activityData.errors) {
+      console.error('GitHub Activity API errors:', activityData.errors);
+      throw new Error('Failed to fetch GitHub activity');
+    }
 
     // Process recent activity
-    const recentActivity = activityData
-      .filter((event: any) => event.type === 'PushEvent')
-      .slice(0, 7)
-      .map((event: any) => ({
-        date: new Date(event.created_at).toLocaleDateString(),
-        repo: event.repo.name.split('/')[1],
-        repoUrl: `https://github.com/${event.repo.name}`,
-        commits: event.payload.commits.map((commit: any) => ({
-          message: commit.message,
-          url: `https://github.com/${event.repo.name}/commit/${commit.sha}`,
-          changes: {
-            additions: event.payload.size || 0,
-            deletions: event.payload.distinct_size || 0
-          }
+    const recentActivity = activityData.data.user.contributionsCollection.commitContributionsByRepository
+      .flatMap((repo: any) => 
+        repo.contributions.nodes.map((node: any) => ({
+          date: new Date(node.occurredAt).toISOString().split('T')[0],
+          repo: repo.repository.name,
+          repoUrl: repo.repository.url,
+          commits: [{
+            message: `${node.commitCount} commit${node.commitCount > 1 ? 's' : ''}`,
+            url: `${repo.repository.url}/commits`,
+            changes: {
+              additions: 0,
+              deletions: 0
+            }
+          }]
         }))
-      }));
-
-    // Calculate language stats
-    console.log('Calculating language stats...');
-    const languageStats = await Promise.all(
-      reposData.slice(0, 10).map(async (repo: any) => {
-        try {
-          const langResponse = await fetch(repo.languages_url, { headers });
-          if (!langResponse.ok) return {};
-          return langResponse.json();
-        } catch (error) {
-          console.error(`Failed to fetch languages for ${repo.name}:`, error);
-          return {};
-        }
-      })
-    ).then((languagesData) => {
-      const totalBytes = languagesData.reduce((acc, langData) => {
-        return acc + Object.values(langData).reduce((sum: any, bytes: any) => sum + bytes, 0);
-      }, 0);
-
-      const combined = languagesData.reduce((acc: any, langData: any) => {
-        Object.entries(langData).forEach(([lang, bytes]: [string, any]) => {
-          acc[lang] = (acc[lang] || 0) + bytes;
-        });
-        return acc;
-      }, {});
-
-      return Object.entries(combined)
-        .map(([name, bytes]: [string, any]) => ({
-          name,
-          percentage: Math.round((bytes / totalBytes) * 100),
-          color: '#' + Math.floor(Math.random()*16777215).toString(16)
-        }))
-        .sort((a, b) => b.percentage - a.percentage)
-        .slice(0, 5);
-    });
+      )
+      .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
 
     // Return the response
-    const response = {
-      totalRepos: userData.public_repos,
+    const responseData = {
+      totalRepos,
       totalStars,
       totalForks,
-      totalContributions: userData.public_repos,
-      languages: languageStats,
+      totalContributions,
+      languages,
       recentActivity
     };
 
     console.log('Final response prepared successfully');
-    return NextResponse.json(response);
+    return NextResponse.json(responseData);
   } catch (error: any) {
     console.error('GitHub API Error:', {
       name: error.name,
