@@ -1,90 +1,50 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Moon, Sun, Menu, X } from 'lucide-react'
-import { useTheme } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
+import { Menu, X, Sun, Moon } from "lucide-react"
+import { useTheme } from "next-themes"
 
 // Update the navItems array to include all sections including About Me
 const navItems = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Projects", href: "#projects" },
-  { name: "Experience", href: "#experience" },
-  { name: "Skills", href: "#skills" },
-  { name: "Certifications", href: "#certifications" },
-  { name: "Resume", href: "#resume" },
-  { name: "Progress", href: "#code-stats" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Projects", href: "/projects" },
+  { name: "Experience", href: "/experience" },
+  { name: "Skills", href: "/skills" },
+  { name: "Certifications", href: "/certifications" },
+  { name: "Resume", href: "/resume" },
+  { name: "Progress", href: "/code-stats" },
+  { name: "Contact", href: "/contact" },
 ]
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
-  const { theme, setTheme } = useTheme()
-
-  // Handle scroll events
-  const handleScroll = useCallback(() => {
-    setIsScrolled(window.scrollY > 10)
-
-    // Get all sections
-    const sections = navItems.map((item) => {
-      const element = document.getElementById(item.href.substring(1))
-      return {
-        id: item.href.substring(1),
-        element,
-        top: element?.offsetTop ?? 0,
-        bottom: (element?.offsetTop ?? 0) + (element?.offsetHeight ?? 0)
-      }
-    })
-
-    // Get current scroll position with offset for navbar height
-    const scrollPosition = window.scrollY + 80 // Adjusted offset for navbar height
-
-    // Find the current section with more precise boundaries
-    const currentSection = sections.find(section => {
-      const sectionTop = section.top - 80 // Adjust for navbar height
-      const sectionBottom = section.bottom - 80 // Adjust for navbar height
-      const isInSection = scrollPosition >= sectionTop && scrollPosition < sectionBottom
-      
-      // Add a small buffer zone at the top of each section
-      const isNearTop = Math.abs(scrollPosition - sectionTop) < 100
-      
-      return isInSection || isNearTop
-    })
-
-    if (currentSection) {
-      setActiveSection(currentSection.id)
-    }
-  }, [])
+  const { setTheme, theme } = useTheme()
 
   useEffect(() => {
-    // Initial check for active section
-    handleScroll()
-
-    // Add a small delay to ensure all elements are properly loaded
-    const timeoutId = setTimeout(() => {
-      handleScroll()
-    }, 100)
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-      clearTimeout(timeoutId)
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
     }
-  }, [handleScroll])
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-  // Handle smooth scrolling with improved offset
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
+
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     setMobileMenuOpen(false)
 
-    const targetId = href.substring(1)
+    const targetId = href.replace("/", "")
     const element = document.getElementById(targetId)
 
     if (element) {
@@ -96,14 +56,8 @@ export default function Navbar() {
         behavior: "smooth",
       })
 
-      // Update URL without page reload
-      window.history.pushState(null, "", href)
       setActiveSection(targetId)
     }
-  }
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
   }
 
   return (
@@ -116,9 +70,9 @@ export default function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
           <Link
-            href="#home"
+            href="/"
             className="text-xl font-bold tracking-tighter transition-colors"
-            onClick={(e) => handleNavClick(e, "#home")}
+            onClick={(e) => handleNavClick(e, "/")}
           >
             <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Arhaan Girdhar</span>
           </Link>
@@ -138,11 +92,11 @@ export default function Navbar() {
                 onClick={(e) => handleNavClick(e, item.href)}
                 className={cn(
                   "relative px-3 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
-                  activeSection === item.href.substring(1) ? "text-primary" : "text-muted-foreground",
+                  activeSection === item.href.replace("/", "") ? "text-primary" : "text-muted-foreground",
                 )}
               >
                 {item.name}
-                {activeSection === item.href.substring(1) && (
+                {activeSection === item.href.replace("/", "") && (
                   <motion.span
                     layoutId="activeSection"
                     className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary mx-3"
@@ -227,7 +181,7 @@ export default function Navbar() {
                     onClick={(e) => handleNavClick(e, item.href)}
                     className={cn(
                       "block py-2 px-3 text-sm font-medium transition-colors hover:text-primary rounded-md",
-                      activeSection === item.href.substring(1) ? "bg-primary/10 text-primary" : "text-muted-foreground",
+                      activeSection === item.href.replace("/", "") ? "bg-primary/10 text-primary" : "text-muted-foreground",
                     )}
                   >
                     {item.name}
