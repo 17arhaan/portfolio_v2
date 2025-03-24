@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Sun, Moon } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useTheme } from "@/components/theme-provider"
 
 // Update the navItems array to include all sections including About Me
 const navItems = [
@@ -43,6 +43,15 @@ export default function Navbar() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     setMobileMenuOpen(false)
+
+    if (href === "/") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      })
+      setActiveSection("home")
+      return
+    }
 
     const targetId = href.replace("/", "")
     const element = document.getElementById(targetId)
@@ -116,10 +125,12 @@ export default function Navbar() {
               size="icon"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="ml-2"
+              className="ml-2 p-0 hover:bg-transparent"
             >
-              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <div className="relative h-5 w-5">
+                <Sun className="absolute h-5 w-5 rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100" />
+              </div>
               <span className="sr-only">Toggle theme</span>
             </Button>
           </motion.div>
@@ -132,9 +143,12 @@ export default function Navbar() {
             size="icon"
             onClick={toggleTheme}
             aria-label="Toggle theme"
+            className="p-0 hover:bg-transparent"
           >
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <div className="relative h-5 w-5">
+              <Sun className="absolute h-5 w-5 rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100" />
+            </div>
             <span className="sr-only">Toggle theme</span>
           </Button>
           <Button

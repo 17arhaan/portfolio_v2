@@ -33,13 +33,6 @@ export function ThemeProvider({
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem(storageKey) as Theme | null
-    if (savedTheme) {
-      setTheme(savedTheme)
-    }
-  }, [storageKey])
-
-  useEffect(() => {
     const root = window.document.documentElement
     root.classList.remove("light", "dark")
 
@@ -51,6 +44,13 @@ export function ThemeProvider({
 
     root.classList.add(theme)
   }, [theme, prefersDarkMode])
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem(storageKey) as Theme | null
+    if (savedTheme) {
+      setTheme(savedTheme)
+    }
+  }, [storageKey])
 
   const value = {
     theme,

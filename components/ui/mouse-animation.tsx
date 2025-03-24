@@ -19,7 +19,7 @@ export function MouseAnimation() {
 
   return (
     <div
-      className="fixed pointer-events-none z-50 mix-blend-difference"
+      className="fixed pointer-events-none z-[9999] mix-blend-difference"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

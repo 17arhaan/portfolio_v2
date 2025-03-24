@@ -23,7 +23,7 @@ const highlights = [
   {
     icon: Briefcase,
     title: "Experience",
-    details: "1+ Year ",
+    details: "1+ Year",
     subtext: "Bharat Electronics Limited\n\n • Invisible Mechanics • buildspace"
   }
 ]
