@@ -8,7 +8,7 @@ import CodeStats from "@/components/code-stats"
 import Contact from "@/components/contact"
 import Summary from "@/components/summary"
 import { Toaster } from "@/components/ui/toaster"
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">

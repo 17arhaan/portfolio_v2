@@ -25,39 +25,13 @@ export async function GET() {
     const statsData = await statsResponse.json();
     console.log('LeetCode stats fetched:', statsData);
 
-    // Fetch recent submissions using LeetCode's GraphQL API
-    const submissionsQuery = {
-      query: `
-        query userProfile($username: String!) {
-          matchedUser(username: $username) {
-            submitStats {
-              acSubmissionNum {
-                difficulty
-                count
-                submissions
-              }
-            }
-            recentSubmissionList {
-              title
-              timestamp
-              statusDisplay
-              lang
-            }
-          }
-        }
-      `,
-      variables: {
-        username: "arhaan17"
-      }
-    };
-
-    const submissionsResponse = await fetch('https://leetcode.com/graphql', {
-      method: 'POST',
+    // Fetch recent submissions using public API
+    const submissionsResponse = await fetch('https://leetcode.com/api/submissions/arhaan17/?offset=0&limit=20', {
       headers: {
-        'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0',
-      },
-      body: JSON.stringify(submissionsQuery)
+        'Accept': 'application/json',
+        'Referer': 'https://leetcode.com/arhaan17'
+      }
     });
 
     let recentSubmissions = [];
@@ -65,42 +39,45 @@ export async function GET() {
       const submissionsData = await submissionsResponse.json();
       console.log('Submissions data:', submissionsData);
       
-      if (submissionsData.data?.matchedUser?.recentSubmissionList) {
-        recentSubmissions = submissionsData.data.matchedUser.recentSubmissionList
-          .filter((sub: any) => sub.statusDisplay === 'Accepted')
+      if (submissionsData.submissions_dump) {
+        recentSubmissions = submissionsData.submissions_dump
+          .filter((sub: any) => sub.status_display === 'Accepted')
           .slice(0, 5)
           .map((sub: any) => ({
             title: sub.title,
-            difficulty: "Medium", // We'll get this from the problem API
-            date: new Date(parseInt(sub.timestamp) * 1000).toLocaleDateString()
+            difficulty: sub.difficulty || 'Medium',
+            date: new Date(sub.timestamp * 1000).toLocaleDateString()
           }));
       }
-    } else {
+    }
+
+    // If no submissions were fetched, use placeholder data
+    if (recentSubmissions.length === 0) {
       console.log('Using fallback submissions data');
       recentSubmissions = [
         {
-          title: "Two Sum",
+          title: "Longest Common Subsequence",
+          difficulty: "Medium",
+          date: new Date().toLocaleDateString()
+        },
+        {
+          title: "Binary Tree Level Order Traversal",
+          difficulty: "Medium",
+          date: new Date().toLocaleDateString()
+        },
+        {
+          title: "Maximum Subarray",
+          difficulty: "Medium",
+          date: new Date().toLocaleDateString()
+        },
+        {
+          title: "Valid Parentheses",
           difficulty: "Easy",
           date: new Date().toLocaleDateString()
         },
         {
-          title: "Add Two Numbers",
-          difficulty: "Medium",
-          date: new Date().toLocaleDateString()
-        },
-        {
-          title: "Longest Substring Without Repeating Characters",
-          difficulty: "Medium",
-          date: new Date().toLocaleDateString()
-        },
-        {
-          title: "Median of Two Sorted Arrays",
+          title: "Merge k Sorted Lists",
           difficulty: "Hard",
-          date: new Date().toLocaleDateString()
-        },
-        {
-          title: "Longest Palindromic Substring",
-          difficulty: "Medium",
           date: new Date().toLocaleDateString()
         }
       ];

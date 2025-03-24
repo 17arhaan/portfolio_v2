@@ -53,7 +53,7 @@ const projectsData = [
     title: "SnakeCV",
     description:
       "• Built an interactive Snake Game with Python and React, featuring manual, AI, and gesture-controlled modes for dynamic gameplay\n\n• Integrated OpenCV and webcam-based gesture recognition to enable real-time control via hand movements in the Python version\n\n• Developed a responsive web version using React for accessible browser-based play with intuitive keyboard controls\n\n• Implemented features including AI mode (Q-learning), live webcam feed, game replays, leaderboard tracking, and a modular game menu system",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/snakecv.webp?height=400&width=600",
     tags: ["Python", "OpenCV", "Pygame", "Gesture Control", "Computer Vision", "Game Development", "Real-Time Interaction"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/Snake_CV_ML",

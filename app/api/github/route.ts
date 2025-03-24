@@ -2,14 +2,19 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
+    // Check if token exists
+    if (!process.env.GITHUB_TOKEN) {
+      throw new Error('GitHub token is not configured');
+    }
+
     const headers = {
-      'Authorization': `token ${process.env.GITHUB_TOKEN}`,
+      'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
       'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': '17arhaan'
+      'User-Agent': '17arhaan',
+      'X-GitHub-Api-Version': '2022-11-28'
     };
 
     console.log('Starting GitHub API calls...');
-    console.log('Token exists:', !!process.env.GITHUB_TOKEN);
 
     // Fetch user data
     console.log('Fetching user data...');
@@ -17,12 +22,23 @@ export async function GET() {
     
     if (!userResponse.ok) {
       const errorText = await userResponse.text();
+      const rateLimitRemaining = userResponse.headers.get('X-RateLimit-Remaining');
+      const rateLimitReset = userResponse.headers.get('X-RateLimit-Reset');
+      
       console.error('User API Error:', {
         status: userResponse.status,
         statusText: userResponse.statusText,
+        rateLimitRemaining,
+        rateLimitReset,
         error: errorText
       });
-      throw new Error(`User API failed: ${errorText}`);
+      
+      if (userResponse.status === 403 && rateLimitRemaining === '0') {
+        const resetTime = new Date(parseInt(rateLimitReset || '0') * 1000).toLocaleString();
+        throw new Error(`GitHub API rate limit exceeded. Resets at ${resetTime}`);
+      }
+      
+      throw new Error(`GitHub API failed: ${errorText}`);
     }
 
     const userData = await userResponse.json();
@@ -30,15 +46,26 @@ export async function GET() {
 
     // Fetch repositories
     console.log('Fetching repositories...');
-    const reposResponse = await fetch('https://api.github.com/users/17arhaan/repos', { headers });
+    const reposResponse = await fetch('https://api.github.com/users/17arhaan/repos?per_page=100', { headers });
     
     if (!reposResponse.ok) {
       const errorText = await reposResponse.text();
+      const rateLimitRemaining = reposResponse.headers.get('X-RateLimit-Remaining');
+      const rateLimitReset = reposResponse.headers.get('X-RateLimit-Reset');
+      
       console.error('Repos API Error:', {
         status: reposResponse.status,
         statusText: reposResponse.statusText,
+        rateLimitRemaining,
+        rateLimitReset,
         error: errorText
       });
+      
+      if (reposResponse.status === 403 && rateLimitRemaining === '0') {
+        const resetTime = new Date(parseInt(rateLimitReset || '0') * 1000).toLocaleString();
+        throw new Error(`GitHub API rate limit exceeded. Resets at ${resetTime}`);
+      }
+      
       throw new Error(`Repos API failed: ${errorText}`);
     }
 
@@ -52,15 +79,26 @@ export async function GET() {
 
     // Fetch recent activity
     console.log('Fetching recent activity...');
-    const activityResponse = await fetch('https://api.github.com/users/17arhaan/events', { headers });
+    const activityResponse = await fetch('https://api.github.com/users/17arhaan/events/public', { headers });
     
     if (!activityResponse.ok) {
       const errorText = await activityResponse.text();
+      const rateLimitRemaining = activityResponse.headers.get('X-RateLimit-Remaining');
+      const rateLimitReset = activityResponse.headers.get('X-RateLimit-Reset');
+      
       console.error('Activity API Error:', {
         status: activityResponse.status,
         statusText: activityResponse.statusText,
+        rateLimitRemaining,
+        rateLimitReset,
         error: errorText
       });
+      
+      if (activityResponse.status === 403 && rateLimitRemaining === '0') {
+        const resetTime = new Date(parseInt(rateLimitReset || '0') * 1000).toLocaleString();
+        throw new Error(`GitHub API rate limit exceeded. Resets at ${resetTime}`);
+      }
+      
       throw new Error(`Activity API failed: ${errorText}`);
     }
 
@@ -85,48 +123,47 @@ export async function GET() {
         }))
       }));
 
-    // Fetch language stats
-    console.log('Fetching language stats...');
-    const languagePromises = reposData.map(async (repo: any) => {
-      const langResponse = await fetch(repo.languages_url, { headers });
-      if (!langResponse.ok) {
-        console.error(`Failed to fetch languages for ${repo.name}`);
-        return {};
-      }
-      return langResponse.json();
-    });
+    // Calculate language stats
+    console.log('Calculating language stats...');
+    const languageStats = await Promise.all(
+      reposData.slice(0, 10).map(async (repo: any) => {
+        try {
+          const langResponse = await fetch(repo.languages_url, { headers });
+          if (!langResponse.ok) return {};
+          return langResponse.json();
+        } catch (error) {
+          console.error(`Failed to fetch languages for ${repo.name}:`, error);
+          return {};
+        }
+      })
+    ).then((languagesData) => {
+      const totalBytes = languagesData.reduce((acc, langData) => {
+        return acc + Object.values(langData).reduce((sum: any, bytes: any) => sum + bytes, 0);
+      }, 0);
 
-    const languagesData = await Promise.all(languagePromises);
-    
-    // Calculate language percentages
-    const totalBytes = languagesData.reduce((acc: number, langData: any) => {
-      return acc + Object.values(langData).reduce((sum: any, bytes: any) => sum + bytes, 0);
-    }, 0);
-
-    const languageStats = Object.entries(
-      languagesData.reduce((acc: any, langData: any) => {
+      const combined = languagesData.reduce((acc: any, langData: any) => {
         Object.entries(langData).forEach(([lang, bytes]: [string, any]) => {
           acc[lang] = (acc[lang] || 0) + bytes;
         });
         return acc;
-      }, {})
-    )
-    .map(([name, bytes]: [string, any]) => ({
-      name,
-      percentage: Math.round((bytes / totalBytes) * 100),
-      color: '#' + Math.floor(Math.random()*16777215).toString(16) // Fallback color if not in mapping
-    }))
-    .sort((a, b) => b.percentage - a.percentage)
-    .slice(0, 5);
+      }, {});
 
-    console.log('Language stats calculated:', languageStats);
+      return Object.entries(combined)
+        .map(([name, bytes]: [string, any]) => ({
+          name,
+          percentage: Math.round((bytes / totalBytes) * 100),
+          color: '#' + Math.floor(Math.random()*16777215).toString(16)
+        }))
+        .sort((a, b) => b.percentage - a.percentage)
+        .slice(0, 5);
+    });
 
     // Return the response
     const response = {
       totalRepos: userData.public_repos,
       totalStars,
       totalForks,
-      totalContributions: userData.public_repos, // Using repos count as a fallback
+      totalContributions: userData.public_repos,
       languages: languageStats,
       recentActivity
     };
