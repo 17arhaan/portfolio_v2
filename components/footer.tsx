@@ -7,16 +7,6 @@ import { motion } from "framer-motion"
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
-  const footerLinks = [
-    { name: "Home", href: "#home" },
-    { name: "Projects", href: "#projects" },
-    { name: "Experience", href: "#experience" },
-    { name: "Skills", href: "#skills" },
-    { name: "Certifications", href: "#certifications" },
-    { name: "Resume", href: "#resume" },
-    { name: "Contact", href: "#contact" },
-  ]
-
   const socialLinks = [
     { name: "GitHub", href: "https://github.com/17arhaan", icon: "github" },
     { name: "LinkedIn", href: "https://www.linkedin.com/in/arhaan17/", icon: "linkedin" },
@@ -45,7 +35,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="border-t py-8 bg-muted/30">
+    <footer className="border-t py-6 bg-muted/30">
       <motion.div
         className="container px-4 mx-auto"
         initial="hidden"
@@ -53,17 +43,21 @@ export default function Footer() {
         viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <motion.div variants={itemVariants} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <motion.div variants={itemVariants} className="space-y-3">
             <Link href="/" className="inline-block">
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
                 Arhaan Girdhar
               </span>
             </Link>
-            <p className="text-muted-foreground max-w-md">
+            <p className="text-sm text-muted-foreground max-w-xs">
               Aspiring Software Engineer specializing in creating beautiful, functional, and user-friendly applications
               with a focus on AI & ML.
             </p>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="flex flex-col items-center justify-center">
+            <h3 className="text-sm font-medium mb-3 text-muted-foreground">Connect</h3>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
                 <motion.a
@@ -72,7 +66,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="h-9 w-9 flex items-center justify-center rounded-full bg-muted hover:bg-primary/10 transition-all duration-300"
-                  whileHover={{ y: -3, scale: 1.05 }}
+                  whileHover={{ y: -2, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label={social.name}
                 >
@@ -112,29 +106,9 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-8">
+          <motion.div variants={itemVariants} className="flex flex-col items-center justify-center">
             <div>
-              <h3 className="text-sm font-medium mb-4 text-muted-foreground">Navigation</h3>
-              <ul className="space-y-2">
-                {footerLinks.map((link) => (
-                  <motion.li
-                    key={link.name}
-                    whileHover={{ x: 5 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  >
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-medium mb-4 text-muted-foreground">Contact</h3>
+              <h3 className="text-sm font-medium mb-3 text-muted-foreground">Contact</h3>
               <ul className="space-y-2">
                 <motion.li
                   whileHover={{ x: 5 }}
@@ -157,18 +131,15 @@ export default function Footer() {
               </ul>
             </div>
           </motion.div>
-        </div>
 
-        <motion.div
-          variants={itemVariants}
-          className="border-t mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"
-        >
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <span>&copy; {currentYear} Arhaan Girdhar</span>
-            <span className="hidden md:inline">•</span>
-            <span className="hidden md:inline">All rights reserved</span>
-          </div>
-        </motion.div>
+          <motion.div variants={itemVariants} className="flex flex-col items-end justify-center">
+            <div className="text-sm text-muted-foreground">
+              <span>&copy; {currentYear} Arhaan Girdhar</span>
+              <span className="hidden md:inline mx-2">•</span>
+              <span className="hidden md:inline">All rights reserved</span>
+            </div>
+          </motion.div>
+        </div>
       </motion.div>
     </footer>
   )
