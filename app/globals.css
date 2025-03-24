@@ -144,3 +144,14 @@ img {
   animation: blob 7s infinite;
 }
 
+/* Custom Cursor Styles */
+* {
+  cursor: none !important;
+}
+
+@media (max-width: 768px) {
+  * {
+    cursor: auto !important;
+  }
+}
+

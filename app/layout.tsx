@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import { Toaster } from "@/components/ui/toaster"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { MouseAnimation } from "@/components/ui/mouse-animation"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -70,6 +71,7 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen bg-background`}>
         <ThemeProvider defaultTheme="system" storageKey="theme">
           <div className="relative flex min-h-screen flex-col">
+            <MouseAnimation />
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />

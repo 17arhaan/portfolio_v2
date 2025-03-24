@@ -1,9 +1,10 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useState } from "react"
 
 // Updated skills data
 const skillsData = {
@@ -84,18 +85,20 @@ const skillsData = {
 }
 
 export default function Skills() {
+  const [activeTab, setActiveTab] = useState("programming")
+
   return (
     <section id="skills" className="py-20 bg-muted/30">
       <div className="container px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl font-bold mb-4">Skills & Expertise</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4 tracking-tight">Skills & Expertise</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             A comprehensive overview of my technical abilities, domain knowledge, and languages.
           </p>
         </motion.div>
@@ -103,181 +106,82 @@ export default function Skills() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
           viewport={{ once: true, margin: "-100px" }}
           className="max-w-4xl mx-auto"
         >
-          <Tabs defaultValue="programming" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 mb-8">
-              <TabsTrigger value="programming" className="text-sm">Programming</TabsTrigger>
-              <TabsTrigger value="frameworks" className="text-sm">Frameworks</TabsTrigger>
-              <TabsTrigger value="libraries" className="text-sm">Libraries</TabsTrigger>
-              <TabsTrigger value="tools" className="text-sm">Dev Tools</TabsTrigger>
-              <TabsTrigger value="platforms" className="text-sm">Platforms</TabsTrigger>
-              <TabsTrigger value="domains" className="text-sm">Domains</TabsTrigger>
-              <TabsTrigger value="languages" className="text-sm">Languages</TabsTrigger>
-            </TabsList>
+          <Tabs defaultValue="programming" className="w-full" onValueChange={setActiveTab}>
+            <div className="relative">
+              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 mb-8 bg-muted/20 relative">
+                {Object.keys(skillsData).map((category) => (
+                  <TabsTrigger
+                    key={category}
+                    value={category}
+                    className="text-sm font-medium relative z-10 transition-colors duration-300"
+                  >
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </TabsTrigger>
+                ))}
+                <motion.div
+                  className="absolute inset-0 bg-background rounded-md shadow-sm"
+                  layoutId="activeTab"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  style={{
+                    width: `calc(100% / ${Object.keys(skillsData).length} - 4px)`,
+                    left: `calc(${Object.keys(skillsData).indexOf(activeTab)} * (100% / ${Object.keys(skillsData).length}))`,
+                  }}
+                />
+              </TabsList>
+            </div>
 
-            <TabsContent value="programming" className="space-y-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {skillsData.programming.map((skill, index) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <div className="mb-2 flex justify-between">
-                          <span className="font-medium">{skill.name}</span>
-                          <span className="text-muted-foreground">{skill.level}%</span>
+            <AnimatePresence mode="wait">
+              {Object.entries(skillsData).map(([category, skills]) => (
+                <TabsContent key={category} value={category}>
+                  <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ 
+                      duration: 0.4,
+                      ease: [0.4, 0, 0.2, 1],
+                      staggerChildren: 0.05
+                    }}
+                  >
+                    <Card className="border border-border/50 shadow-sm">
+                      <CardContent className="pt-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {skills.map((skill, index) => (
+                            <motion.div
+                              key={skill.name}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 20 }}
+                              transition={{ 
+                                duration: 0.3,
+                                ease: [0.4, 0, 0.2, 1],
+                                delay: index * 0.05
+                              }}
+                              className="group"
+                            >
+                              <div className="mb-2 flex justify-between items-center">
+                                <span className="font-medium group-hover:text-primary transition-colors duration-300">
+                                  {skill.name}
+                                </span>
+                                <span className="text-muted-foreground text-sm">{skill.level}%</span>
+                              </div>
+                              <Progress 
+                                value={skill.level} 
+                                className="h-2 group-hover:bg-primary/20 transition-colors duration-300" 
+                              />
+                            </motion.div>
+                          ))}
                         </div>
-                        <Progress value={skill.level} className="h-2" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="frameworks" className="space-y-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {skillsData.frameworks.map((skill, index) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <div className="mb-2 flex justify-between">
-                          <span className="font-medium">{skill.name}</span>
-                          <span className="text-muted-foreground">{skill.level}%</span>
-                        </div>
-                        <Progress value={skill.level} className="h-2" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="libraries" className="space-y-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {skillsData.libraries.map((skill, index) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <div className="mb-2 flex justify-between">
-                          <span className="font-medium">{skill.name}</span>
-                          <span className="text-muted-foreground">{skill.level}%</span>
-                        </div>
-                        <Progress value={skill.level} className="h-2" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="tools" className="space-y-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {skillsData.tools.map((skill, index) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <div className="mb-2 flex justify-between">
-                          <span className="font-medium">{skill.name}</span>
-                          <span className="text-muted-foreground">{skill.level}%</span>
-                        </div>
-                        <Progress value={skill.level} className="h-2" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="platforms" className="space-y-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {skillsData.platforms.map((skill, index) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <div className="mb-2 flex justify-between">
-                          <span className="font-medium">{skill.name}</span>
-                          <span className="text-muted-foreground">{skill.level}%</span>
-                        </div>
-                        <Progress value={skill.level} className="h-2" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="domains" className="space-y-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {skillsData.domains.map((skill, index) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <div className="mb-2 flex justify-between">
-                          <span className="font-medium">{skill.name}</span>
-                          <span className="text-muted-foreground">{skill.level}%</span>
-                        </div>
-                        <Progress value={skill.level} className="h-2" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="languages" className="space-y-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {skillsData.languages.map((skill, index) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <div className="mb-2 flex justify-between">
-                          <span className="font-medium">{skill.name}</span>
-                          <span className="text-muted-foreground">{skill.level}%</span>
-                        </div>
-                        <Progress value={skill.level} className="h-2" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </TabsContent>
+              ))}
+            </AnimatePresence>
           </Tabs>
         </motion.div>
       </div>

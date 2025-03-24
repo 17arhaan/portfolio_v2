@@ -90,12 +90,17 @@ const config = {
             backgroundPosition: "-200% 0",
           },
         },
+        sparkle: {
+          '0%': { opacity: '1', transform: 'scale(1)' },
+          '100%': { opacity: '0', transform: 'scale(0.3)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         blob: "blob 7s infinite",
         shimmer: "shimmer 2s linear infinite",
+        sparkle: 'sparkle 1.5s ease-in-out infinite',
       },
       backgroundSize: {
         "300%": "300%",
