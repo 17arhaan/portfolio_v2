@@ -17,11 +17,11 @@ const projectsData = [
     title: "J.A.R.V.I.S",
     description:
       "• Built a sophisticated AI assistant with multi-modal capabilities using Python, TensorFlow, and advanced NLP models\n\n• Implemented real-time object detection with YOLOv8 achieving 91% mAP, and speech recognition with 95% accuracy\n\n• Developed a CNN-based face authentication system with 98% accuracy, supporting multi-user profiles and dynamic learning\n\n• Created a modular architecture with 20+ custom plugins for task automation, system control, and API integrations\n\n• Integrated OpenAI's GPT models for context-aware conversations and task understanding\n\n• Engineered a custom wake word detection system with 99% accuracy using MFCC features and Deep Learning",
-    image: "/jarvis.png",
+    image: "/jarvis_l.png?height=400&width=600",
     tags: ["Python", "TensorFlow", "PyTorch", "YOLOv8", "OpenAI API", "Whisper ASR", "CNN", "RNN", "LSTM", "GRU", "FastAPI", "WebSocket", "Redis", "Docker"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/J.A.R.V.I.S",
-    category: "dl",
+    categories: ["ai", "dl"],
     featured: true,
   },
   {
@@ -29,11 +29,11 @@ const projectsData = [
     title: "W.E.A.L.T.H",
     description:
       "• Engineered a full-stack finance tracking application with Next.js 13, TypeScript, and PostgreSQL\n\n• Implemented real-time transaction tracking with WebSocket integration for live updates\n\n• Built a RESTful API with Express.js featuring JWT authentication and role-based access control\n\n• Designed a responsive UI with Tailwind CSS and Framer Motion for smooth animations\n\n• Integrated Plaid API for secure bank account linking and automated transaction imports\n\n• Developed custom analytics dashboard with Chart.js for visualizing spending patterns\n\n• Implemented automated bill detection and recurring payment tracking using ML algorithms",
-    image: "/wealth.png?height=400&width=600",
+    image: "/wealth_l.png?height=400&width=600",
     tags: ["Next.js 13", "TypeScript", "Express.js", "Tailwind CSS", "PostgreSQL", "Prisma", "WebSocket", "JWT", "Plaid API", "Chart.js", "Redis", "Docker", "AWS"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/W.E.A.L.T.H",
-    category: "web",
+    categories: ["web"],
     featured: true,
   },
   {
@@ -41,11 +41,11 @@ const projectsData = [
     title: "Sentiment Analysis",
     description:
       "• Built a scalable news and trend analysis pipeline processing 1M+ articles daily using Apache Kafka and Python\n\n• Implemented custom NLP models achieving 92% accuracy in sentiment classification\n\n• Engineered a distributed system with Redis caching reducing response times by 75%\n\n• Developed real-time trend detection algorithms with 95% accuracy using statistical analysis\n\n• Created a custom web scraping framework handling 100K requests/hour with rotating proxies\n\n• Integrated multiple data sources including NewsAPI, GDELT, and Wikipedia with fault-tolerant pipelines\n\n• Built an interactive dashboard using Streamlit for real-time visualization of trends",
-    image: "/sentiment.png?height=400&width=600",
+    image: "/sentiment_l.png?height=400&width=600",
     tags: ["Python", "Apache Kafka", "Redis", "Elasticsearch", "Docker", "Kubernetes", "BERT", "Streamlit", "FastAPI", "MongoDB", "AWS", "Airflow"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/Sentiment_Analysis",
-    category: "data",
+    categories: ["data", "ai", "ml"],
     featured: false,
   },
   {
@@ -53,11 +53,11 @@ const projectsData = [
     title: "SnakeCV",
     description:
       "• Developed a multi-mode Snake Game with computer vision controls using Python, OpenCV, and React\n\n• Implemented real-time hand gesture recognition with 98% accuracy using MediaPipe and custom CV models\n\n• Created an AI agent using Q-learning achieving average scores of 50+ points\n\n• Built a responsive web version with React and TypeScript featuring custom animations\n\n• Designed a replay system storing game states in IndexedDB for offline access\n\n• Integrated WebRTC for real-time multiplayer functionality with <100ms latency\n\n• Added leaderboard system with Firebase real-time database integration",
-    image: "/snakecv.png?height=400&width=600",
+    image: "/snake_l.png?height=400&width=600",
     tags: ["Python", "OpenCV", "MediaPipe", "React", "TypeScript", "WebRTC", "Firebase", "Q-Learning", "WebGL", "Socket.io", "IndexedDB"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/Snake_CV_ML",
-    categories: ["cv", "ml"],
+    categories: ["cv", "ml", "web"],
     featured: true,
   },
   {
@@ -65,11 +65,11 @@ const projectsData = [
     title: "TherapAI",
     description:
       "• Built an AI-powered mental health platform using Python, FastAPI, and React\n\n• Integrated GPT-4 with custom fine-tuning for therapeutic conversations achieving 90% user satisfaction\n\n• Implemented real-time emotion detection from text and voice with 94% accuracy\n\n• Developed secure user authentication and HIPAA-compliant data storage\n\n• Created a progressive web app with offline support and push notifications\n\n• Built an emergency response system with automated escalation protocols\n\n• Integrated with external mental health resources and crisis hotlines",
-    image: "/therapai.png?height=400&width=600",
+    image: "/therapai_l.png?height=400&width=600",
     tags: ["Python", "FastAPI", "React", "GPT-4", "MongoDB", "Redis", "JWT", "WebSocket", "Docker", "AWS", "TensorFlow", "HIPAA Compliance"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/TherapAI",
-    category: "ai",
+    categories: ["ai", "ml"],
     featured: false,
   },
 ]
@@ -95,7 +95,7 @@ export default function Projects() {
   const filteredProjects = projectsData
     .filter((project) => {
       if (activeCategory === "all") return true;
-      return project.categories?.includes(activeCategory) || project.category === activeCategory;
+      return project.categories?.includes(activeCategory);
     })
     .filter((project) => {
       if (!searchQuery) return true;
