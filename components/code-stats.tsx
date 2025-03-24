@@ -312,42 +312,91 @@ export default function CodeStats() {
                             />
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                              <div className="flex justify-between mb-1">
-                                <span className="text-sm font-medium text-green-500">Easy</span>
-                                <span className="text-sm text-muted-foreground">
-                                  {leetcodeStats.easySolved}/{leetcodeStats.easyTotal}
-                                </span>
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Difficulty Breakdown</CardTitle>
+                              <CardDescription>Problems solved by difficulty level</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-4">
+                                <div>
+                                  <div className="flex justify-between mb-1">
+                                    <span className="text-sm font-medium text-green-500">Easy</span>
+                                    <span className="text-sm font-medium text-green-500">
+                                      {leetcodeStats.easySolved}/{leetcodeStats.easyTotal}
+                                    </span>
+                                  </div>
+                                  <div className="w-full bg-muted rounded-full h-2">
+                                    <div
+                                      className="bg-green-500 h-2 rounded-full"
+                                      style={{
+                                        width: `${(leetcodeStats.easySolved / leetcodeStats.easyTotal) * 100}%`
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                <div>
+                                  <div className="flex justify-between mb-1">
+                                    <span className="text-sm font-medium text-yellow-500">Medium</span>
+                                    <span className="text-sm font-medium text-yellow-500">
+                                      {leetcodeStats.mediumSolved}/{leetcodeStats.mediumTotal}
+                                    </span>
+                                  </div>
+                                  <div className="w-full bg-muted rounded-full h-2">
+                                    <div
+                                      className="bg-yellow-500 h-2 rounded-full"
+                                      style={{
+                                        width: `${(leetcodeStats.mediumSolved / leetcodeStats.mediumTotal) * 100}%`
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                <div>
+                                  <div className="flex justify-between mb-1">
+                                    <span className="text-sm font-medium text-red-500">Hard</span>
+                                    <span className="text-sm font-medium text-red-500">
+                                      {leetcodeStats.hardSolved}/{leetcodeStats.hardTotal}
+                                    </span>
+                                  </div>
+                                  <div className="w-full bg-muted rounded-full h-2">
+                                    <div
+                                      className="bg-red-500 h-2 rounded-full"
+                                      style={{
+                                        width: `${(leetcodeStats.hardSolved / leetcodeStats.hardTotal) * 100}%`
+                                      }}
+                                    />
+                                  </div>
+                                </div>
                               </div>
-                              <Progress
-                                value={(leetcodeStats.easySolved / leetcodeStats.easyTotal) * 100}
-                                className="h-2 bg-muted"
-                              />
+                            </CardContent>
+                          </Card>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Problem Solving Progress</CardTitle>
+                          <CardDescription>Your LeetCode problem-solving journey</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="text-center p-4 rounded-lg bg-muted/50">
+                              <p className="text-sm text-muted-foreground mb-1">Total Solved</p>
+                              <p className="text-3xl font-bold text-primary">{leetcodeStats.totalSolved}</p>
                             </div>
-                            <div>
-                              <div className="flex justify-between mb-1">
-                                <span className="text-sm font-medium text-yellow-500">Medium</span>
-                                <span className="text-sm text-muted-foreground">
-                                  {leetcodeStats.mediumSolved}/{leetcodeStats.mediumTotal}
-                                </span>
-                              </div>
-                              <Progress
-                                value={(leetcodeStats.mediumSolved / leetcodeStats.mediumTotal) * 100}
-                                className="h-2 bg-muted"
-                              />
+                            <div className="text-center p-4 rounded-lg bg-muted/50">
+                              <p className="text-sm text-muted-foreground mb-1">Total Problems</p>
+                              <p className="text-3xl font-bold text-primary">{leetcodeStats.totalQuestions}</p>
                             </div>
-                            <div>
-                              <div className="flex justify-between mb-1">
-                                <span className="text-sm font-medium text-red-500">Hard</span>
-                                <span className="text-sm text-muted-foreground">
-                                  {leetcodeStats.hardSolved}/{leetcodeStats.hardTotal}
-                                </span>
-                              </div>
-                              <Progress
-                                value={(leetcodeStats.hardSolved / leetcodeStats.hardTotal) * 100}
-                                className="h-2 bg-muted"
-                              />
+                            <div className="text-center p-4 rounded-lg bg-muted/50">
+                              <p className="text-sm text-muted-foreground mb-1">Completion Rate</p>
+                              <p className="text-3xl font-bold text-primary">
+                                {((leetcodeStats.totalSolved / leetcodeStats.totalQuestions) * 100).toFixed(1)}%
+                              </p>
+                            </div>
+                            <div className="text-center p-4 rounded-lg bg-muted/50">
+                              <p className="text-sm text-muted-foreground mb-1">Problems Left</p>
+                              <p className="text-3xl font-bold text-primary">{leetcodeStats.totalQuestions - leetcodeStats.totalSolved}</p>
                             </div>
                           </div>
                         </CardContent>

@@ -63,19 +63,21 @@ export async function GET() {
     const submissionCalendar = JSON.parse(data.data.matchedUser.submissionCalendar);
     const allQuestions = data.data.allQuestionsCount;
 
-    // Calculate total solved problems
-    const totalSolved = stats.reduce((acc: number, curr: any) => acc + curr.count, 0);
-    const totalQuestions = allQuestions.reduce((acc: number, curr: any) => acc + curr.count, 0);
-
     // Get difficulty-specific stats
     const easyStats = stats.find((s: any) => s.difficulty === 'Easy') || { count: 0, submissions: 0 };
     const mediumStats = stats.find((s: any) => s.difficulty === 'Medium') || { count: 0, submissions: 0 };
     const hardStats = stats.find((s: any) => s.difficulty === 'Hard') || { count: 0, submissions: 0 };
 
-    // Get total questions by difficulty
-    const easyTotal = allQuestions.find((q: any) => q.difficulty === 'Easy')?.count || 150;
-    const mediumTotal = allQuestions.find((q: any) => q.difficulty === 'Medium')?.count || 150;
-    const hardTotal = allQuestions.find((q: any) => q.difficulty === 'Hard')?.count || 75;
+    // Calculate total solved problems (sum of all difficulties)
+    const totalSolved = easyStats.count + mediumStats.count + hardStats.count;
+
+    // Get total questions by difficulty from the API
+    const easyTotal = allQuestions.find((q: any) => q.difficulty === 'Easy')?.count || 0;
+    const mediumTotal = allQuestions.find((q: any) => q.difficulty === 'Medium')?.count || 0;
+    const hardTotal = allQuestions.find((q: any) => q.difficulty === 'Hard')?.count || 0;
+
+    // Calculate total questions (sum of all difficulties)
+    const totalQuestions = easyTotal + mediumTotal + hardTotal;
 
     // Calculate streak, max streak, and total days
     const today = new Date();
