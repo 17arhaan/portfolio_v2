@@ -16,7 +16,19 @@ interface GitHubStats {
   totalForks: number
   totalContributions: number
   languages: { name: string; percentage: number; color: string }[]
-  recentActivity: { date: string; commits: number; repo: string }[]
+  recentActivity: {
+    date: string
+    repo: string
+    repoUrl: string
+    commits: {
+      message: string
+      url: string
+      changes: {
+        additions: number
+        deletions: number
+      }
+    }[]
+  }[]
 }
 
 // Types for LeetCode data
@@ -129,8 +141,16 @@ export default function CodeStats() {
           .slice(0, 7)
           .map((event: any) => ({
             date: new Date(event.created_at).toLocaleDateString(),
-            commits: event.payload.commits.length,
-            repo: event.repo.name.split('/')[1]
+            repo: event.repo.name.split('/')[1],
+            repoUrl: event.repo.url.replace('api.', '').replace('/repos', ''),
+            commits: event.payload.commits.map((commit: any) => ({
+              message: commit.message,
+              url: commit.url,
+              changes: {
+                additions: event.payload.size || 0,
+                deletions: event.payload.distinct_size || 0
+              }
+            }))
           }));
 
         // Fetch language stats
@@ -338,14 +358,38 @@ export default function CodeStats() {
                             {githubStats.recentActivity
                               .slice(0, showAllActivities ? undefined : 2)
                               .map((activity, index) => (
-                                <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-                                  <GitCommit className="h-5 w-5 text-primary flex-shrink-0" />
-                                  <div className="flex-1">
-                                    <p className="font-medium">{activity.repo}</p>
-                                    <p className="text-sm text-muted-foreground">{activity.date}</p>
+                                <div key={index} className="space-y-2">
+                                  <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
+                                    <GitCommit className="h-5 w-5 text-primary flex-shrink-0" />
+                                    <div className="flex-1">
+                                      <a 
+                                        href={activity.repoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="font-medium hover:text-primary transition-colors"
+                                      >
+                                        {activity.repo}
+                                      </a>
+                                      <p className="text-sm text-muted-foreground">{activity.date}</p>
+                                    </div>
                                   </div>
-                                  <div className="text-sm text-muted-foreground">
-                                    {activity.commits} commit{activity.commits !== 1 ? 's' : ''}
+                                  <div className="ml-7 space-y-2">
+                                    {activity.commits.map((commit, commitIndex) => (
+                                      <div key={commitIndex} className="p-2 rounded-lg bg-muted/30">
+                                        <a 
+                                          href={commit.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-sm hover:text-primary transition-colors block mb-1"
+                                        >
+                                          {commit.message}
+                                        </a>
+                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                          <span className="text-green-500">+{commit.changes.additions}</span>
+                                          <span className="text-red-500">-{commit.changes.deletions}</span>
+                                        </div>
+                                      </div>
+                                    ))}
                                   </div>
                                 </div>
                             ))}
