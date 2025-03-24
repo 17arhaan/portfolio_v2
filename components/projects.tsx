@@ -29,7 +29,7 @@ const projectsData = [
     title: "W.E.A.L.T.H",
     description:
       "• Engineered a full-stack finance tracking application with Next.js 13, TypeScript, and PostgreSQL\n\n• Implemented real-time transaction tracking with WebSocket integration for live updates\n\n• Built a RESTful API with Express.js featuring JWT authentication and role-based access control\n\n• Designed a responsive UI with Tailwind CSS and Framer Motion for smooth animations\n\n• Integrated Plaid API for secure bank account linking and automated transaction imports\n\n• Developed custom analytics dashboard with Chart.js for visualizing spending patterns\n\n• Implemented automated bill detection and recurring payment tracking using ML algorithms",
-    image: "/wealth.webp?height=400&width=600",
+    image: "/wealth.png?height=400&width=600",
     tags: ["Next.js 13", "TypeScript", "Express.js", "Tailwind CSS", "PostgreSQL", "Prisma", "WebSocket", "JWT", "Plaid API", "Chart.js", "Redis", "Docker", "AWS"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/W.E.A.L.T.H",
@@ -41,7 +41,7 @@ const projectsData = [
     title: "Sentiment Analysis",
     description:
       "• Built a scalable news and trend analysis pipeline processing 1M+ articles daily using Apache Kafka and Python\n\n• Implemented custom NLP models achieving 92% accuracy in sentiment classification\n\n• Engineered a distributed system with Redis caching reducing response times by 75%\n\n• Developed real-time trend detection algorithms with 95% accuracy using statistical analysis\n\n• Created a custom web scraping framework handling 100K requests/hour with rotating proxies\n\n• Integrated multiple data sources including NewsAPI, GDELT, and Wikipedia with fault-tolerant pipelines\n\n• Built an interactive dashboard using Streamlit for real-time visualization of trends",
-    image: "/sentiment.webp?height=400&width=600",
+    image: "/sentiment.png?height=400&width=600",
     tags: ["Python", "Apache Kafka", "Redis", "Elasticsearch", "Docker", "Kubernetes", "BERT", "Streamlit", "FastAPI", "MongoDB", "AWS", "Airflow"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/Sentiment_Analysis",
@@ -53,7 +53,7 @@ const projectsData = [
     title: "SnakeCV",
     description:
       "• Developed a multi-mode Snake Game with computer vision controls using Python, OpenCV, and React\n\n• Implemented real-time hand gesture recognition with 98% accuracy using MediaPipe and custom CV models\n\n• Created an AI agent using Q-learning achieving average scores of 50+ points\n\n• Built a responsive web version with React and TypeScript featuring custom animations\n\n• Designed a replay system storing game states in IndexedDB for offline access\n\n• Integrated WebRTC for real-time multiplayer functionality with <100ms latency\n\n• Added leaderboard system with Firebase real-time database integration",
-    image: "/snakecv.webp?height=400&width=600",
+    image: "/snakecv.png?height=400&width=600",
     tags: ["Python", "OpenCV", "MediaPipe", "React", "TypeScript", "WebRTC", "Firebase", "Q-Learning", "WebGL", "Socket.io", "IndexedDB"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/Snake_CV_ML",
@@ -359,19 +359,111 @@ export default function Projects() {
                     <div className="space-y-3">
                       <h4 className="font-semibold">Features</h4>
                       <ul className="list-disc list-inside text-muted-foreground space-y-2">
-                        <li>Responsive design for all devices</li>
-                        <li>Intuitive user interface</li>
-                        <li>High performance and optimization</li>
-                        <li>Secure authentication system</li>
+                        {selectedProjectData.id === 1 && (
+                          <>
+                            <li>Multi-modal AI assistant with voice and text interaction</li>
+                            <li>Real-time object detection and recognition</li>
+                            <li>Face authentication with multi-user support</li>
+                            <li>Custom wake word detection system</li>
+                            <li>Task automation with 20+ custom plugins</li>
+                            <li>Multi-language support with real-time translation</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 2 && (
+                          <>
+                            <li>Real-time transaction tracking and updates</li>
+                            <li>Secure bank account integration via Plaid</li>
+                            <li>Custom analytics dashboard with visualizations</li>
+                            <li>Automated bill detection and tracking</li>
+                            <li>Investment portfolio optimization</li>
+                            <li>Real-time market data integration</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 3 && (
+                          <>
+                            <li>Real-time news sentiment analysis</li>
+                            <li>Custom trend detection algorithms</li>
+                            <li>Interactive data visualization dashboard</li>
+                            <li>Automated data collection pipeline</li>
+                            <li>Real-time sentiment shift alerts</li>
+                            <li>Topic modeling and analysis</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 4 && (
+                          <>
+                            <li>Hand gesture-controlled gameplay</li>
+                            <li>AI-powered game agent</li>
+                            <li>Real-time multiplayer support</li>
+                            <li>Custom game physics engine</li>
+                            <li>Power-up system with special effects</li>
+                            <li>Achievement and leaderboard system</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 5 && (
+                          <>
+                            <li>AI-powered therapeutic conversations</li>
+                            <li>Real-time emotion detection</li>
+                            <li>HIPAA-compliant data storage</li>
+                            <li>Secure video conferencing</li>
+                            <li>Personalized treatment recommendations</li>
+                            <li>Progress tracking and analytics</li>
+                          </>
+                        )}
                       </ul>
                     </div>
                     <div className="space-y-3">
                       <h4 className="font-semibold">Technical Details</h4>
                       <ul className="list-disc list-inside text-muted-foreground space-y-2">
-                        <li>Frontend: React with TypeScript</li>
-                        <li>Backend: Node.js with Express</li>
-                        <li>Database: MongoDB</li>
-                        <li>Deployment: Vercel</li>
+                        {selectedProjectData.id === 1 && (
+                          <>
+                            <li>YOLOv8 with 91% mAP for object detection</li>
+                            <li>Whisper ASR with 95% speech recognition accuracy</li>
+                            <li>CNN-based face auth with 98% accuracy</li>
+                            <li>GPT-4 integration with custom prompt engineering</li>
+                            <li>FastAPI and WebSocket for real-time communication</li>
+                            <li>Redis for distributed caching and state management</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 2 && (
+                          <>
+                            <li>Next.js 13 with TypeScript and Tailwind CSS</li>
+                            <li>Express.js backend with JWT authentication</li>
+                            <li>PostgreSQL with Prisma ORM</li>
+                            <li>WebSocket with Redis pub/sub for real-time updates</li>
+                            <li>Chart.js and D3.js for data visualization</li>
+                            <li>AWS S3 for secure document storage</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 3 && (
+                          <>
+                            <li>BERT-based NLP models with 92% accuracy</li>
+                            <li>Apache Kafka for scalable data processing</li>
+                            <li>Redis and Elasticsearch for fast retrieval</li>
+                            <li>Custom web scraping with proxy rotation</li>
+                            <li>LDA and NMF for topic modeling</li>
+                            <li>MLflow for experiment tracking</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 4 && (
+                          <>
+                            <li>MediaPipe for hand gesture recognition</li>
+                            <li>Deep Q-Learning with experience replay</li>
+                            <li>WebRTC for multiplayer with {'<'}100ms latency</li>
+                            <li>Custom game physics engine</li>
+                            <li>WebGL for special effects</li>
+                            <li>Firebase for real-time leaderboard</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 5 && (
+                          <>
+                            <li>GPT-4 with custom fine-tuning</li>
+                            <li>Real-time emotion detection with 94% accuracy</li>
+                            <li>HIPAA-compliant data encryption</li>
+                            <li>WebRTC for secure video calls</li>
+                            <li>PWA with offline support</li>
+                            <li>Service Workers for push notifications</li>
+                          </>
+                        )}
                       </ul>
                     </div>
                   </div>
