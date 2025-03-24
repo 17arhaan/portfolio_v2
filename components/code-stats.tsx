@@ -205,30 +205,27 @@ export default function CodeStats() {
       }
     };
 
+    const fetchLeetCodeStats = async () => {
+      try {
+        const response = await fetch('/api/leetcode');
+        const data = await response.json();
+        
+        // Check if we got an error response
+        if (data.error) {
+          console.error('LeetCode API error:', data.error);
+          return;
+        }
+
+        setLeetcodeStats(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching LeetCode stats:', error);
+        setLoading(false);
+      }
+    };
+
     fetchGitHubStats();
-
-    // Simulate LeetCode data fetch
-    const timer = setTimeout(() => {
-      setLeetcodeStats({
-        totalSolved: 187,
-        totalQuestions: 2500,
-        easySolved: 95,
-        easyTotal: 150,
-        mediumSolved: 72,
-        mediumTotal: 150,
-        hardSolved: 20,
-        hardTotal: 75,
-        recentSubmissions: [
-          { title: "Two Sum", difficulty: "Easy", date: "2023-03-07" },
-          { title: "Add Two Numbers", difficulty: "Medium", date: "2023-03-05" },
-          { title: "LRU Cache", difficulty: "Medium", date: "2023-03-03" },
-          { title: "Merge k Sorted Lists", difficulty: "Hard", date: "2023-03-01" },
-          { title: "Valid Parentheses", difficulty: "Easy", date: "2023-02-28" },
-        ],
-      });
-    }, 1500);
-
-    return () => clearTimeout(timer);
+    fetchLeetCodeStats();
   }, []);
 
   // Function to render loading skeletons
