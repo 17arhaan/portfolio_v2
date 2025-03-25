@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: "Arhaan Girdhar Portfolio",
     images: [
       {
-        url: "/pfp.png",
+        url: "/favicon.png",
         width: 1200,
         height: 1200,
         alt: "Arhaan Girdhar",
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: "/pfp.png",
-    shortcut: "/pfp.png",
-    apple: "/pfp.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
   generator: null,
 }
@@ -63,11 +63,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <head>
-        <link rel="icon" type="image/png" href="/favicon.png" />
-        <meta name="theme-color" content="#000000" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </head>
       <body className={`${inter.className} min-h-screen bg-background`}>
         <ThemeProvider defaultTheme="system" storageKey="theme" attribute="class">
           <div className="relative flex min-h-screen flex-col">
@@ -82,7 +77,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-
-import './globals.css'
