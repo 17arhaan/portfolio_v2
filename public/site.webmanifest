@@ -1,0 +1,21 @@
+{
+  "name": "Arhaan Girdhar Portfolio",
+  "short_name": "Arhaan Portfolio",
+  "description": "A showcase of my work, skills, and professional experience as a software engineer specializing in AI & ML.",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+} 

@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   keywords: ["Arhaan Girdhar", "portfolio", "software engineer", "AI", "ML", "web developer", "MIT Manipal"],
   authors: [{ name: "Arhaan Girdhar" }],
   creator: "Arhaan Girdhar",
+  metadataBase: new URL('https://arhaanportfolio.in'),
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -42,17 +43,30 @@ export const metadata: Metadata = {
     title: "Arhaan Girdhar | Portfolio",
     description: "A showcase of my work, skills, and professional experience as a software engineer specializing in AI & ML.",
     creator: "@Arrhhaan",
-    images: ["/pfp.png"],
+    images: ["/favicon.png"],
   },
   robots: {
     index: true,
     follow: true,
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png' },
+    ],
+    shortcut: '/favicon.ico',
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/safari-pinned-tab.svg',
+        color: '#000000'
+      }
+    ],
   },
+  manifest: '/site.webmanifest',
   generator: null,
 }
 
@@ -63,6 +77,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <head>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
       <body className={`${inter.className} min-h-screen bg-background`}>
         <ThemeProvider defaultTheme="system" storageKey="theme" attribute="class">
           <div className="relative flex min-h-screen flex-col">
