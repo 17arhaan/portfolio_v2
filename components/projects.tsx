@@ -77,7 +77,7 @@ const projectsData = [
     title: "TherapAI",
     description:
       "• Built an AI-powered mental health platform using Python, FastAPI, and React\n\n• Integrated GPT-4 with custom fine-tuning for therapeutic conversations achieving 90% user satisfaction\n\n• Implemented real-time emotion detection from text and voice with 94% accuracy\n\n• Developed secure user authentication and HIPAA-compliant data storage\n\n• Created a progressive web app with offline support and push notifications\n\n• Built an emergency response system with automated escalation protocols\n\n• Integrated with external mental health resources and crisis hotlines",
-    image: "/therapai_l.png?height=400&width=600",
+    image: "/therapai.png?height=400&width=600",
     tags: ["Python", "FastAPI", "PyTorch", "TensorFlow", "Transformers", "Hugging Face", "NumPy", "Pandas", "MongoDB", "Docker"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/TherapAI",
