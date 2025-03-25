@@ -383,42 +383,52 @@ export default function Projects() {
                         )}
                         {selectedProjectData.id === 2 && (
                           <>
-                            <li>Real-time transaction tracking and updates</li>
-                            <li>Secure bank account integration via Plaid</li>
-                            <li>Custom analytics dashboard with visualizations</li>
-                            <li>Automated bill detection and tracking</li>
-                            <li>Investment portfolio optimization</li>
-                            <li>Real-time market data integration</li>
+                            <li>Multi-modal AI assistant with voice and text interaction</li>
+                            <li>Real-time object detection and recognition</li>
+                            <li>Face authentication with multi-user support</li>
+                            <li>Custom wake word detection system</li>
+                            <li>Task automation with 20+ custom plugins</li>
+                            <li>Multi-language support with real-time translation</li>
                           </>
                         )}
                         {selectedProjectData.id === 3 && (
                           <>
-                            <li>Real-time news sentiment analysis</li>
-                            <li>Custom trend detection algorithms</li>
-                            <li>Interactive data visualization dashboard</li>
-                            <li>Automated data collection pipeline</li>
-                            <li>Real-time sentiment shift alerts</li>
-                            <li>Topic modeling and analysis</li>
+                            <li>Full-stack finance tracking application</li>
+                            <li>Real-time transaction tracking with WebSocket</li>
+                            <li>Secure bank account integration via Plaid</li>
+                            <li>Custom analytics dashboard with Chart.js</li>
+                            <li>Automated bill detection and tracking</li>
+                            <li>Role-based access control system</li>
                           </>
                         )}
                         {selectedProjectData.id === 4 && (
                           <>
-                            <li>Hand gesture-controlled gameplay</li>
-                            <li>AI-powered game agent</li>
-                            <li>Real-time multiplayer support</li>
-                            <li>Custom game physics engine</li>
-                            <li>Power-up system with special effects</li>
-                            <li>Achievement and leaderboard system</li>
+                            <li>Scalable news and trend analysis pipeline</li>
+                            <li>Custom NLP models for sentiment classification</li>
+                            <li>Distributed system with Redis caching</li>
+                            <li>Real-time trend detection algorithms</li>
+                            <li>Custom web scraping framework</li>
+                            <li>Interactive Streamlit dashboard</li>
                           </>
                         )}
                         {selectedProjectData.id === 5 && (
                           <>
-                            <li>AI-powered therapeutic conversations</li>
+                            <li>Multi-mode Snake Game with computer vision controls</li>
+                            <li>Real-time hand gesture recognition</li>
+                            <li>AI agent using Q-learning</li>
+                            <li>Responsive web version with custom animations</li>
+                            <li>Replay system with IndexedDB storage</li>
+                            <li>Real-time multiplayer with WebRTC</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 6 && (
+                          <>
+                            <li>AI-powered mental health platform</li>
+                            <li>GPT-4 with custom fine-tuning</li>
                             <li>Real-time emotion detection</li>
                             <li>HIPAA-compliant data storage</li>
-                            <li>Secure video conferencing</li>
-                            <li>Personalized treatment recommendations</li>
-                            <li>Progress tracking and analytics</li>
+                            <li>Progressive web app with offline support</li>
+                            <li>Emergency response system</li>
                           </>
                         )}
                       </ul>
@@ -438,6 +448,16 @@ export default function Projects() {
                         )}
                         {selectedProjectData.id === 2 && (
                           <>
+                            <li>YOLOv8 with 91% mAP for object detection</li>
+                            <li>Whisper ASR with 95% speech recognition accuracy</li>
+                            <li>CNN-based face auth with 98% accuracy</li>
+                            <li>GPT-4 integration with custom prompt engineering</li>
+                            <li>FastAPI and WebSocket for real-time communication</li>
+                            <li>Redis for distributed caching and state management</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 3 && (
+                          <>
                             <li>Next.js 13 with TypeScript and Tailwind CSS</li>
                             <li>Express.js backend with JWT authentication</li>
                             <li>PostgreSQL with Prisma ORM</li>
@@ -446,27 +466,27 @@ export default function Projects() {
                             <li>AWS S3 for secure document storage</li>
                           </>
                         )}
-                        {selectedProjectData.id === 3 && (
-                          <>
-                            <li>BERT-based NLP models with 92% accuracy</li>
-                            <li>Apache Kafka for scalable data processing</li>
-                            <li>Redis and Elasticsearch for fast retrieval</li>
-                            <li>Custom web scraping with proxy rotation</li>
-                            <li>LDA and NMF for topic modeling</li>
-                            <li>MLflow for experiment tracking</li>
-                          </>
-                        )}
                         {selectedProjectData.id === 4 && (
                           <>
-                            <li>MediaPipe for hand gesture recognition</li>
-                            <li>Deep Q-Learning with experience replay</li>
-                            <li>WebRTC for multiplayer with {'<'}100ms latency</li>
-                            <li>Custom game physics engine</li>
-                            <li>WebGL for special effects</li>
-                            <li>Firebase for real-time leaderboard</li>
+                            <li>Apache Kafka for scalable data processing</li>
+                            <li>Custom NLP models with 92% accuracy</li>
+                            <li>Redis caching reducing response times by 75%</li>
+                            <li>Trend detection algorithms with 95% accuracy</li>
+                            <li>Custom web scraping handling 100K requests/hour</li>
+                            <li>Elasticsearch and MongoDB for data storage</li>
                           </>
                         )}
                         {selectedProjectData.id === 5 && (
+                          <>
+                            <li>OpenCV and MediaPipe for hand tracking</li>
+                            <li>Q-learning AI agent achieving 50+ points</li>
+                            <li>React and TypeScript for web interface</li>
+                            <li>WebRTC for multiplayer with {'<'}100ms latency</li>
+                            <li>IndexedDB for offline replay storage</li>
+                            <li>Firebase for real-time leaderboard</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 6 && (
                           <>
                             <li>GPT-4 with custom fine-tuning</li>
                             <li>Real-time emotion detection with 94% accuracy</li>
