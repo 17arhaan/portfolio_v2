@@ -21,7 +21,7 @@ const projectsData = [
     tags: ["Python", "MuJoCo", "React", "TensorFlow", "Flask", "LSTM", "Node.js", "Matplotlib", "TypeScript", "FastAPI"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/Movement_Tracking_Mujoco",
-    categories: ["ai", "ml", "dl"],
+    categories: ["web", "dl"],
     featured: true,
   },
   {
