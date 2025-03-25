@@ -373,12 +373,12 @@ export default function Projects() {
                       <ul className="list-disc list-inside text-muted-foreground space-y-2">
                         {selectedProjectData.id === 1 && (
                           <>
-                            <li>Multi-modal AI assistant with voice and text interaction</li>
-                            <li>Real-time object detection and recognition</li>
-                            <li>Face authentication with multi-user support</li>
-                            <li>Custom wake word detection system</li>
-                            <li>Task automation with 20+ custom plugins</li>
-                            <li>Multi-language support with real-time translation</li>
+                            <li>Realistic humanoid movement simulation using MuJoCo physics engine</li>
+                            <li>Motion tracking with joint angles and velocities capture</li>
+                            <li>LSTM model for motion forecasting and classification</li>
+                            <li>Interactive React-based GUI for simulation control</li>
+                            <li>Real-time visualization of MuJoCo scenes</li>
+                            <li>Modular architecture for custom models and algorithms</li>
                           </>
                         )}
                         {selectedProjectData.id === 2 && (
@@ -428,12 +428,12 @@ export default function Projects() {
                       <ul className="list-disc list-inside text-muted-foreground space-y-2">
                         {selectedProjectData.id === 1 && (
                           <>
-                            <li>YOLOv8 with 91% mAP for object detection</li>
-                            <li>Whisper ASR with 95% speech recognition accuracy</li>
-                            <li>CNN-based face auth with 98% accuracy</li>
-                            <li>GPT-4 integration with custom prompt engineering</li>
-                            <li>FastAPI and WebSocket for real-time communication</li>
-                            <li>Redis for distributed caching and state management</li>
+                            <li>MuJoCo physics engine for accurate humanoid simulation</li>
+                            <li>LSTM model with 95% accuracy for motion prediction</li>
+                            <li>React and TypeScript for responsive frontend</li>
+                            <li>FastAPI backend for real-time data processing</li>
+                            <li>Matplotlib for advanced motion visualization</li>
+                            <li>Flask API for ML model serving</li>
                           </>
                         )}
                         {selectedProjectData.id === 2 && (
