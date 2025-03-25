@@ -8,7 +8,7 @@ import Footer from "@/components/footer"
 import { Toaster } from "@/components/ui/toaster"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { MouseAnimation } from "@/components/ui/mouse-animation"
-
+import { Analytics } from "@vercel/analytics/react"
 const inter = Inter({ 
   subsets: ["latin"],
   display: "swap",
@@ -72,6 +72,8 @@ export default function RootLayout({
             <Footer />
           </div>
           <Toaster />
+          <SpeedInsights />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
