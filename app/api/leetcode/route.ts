@@ -81,40 +81,79 @@ export async function GET() {
 
     // Calculate streak, max streak, and total days
     const today = new Date();
-    const dates = Object.keys(submissionCalendar).map(timestamp => parseInt(timestamp));
-    const lastSolvedDate = new Date(Math.max(...dates) * 1000);
+    today.setHours(0, 0, 0, 0);
     
     let streak = 0;
     let maxStreak = 0;
-    let currentStreak = 0;
     let totalDays = 0;
-    let currentDate = new Date();
+    let lastSolvedDate = new Date();
+    
+    // Find the last solved date from submission calendar
+    const timestamps = Object.keys(submissionCalendar).map(Number);
+    if (timestamps.length > 0) {
+      const lastTimestamp = Math.max(...timestamps);
+      lastSolvedDate = new Date(lastTimestamp * 1000);
+    }
     
     // Calculate current streak
-    while (submissionCalendar[Math.floor(currentDate.getTime() / 1000)]) {
-      streak++;
-      currentDate.setDate(currentDate.getDate() - 1);
+    let currentDate = new Date(lastSolvedDate);
+    currentDate.setHours(0, 0, 0, 0);
+    
+    // Check if the last submission was today or yesterday
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    // If the last submission was more than 2 days ago, streak is 0
+    if (currentDate < yesterday) {
+      streak = 0;
+    } else {
+      // Calculate current streak
+      streak = 1;
+      let prevDate = new Date(currentDate);
+      prevDate.setDate(prevDate.getDate() - 1);
+      
+      while (true) {
+        const prevTimestamp = Math.floor(prevDate.getTime() / 1000);
+        const hasPrevSubmission = submissionCalendar[prevTimestamp] && submissionCalendar[prevTimestamp] > 0;
+        
+        if (hasPrevSubmission) {
+          streak++;
+          prevDate.setDate(prevDate.getDate() - 1);
+        } else {
+          break;
+        }
+      }
     }
     
     // Calculate max streak and total days
-    currentDate = new Date();
-    const startDate = new Date('2020-01-01'); // Start from a reasonable date
-    while (currentDate >= startDate) {
-      const timestamp = Math.floor(currentDate.getTime() / 1000);
-      if (submissionCalendar[timestamp] && submissionCalendar[timestamp] > 0) {
+    // Sort timestamps in descending order
+    const sortedTimestamps = timestamps.sort((a, b) => b - a);
+    let currentStreak = 1;
+    
+    // Calculate max streak by checking consecutive days
+    for (let i = 0; i < sortedTimestamps.length - 1; i++) {
+      const currentTimestamp = sortedTimestamps[i];
+      const nextTimestamp = sortedTimestamps[i + 1];
+      
+      const currentDate = new Date(currentTimestamp * 1000);
+      const nextDate = new Date(nextTimestamp * 1000);
+      currentDate.setHours(0, 0, 0, 0);
+      nextDate.setHours(0, 0, 0, 0);
+      
+      // Check if the dates are consecutive
+      const diffTime = Math.abs(currentDate.getTime() - nextDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 1) {
         currentStreak++;
         maxStreak = Math.max(maxStreak, currentStreak);
-        totalDays++;
       } else {
-        currentStreak = 0;
+        currentStreak = 1;
       }
-      currentDate.setDate(currentDate.getDate() - 1);
     }
-
-    // Alternative calculation for total days using the submission calendar directly
-    totalDays = Object.values(submissionCalendar as Record<string, number>).reduce((acc: number, count: number) => {
-      return acc + (count > 0 ? 1 : 0);
-    }, 0);
+    
+    // Calculate total days with submissions
+    totalDays = timestamps.length;
 
     // Format the response
     const responseData = {

@@ -40,6 +40,11 @@ export async function GET() {
 
     console.log('Starting GitHub API calls...');
 
+    // Calculate date range (last 365 days)
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 365);
+    
     // GraphQL query for user data, repositories, and contributions
     const query = `
       query {
@@ -54,17 +59,27 @@ export async function GET() {
                   size
                   node {
                     name
+                    color
                   }
                 }
               }
             }
           }
-          contributionsCollection {
+          contributionsCollection(from: "${startDate.toISOString()}", to: "${endDate.toISOString()}") {
             totalCommitContributions
             totalIssueContributions
             totalPullRequestContributions
             totalPullRequestReviewContributions
             restrictedContributionsCount
+            contributionCalendar {
+              totalContributions
+              weeks {
+                contributionDays {
+                  contributionCount
+                  date
+                }
+              }
+            }
           }
         }
       }
@@ -96,28 +111,26 @@ export async function GET() {
     const totalForks = repositories.reduce((acc: number, repo: any) => acc + repo.forkCount, 0);
     
     // Calculate total contributions properly
-    const totalContributions = 
-      contributions.totalCommitContributions +
-      contributions.totalIssueContributions +
-      contributions.totalPullRequestContributions +
-      contributions.totalPullRequestReviewContributions +
-      contributions.restrictedContributionsCount;
+    const totalContributions = contributions.contributionCalendar.totalContributions;
 
     // Calculate language stats with proper sizing
-    const languageTotals: { [key: string]: number } = {};
+    const languageTotals: { [key: string]: { size: number; color: string } } = {};
     repositories.forEach((repo: any) => {
       repo.languages.edges.forEach((edge: any) => {
         const langName = edge.node.name;
-        languageTotals[langName] = (languageTotals[langName] || 0) + edge.size;
+        if (!languageTotals[langName]) {
+          languageTotals[langName] = { size: 0, color: edge.node.color };
+        }
+        languageTotals[langName].size += edge.size;
       });
     });
 
-    const totalBytes = Object.values(languageTotals).reduce((a: number, b: number) => a + b, 0);
+    const totalBytes = Object.values(languageTotals).reduce((acc, curr) => acc + curr.size, 0);
     const languages = Object.entries(languageTotals)
-      .map(([name, size]) => ({
+      .map(([name, data]) => ({
         name,
-        percentage: Math.round((size / totalBytes) * 100),
-        color: languageColors[name as keyof typeof languageColors] || '#8b8b8b'
+        percentage: Math.round((data.size / totalBytes) * 100),
+        color: data.color || '#8b8b8b'
       }))
       .filter(lang => lang.percentage > 0)
       .sort((a, b) => b.percentage - a.percentage);
@@ -126,7 +139,7 @@ export async function GET() {
     const activityQuery = `
       query {
         user(login: "17arhaan") {
-          contributionsCollection {
+          contributionsCollection(from: "${startDate.toISOString()}", to: "${endDate.toISOString()}") {
             commitContributionsByRepository {
               repository {
                 name
@@ -176,7 +189,7 @@ export async function GET() {
             message: `${node.commitCount} commit${node.commitCount > 1 ? 's' : ''}`,
             url: `${repo.repository.url}/commits`,
             changes: {
-              additions: 0,
+              additions: node.commitCount,
               deletions: 0
             }
           }]
