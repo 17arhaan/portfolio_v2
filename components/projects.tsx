@@ -50,12 +50,12 @@ const projectsData = [
   },
   {
     id: 4,
-    title: "Sentiment Analysis",
+    title: "Twitter Sentiment Analysis",
     description:
       "• Built a real-time Twitter sentiment analysis platform using Next.js and Python\n\n• Implemented custom NLP models with 92% accuracy for sentiment classification\n\n• Created an interactive dashboard with real-time sentiment visualization using Chart.js\n\n• Developed a secure authentication system with JWT and password hashing\n\n• Built a responsive UI with shadcn/ui components and Tailwind CSS\n\n• Integrated Twitter API for real-time tweet fetching and analysis\n\n• Added user profiles with analysis history and saved searches",
     image: "/sentiment_l.png?height=400&width=600",
     tags: ["Next.js", "TypeScript", "Python", "Tailwind CSS", "Chart.js", "JWT", "shadcn/ui", "Twitter API"],
-    demoLink: null,
+    demoLink: "https://sentiment-analysis-sepia.vercel.app/",
     githubLink: "https://github.com/17arhaan/Sentiment_Analysis",
     categories: ["data", "ai", "ml"],
     featured: false,
@@ -278,7 +278,7 @@ export default function Projects() {
                           className={!project.demoLink ? "pointer-events-none opacity-50" : ""}
                         >
                           <ExternalLink className="h-4 w-4" />
-                          <span className="sr-only md:not-sr-only">Working on Demo</span>
+                          <span className="sr-only md:not-sr-only">{project.demoLink ? "View Demo" : "Working on Demo"}</span>
                         </a>
                       </Button>
                     </CardFooter>
@@ -509,7 +509,7 @@ export default function Projects() {
                         className={!selectedProjectData.demoLink ? "pointer-events-none opacity-50" : ""}
                       >
                         <ExternalLink className="mr-2 h-4 w-4" />
-                        Working on Demo
+                        {selectedProjectData.demoLink ? "View Demo" : "Working on Demo"}
                       </a>
                     </Button>
                     <Button variant="outline" asChild className="flex-1">
