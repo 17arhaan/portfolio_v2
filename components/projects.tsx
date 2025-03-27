@@ -52,9 +52,9 @@ const projectsData = [
     id: 4,
     title: "Sentiment Analysis",
     description:
-      "• Built a scalable news and trend analysis pipeline processing 1M+ articles daily using Apache Kafka and Python\n\n• Implemented custom NLP models achieving 92% accuracy in sentiment classification\n\n• Engineered a distributed system with Redis caching reducing response times by 75%\n\n• Developed real-time trend detection algorithms with 95% accuracy using statistical analysis\n\n• Created a custom web scraping framework handling 100K requests/hour with rotating proxies\n\n• Integrated multiple data sources including NewsAPI, GDELT, and Wikipedia with fault-tolerant pipelines\n\n• Built an interactive dashboard using Streamlit for real-time visualization of trends",
+      "• Built a real-time Twitter sentiment analysis platform using Next.js and Python\n\n• Implemented custom NLP models with 92% accuracy for sentiment classification\n\n• Created an interactive dashboard with real-time sentiment visualization using Chart.js\n\n• Developed a secure authentication system with JWT and password hashing\n\n• Built a responsive UI with shadcn/ui components and Tailwind CSS\n\n• Integrated Twitter API for real-time tweet fetching and analysis\n\n• Added user profiles with analysis history and saved searches",
     image: "/sentiment_l.png?height=400&width=600",
-    tags: ["Python", "Apache Kafka", "Apache Spark", "Apache Zookeeper", "HDFS", "Apache Airflow", "Elasticsearch", "MongoDB", "Docker"],
+    tags: ["Next.js", "TypeScript", "Python", "Tailwind CSS", "Chart.js", "JWT", "shadcn/ui", "Twitter API"],
     demoLink: null,
     githubLink: "https://github.com/17arhaan/Sentiment_Analysis",
     categories: ["data", "ai", "ml"],
@@ -403,12 +403,12 @@ export default function Projects() {
                         )}
                         {selectedProjectData.id === 4 && (
                           <>
-                            <li>Scalable news and trend analysis pipeline</li>
+                            <li>Twitter sentiment analysis platform</li>
                             <li>Custom NLP models for sentiment classification</li>
-                            <li>Distributed system with Redis caching</li>
-                            <li>Real-time trend detection algorithms</li>
-                            <li>Custom web scraping framework</li>
-                            <li>Interactive Streamlit dashboard</li>
+                            <li>Interactive dashboard with real-time sentiment visualization</li>
+                            <li>Secure authentication system</li>
+                            <li>Twitter API integration</li>
+                            <li>User profiles with analysis history</li>
                           </>
                         )}
                         {selectedProjectData.id === 5 && (
@@ -468,12 +468,12 @@ export default function Projects() {
                         )}
                         {selectedProjectData.id === 4 && (
                           <>
-                            <li>Apache Kafka for scalable data processing</li>
+                            <li>Next.js and Python for sentiment analysis</li>
                             <li>Custom NLP models with 92% accuracy</li>
-                            <li>Redis caching reducing response times by 75%</li>
-                            <li>Trend detection algorithms with 95% accuracy</li>
-                            <li>Custom web scraping handling 100K requests/hour</li>
-                            <li>Elasticsearch and MongoDB for data storage</li>
+                            <li>Interactive dashboard with Chart.js</li>
+                            <li>JWT for secure authentication</li>
+                            <li>Twitter API for real-time tweet fetching</li>
+                            <li>User profiles with analysis history</li>
                           </>
                         )}
                         {selectedProjectData.id === 5 && (

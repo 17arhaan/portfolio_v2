@@ -120,7 +120,17 @@ export async function GET() {
           streak++;
           prevDate.setDate(prevDate.getDate() - 1);
         } else {
-          break;
+          // Check if we missed a day
+          const nextTimestamp = Math.floor(prevDate.getTime() / 1000);
+          const hasNextSubmission = submissionCalendar[nextTimestamp] && submissionCalendar[nextTimestamp] > 0;
+          
+          if (hasNextSubmission) {
+            // If we have a submission the next day, continue the streak
+            streak++;
+            prevDate.setDate(prevDate.getDate() - 1);
+          } else {
+            break;
+          }
         }
       }
     }
