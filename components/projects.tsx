@@ -84,6 +84,18 @@ const projectsData = [
     categories: ["ai", "ml"],
     featured: false,
   },
+  {
+    id: 7,
+    title: "Visualify",
+    description:
+      "• Built a real-time Spotify music visualizer with Next.js 14 and dynamic visual effects\n\n• Implemented seamless Spotify integration with NextAuth.js for secure authentication\n\n• Created a modern, responsive UI with Tailwind CSS and Spotify-inspired dark theme\n\n• Developed real-time music visualization synchronized with Spotify playback\n\n• Integrated Spotify Web API for live music data and playback control\n\n• Optimized performance with Next.js 14 server-side rendering and API routes\n\n• Deployed on Vercel with automatic CI/CD pipeline",
+    image: "/visualify_l.png?height=400&width=600",
+    tags: ["Next.js 14", "TypeScript", "Tailwind CSS", "NextAuth.js", "Spotify API", "Vercel"],
+    demoLink: "https://visualify.vercel.app",
+    githubLink: "https://github.com/17arhaan/Visualify",
+    categories: ["web"],
+    featured: true,
+  },
 ]
 
 const categories = [
@@ -431,6 +443,16 @@ export default function Projects() {
                             <li>Emergency response system</li>
                           </>
                         )}
+                        {selectedProjectData.id === 7 && (
+                          <>
+                            <li>Real-time music visualization with dynamic effects</li>
+                            <li>Seamless Spotify integration and authentication</li>
+                            <li>Modern, responsive UI with dark theme</li>
+                            <li>Live music data synchronization</li>
+                            <li>Server-side rendering optimization</li>
+                            <li>Automatic CI/CD deployment</li>
+                          </>
+                        )}
                       </ul>
                     </div>
                     <div className="space-y-3">
@@ -494,6 +516,16 @@ export default function Projects() {
                             <li>WebRTC for secure video calls</li>
                             <li>PWA with offline support</li>
                             <li>Service Workers for push notifications</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 7 && (
+                          <>
+                            <li>Next.js 14 with App Router and API Routes</li>
+                            <li>TypeScript for type safety and better development</li>
+                            <li>Tailwind CSS for responsive styling</li>
+                            <li>NextAuth.js for secure authentication</li>
+                            <li>Spotify Web API for music data</li>
+                            <li>Vercel for deployment and hosting</li>
                           </>
                         )}
                       </ul>
