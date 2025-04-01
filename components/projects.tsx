@@ -43,7 +43,7 @@ const projectsData = [
       "• Engineered a full-stack finance tracking application with Next.js 13, TypeScript, and PostgreSQL\n\n• Implemented real-time transaction tracking with WebSocket integration for live updates\n\n• Built a RESTful API with Express.js featuring JWT authentication and role-based access control\n\n• Designed a responsive UI with Tailwind CSS and Framer Motion for smooth animations\n\n• Integrated Plaid API for secure bank account linking and automated transaction imports\n\n• Developed custom analytics dashboard with Chart.js for visualizing spending patterns\n\n• Implemented automated bill detection and recurring payment tracking using ML algorithms",
     image: "/wealth_l.png?height=400&width=600",
     tags: ["Next.js", "TypeScript", "Express.js", "Tailwind CSS", "PostgreSQL", "Prisma", "WebSocket", "JWT", "Plaid API", "Chart.js"],
-    demoLink: null,
+    demoLink: "https://wealth-rust.vercel.app/dashboard",
     githubLink: "https://github.com/17arhaan/W.E.A.L.T.H",
     categories: ["web"],
     featured: true,
@@ -83,18 +83,6 @@ const projectsData = [
     githubLink: "https://github.com/17arhaan/TherapAI",
     categories: ["ai", "ml"],
     featured: false,
-  },
-  {
-    id: 7,
-    title: "Visualify",
-    description:
-      "• Built a real-time Spotify music visualizer with Next.js 14 and dynamic visual effects\n\n• Implemented seamless Spotify integration with NextAuth.js for secure authentication\n\n• Created a modern, responsive UI with Tailwind CSS and Spotify-inspired dark theme\n\n• Developed real-time music visualization synchronized with Spotify playback\n\n• Integrated Spotify Web API for live music data and playback control\n\n• Optimized performance with Next.js 14 server-side rendering and API routes\n\n• Deployed on Vercel with automatic CI/CD pipeline",
-    image: "/visualify_l.png?height=400&width=600",
-    tags: ["Next.js 14", "TypeScript", "Tailwind CSS", "NextAuth.js", "Spotify API", "Vercel"],
-    demoLink: "https://visualify.vercel.app",
-    githubLink: "https://github.com/17arhaan/Visualify",
-    categories: ["web"],
-    featured: true,
   },
 ]
 
@@ -435,22 +423,12 @@ export default function Projects() {
                         )}
                         {selectedProjectData.id === 6 && (
                           <>
-                            <li>AI-powered mental health platform</li>
-                            <li>GPT-4 with custom fine-tuning</li>
-                            <li>Real-time emotion detection</li>
-                            <li>HIPAA-compliant data storage</li>
-                            <li>Progressive web app with offline support</li>
-                            <li>Emergency response system</li>
-                          </>
-                        )}
-                        {selectedProjectData.id === 7 && (
-                          <>
-                            <li>Real-time music visualization with dynamic effects</li>
-                            <li>Seamless Spotify integration and authentication</li>
-                            <li>Modern, responsive UI with dark theme</li>
-                            <li>Live music data synchronization</li>
-                            <li>Server-side rendering optimization</li>
-                            <li>Automatic CI/CD deployment</li>
+                            <li>AI-powered mental health support</li>
+                            <li>24/7 availability and immediate responses</li>
+                            <li>Personalized conversation flow</li>
+                            <li>Privacy-focused design</li>
+                            <li>Emergency resource recommendations</li>
+                            <li>Multi-language support</li>
                           </>
                         )}
                       </ul>
@@ -510,22 +488,11 @@ export default function Projects() {
                         )}
                         {selectedProjectData.id === 6 && (
                           <>
-                            <li>GPT-4 with custom fine-tuning</li>
-                            <li>Real-time emotion detection with 94% accuracy</li>
-                            <li>HIPAA-compliant data encryption</li>
-                            <li>WebRTC for secure video calls</li>
-                            <li>PWA with offline support</li>
-                            <li>Service Workers for push notifications</li>
-                          </>
-                        )}
-                        {selectedProjectData.id === 7 && (
-                          <>
-                            <li>Next.js 14 with App Router and API Routes</li>
-                            <li>TypeScript for type safety and better development</li>
-                            <li>Tailwind CSS for responsive styling</li>
-                            <li>NextAuth.js for secure authentication</li>
-                            <li>Spotify Web API for music data</li>
-                            <li>Vercel for deployment and hosting</li>
+                            <li>Next.js 14 with App Router</li>
+                            <li>TypeScript for type safety</li>
+                            <li>Tailwind CSS for styling</li>
+                            <li>OpenAI API for AI responses</li>
+                            <li>Vercel for deployment</li>
                           </>
                         )}
                       </ul>
