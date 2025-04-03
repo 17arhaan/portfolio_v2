@@ -87,11 +87,9 @@ export async function GET() {
                 nodes {
                   commitCount
                   occurredAt
-                  commit {
-                    message
+                  repository {
+                    name
                     url
-                    additions
-                    deletions
                   }
                 }
               }
@@ -165,11 +163,11 @@ export async function GET() {
           repo: repo.repository.name,
           repoUrl: repo.repository.url,
           commits: [{
-            message: node.commit?.message || `${node.commitCount} commit${node.commitCount > 1 ? 's' : ''}`,
-            url: node.commit?.url || `${repo.repository.url}/commits`,
+            message: `${node.commitCount} commit${node.commitCount > 1 ? 's' : ''}`,
+            url: `${repo.repository.url}/commits`,
             changes: {
-              additions: node.commit?.additions || 0,
-              deletions: node.commit?.deletions || 0
+              additions: node.commitCount,
+              deletions: 0
             }
           }]
         }))
