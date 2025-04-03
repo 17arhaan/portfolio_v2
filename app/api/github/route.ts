@@ -26,9 +26,9 @@ const languageColors = {
 
 export async function GET() {
   try {
-    // Check if token exists
     if (!process.env.GITHUB_TOKEN) {
-      throw new Error('GitHub token is not configured');
+      console.error('GitHub token is not configured');
+      return NextResponse.json({ error: 'GitHub token not configured' }, { status: 500 });
     }
 
     const headers = {
@@ -37,8 +37,6 @@ export async function GET() {
       'Accept': 'application/vnd.github.v3+json',
       'X-GitHub-Api-Version': '2022-11-28'
     };
-
-    console.log('Starting GitHub API calls...');
 
     // Calculate date range (last 365 days)
     const endDate = new Date();
@@ -80,6 +78,24 @@ export async function GET() {
                 }
               }
             }
+            commitContributionsByRepository {
+              repository {
+                name
+                url
+              }
+              contributions(first: 5) {
+                nodes {
+                  commitCount
+                  occurredAt
+                  commit {
+                    message
+                    url
+                    additions
+                    deletions
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -88,18 +104,20 @@ export async function GET() {
     const response = await fetch('https://api.github.com/graphql', {
       method: 'POST',
       headers,
-      body: JSON.stringify({ query })
+      body: JSON.stringify({ query }),
+      next: { revalidate: 3600 }
     });
 
     if (!response.ok) {
-      throw new Error('GitHub API request failed');
+      console.error('GitHub API request failed:', response.statusText);
+      return NextResponse.json({ error: 'GitHub API request failed' }, { status: response.status });
     }
 
     const data = await response.json();
     
     if (data.errors) {
       console.error('GitHub API errors:', data.errors);
-      throw new Error('Failed to fetch GitHub data');
+      return NextResponse.json({ error: 'GitHub API returned errors' }, { status: 500 });
     }
 
     const repositories = data.data.user.repositories.nodes;
@@ -111,7 +129,11 @@ export async function GET() {
     const totalForks = repositories.reduce((acc: number, repo: any) => acc + repo.forkCount, 0);
     
     // Calculate total contributions properly
-    const totalContributions = contributions.contributionCalendar.totalContributions;
+    const totalContributions = 
+      contributions.totalCommitContributions +
+      contributions.totalIssueContributions +
+      contributions.totalPullRequestContributions +
+      contributions.totalPullRequestReviewContributions;
 
     // Calculate language stats with proper sizing
     const languageTotals: { [key: string]: { size: number; color: string } } = {};
@@ -135,62 +157,19 @@ export async function GET() {
       .filter(lang => lang.percentage > 0)
       .sort((a, b) => b.percentage - a.percentage);
 
-    // Fetch recent activity with more details
-    const activityQuery = `
-      query {
-        user(login: "17arhaan") {
-          contributionsCollection(from: "${startDate.toISOString()}", to: "${endDate.toISOString()}") {
-            commitContributionsByRepository {
-              repository {
-                name
-                url
-              }
-              contributions(first: 5) {
-                nodes {
-                  commitCount
-                  repository {
-                    name
-                    url
-                  }
-                  occurredAt
-                }
-              }
-            }
-          }
-        }
-      }
-    `;
-
-    const activityResponse = await fetch('https://api.github.com/graphql', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ query: activityQuery })
-    });
-
-    if (!activityResponse.ok) {
-      throw new Error('Failed to fetch GitHub activity');
-    }
-
-    const activityData = await activityResponse.json();
-    
-    if (activityData.errors) {
-      console.error('GitHub Activity API errors:', activityData.errors);
-      throw new Error('Failed to fetch GitHub activity');
-    }
-
     // Process recent activity
-    const recentActivity = activityData.data.user.contributionsCollection.commitContributionsByRepository
+    const recentActivity = contributions.commitContributionsByRepository
       .flatMap((repo: any) => 
         repo.contributions.nodes.map((node: any) => ({
           date: new Date(node.occurredAt).toISOString().split('T')[0],
           repo: repo.repository.name,
           repoUrl: repo.repository.url,
           commits: [{
-            message: `${node.commitCount} commit${node.commitCount > 1 ? 's' : ''}`,
-            url: `${repo.repository.url}/commits`,
+            message: node.commit?.message || `${node.commitCount} commit${node.commitCount > 1 ? 's' : ''}`,
+            url: node.commit?.url || `${repo.repository.url}/commits`,
             changes: {
-              additions: node.commitCount,
-              deletions: 0
+              additions: node.commit?.additions || 0,
+              deletions: node.commit?.deletions || 0
             }
           }]
         }))
@@ -208,25 +187,13 @@ export async function GET() {
       recentActivity
     };
 
-    console.log('Final response prepared successfully');
-    return NextResponse.json(responseData);
-  } catch (error: any) {
-    console.error('GitHub API Error:', {
-      name: error.name,
-      message: error.message,
-      stack: error.stack,
-      token: process.env.GITHUB_TOKEN ? 'Token exists' : 'No token found'
+    return NextResponse.json(responseData, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800'
+      }
     });
-
-    return NextResponse.json({
-      error: 'Failed to fetch GitHub stats',
-      message: error.message,
-      totalRepos: 0,
-      totalStars: 0,
-      totalForks: 0,
-      totalContributions: 0,
-      languages: [],
-      recentActivity: []
-    }, { status: 500 });
+  } catch (error) {
+    console.error('Error fetching GitHub stats:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 } 
