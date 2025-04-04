@@ -84,6 +84,18 @@ const projectsData = [
     categories: ["ai", "ml"],
     featured: false,
   },
+  {
+    id: 7,
+    title: "Speedy",
+    description:
+      "• Built an interactive reaction time test with Next.js and Framer Motion\n\n• Implemented random delay system to prevent anticipation\n\n• Created performance metrics and feedback system\n\n• Added dark mode support and responsive design\n\n• Integrated beautiful animations and transitions\n\n• Developed tracking system for best times\n\n• Deployed on Vercel with automatic CI/CD pipeline",
+    image: "/speedy_l.png?height=400&width=600",
+    tags: ["Node.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    demoLink: "https://speedy-green.vercel.app/",
+    githubLink: "https://github.com/17arhaan/Speedy",
+    categories: ["web"],
+    featured: true,
+  }
 ]
 
 const categories = [
@@ -431,6 +443,17 @@ export default function Projects() {
                             <li>Multi-language support</li>
                           </>
                         )}
+                        {selectedProjectData.id === 7 && (
+                          <>
+                            <li>Interactive reaction time test</li>
+                            <li>Random delay system</li>
+                            <li>Performance metrics and feedback</li>
+                            <li>Best times tracking</li>
+                            <li>Dark mode support</li>
+                            <li>Responsive design</li>
+                            <li>Beautiful animations</li>
+                          </>
+                        )}
                       </ul>
                     </div>
                     <div className="space-y-3">
@@ -492,6 +515,16 @@ export default function Projects() {
                             <li>TypeScript for type safety</li>
                             <li>Tailwind CSS for styling</li>
                             <li>OpenAI API for AI responses</li>
+                            <li>Vercel for deployment</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 7 && (
+                          <>
+                            <li>Next.js with App Router</li>
+                            <li>TypeScript for type safety</li>
+                            <li>Tailwind CSS for styling</li>
+                            <li>Framer Motion for animations</li>
+                            <li>shadcn/ui components</li>
                             <li>Vercel for deployment</li>
                           </>
                         )}
