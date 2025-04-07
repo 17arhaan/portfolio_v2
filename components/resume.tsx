@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Download, FileText, Eye, GraduationCap, Award, Briefcase } from "lucide-react"
+import { Download, FileText, Eye, GraduationCap, Award, Briefcase, Users } from "lucide-react"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 
 const highlights = [
@@ -89,10 +89,10 @@ export default function Resume() {
                     Download or view my complete resume to learn more about my qualifications and experience.
                   </motion.p>
 
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="flex flex-wrap justify-center gap-4">
                     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                       <DialogTrigger asChild>
-                        <Button className="gap-2 group">
+                        <Button className="gap-2 group min-w-[140px]">
                           <Eye className="h-4 w-4 transition-transform group-hover:scale-110" />
                           View Resume
                         </Button>
@@ -101,10 +101,20 @@ export default function Resume() {
                         <iframe src="/Arhaan_Resume.pdf" className="w-full h-full" title="Resume" />
                       </DialogContent>
                     </Dialog>
-                    <Button variant="outline" className="gap-2 group" asChild>
+                    <Button variant="outline" className="gap-2 group min-w-[140px]" asChild>
                       <a href="/Arhaan_Resume.pdf" download>
                         <Download className="h-4 w-4 transition-transform group-hover:scale-110" />
                         Download PDF
+                      </a>
+                    </Button>
+                    <Button variant="outline" className="gap-2 group min-w-[140px]" asChild>
+                      <a 
+                        href="https://drive.google.com/drive/folders/1S55QbJu8Pv5a8wAxj5SMgOviAwjTbmKl?usp=sharing" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Users className="h-4 w-4 transition-transform group-hover:scale-110" />
+                        References
                       </a>
                     </Button>
                   </div>

@@ -19,7 +19,20 @@ const certificationsData = [
     description:
       "Strategic digital marketing training focusing on data analysis, consumer behavior, brand measurement, and campaign attribution through practical application of tools and visualization techniques.",
     credentialId: null,
-    credentialURL: "",
+    credentialURL: [
+      {
+        title: "Marketing in Digital World",
+        url: "https://www.coursera.org/account/accomplishments/certificate/1ME6P85IAKC7"
+      },
+      {
+        title: "Digital Marketing Analysis in Theory",
+        url: "#"
+      },
+      {
+        title: "Digital Marketing Analysis in Practice",
+        url: "https://www.coursera.org/account/accomplishments/certificate/HT1IYP3OUP4U"
+      }
+    ],
     skills: ["Data Analysis", "Consumer Behavior", "Brand Measurement", "Campaign Attribution", "Data Visualization", "Marketing Analytics", "Storytelling", "Business Impact"],
     image: "/igies.png?height=200&width=200",
   },
@@ -197,20 +210,32 @@ export default function Certifications() {
                   </Button>
                 </CardContent>
                 <CardFooter className="pt-0">
-                  <Button variant="outline" size="sm" className="w-full gap-2" asChild>
-                    {[5, 6, 7].includes(cert.id) ? (
-                      <span className="flex items-center justify-center">
+                  <div className="w-full space-y-2">
+                    {[5, 6].includes(cert.id) ? (
+                      <Button variant="outline" size="sm" className="w-full gap-2">
                         <Clock className="h-4 w-4" />
                         Ongoing
-                      </span>
+                      </Button>
+                    ) : Array.isArray(cert.credentialURL) ? (
+                      cert.credentialURL.map((credential, index) => (
+                        <Button key={index} variant="outline" size="sm" className="w-full gap-2" asChild>
+                          <a href={credential.url} target="_blank" rel="noopener noreferrer">
+                            <CheckCircle className="h-4 w-4" />
+                            {credential.title}
+                            <ExternalLink className="h-3 w-3 ml-1" />
+                          </a>
+                        </Button>
+                      ))
                     ) : (
-                      <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
-                        <CheckCircle className="h-4 w-4" />
-                        Verify Credential
-                        <ExternalLink className="h-3 w-3 ml-1" />
-                      </a>
+                      <Button variant="outline" size="sm" className="w-full gap-2" asChild>
+                        <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
+                          <CheckCircle className="h-4 w-4" />
+                          Verify Credential
+                          <ExternalLink className="h-3 w-3 ml-1" />
+                        </a>
+                      </Button>
                     )}
-                  </Button>
+                  </div>
                 </CardFooter>
               </Card>
             </motion.div>
