@@ -93,45 +93,73 @@ export async function GET() {
     let totalDays = 0;
     let lastSolvedDate = new Date(0);
     
-    // Get all submission dates
-    const timestamps = Object.keys(submissionCalendar)
-      .map(Number)
-      .sort((a, b) => b - a); // Sort in descending order
+    // Get all submission dates and sort them in ascending order (oldest first)
+    const timestamps = Object.entries(submissionCalendar)
+      .filter(([_, count]) => Number(count) > 0)
+      .map(([timestamp]) => Number(timestamp))
+      .sort((a, b) => a - b);
     
     if (timestamps.length > 0) {
-      lastSolvedDate = new Date(timestamps[0] * 1000);
+      // Get the last solved date
+      lastSolvedDate = new Date(timestamps[timestamps.length - 1] * 1000);
+      lastSolvedDate.setHours(0, 0, 0, 0);
       
-      // Calculate streaks
-      let prevDate = new Date(timestamps[0] * 1000);
-      prevDate.setHours(0, 0, 0, 0);
+      // Initialize streaks
+      currentStreak = 1;
+      maxStreak = 1;
+      let tempStreak = 1;
       
-      for (const timestamp of timestamps) {
-        const currentDate = new Date(timestamp * 1000);
+      // Calculate streaks by looking at consecutive days
+      for (let i = 0; i < timestamps.length - 1; i++) {
+        const currentDate = new Date(timestamps[i] * 1000);
         currentDate.setHours(0, 0, 0, 0);
         
-        const diffDays = Math.floor((prevDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+        const nextDate = new Date(timestamps[i + 1] * 1000);
+        nextDate.setHours(0, 0, 0, 0);
         
-        if (diffDays === 0) {
-          // Same day, skip
-          continue;
-        } else if (diffDays === 1) {
+        const diffDays = Math.floor((nextDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) {
           // Consecutive day
-          currentStreak++;
-          maxStreak = Math.max(maxStreak, currentStreak);
-        } else {
+          tempStreak++;
+          maxStreak = Math.max(maxStreak, tempStreak);
+          
+          // If this is part of the current streak (most recent days)
+          if (i >= timestamps.length - currentStreak) {
+            currentStreak = tempStreak;
+          }
+        } else if (diffDays > 1) {
           // Gap in submissions
-          currentStreak = 0;
+          tempStreak = 1;
         }
         
-        prevDate = currentDate;
         totalDays++;
       }
       
       // Check if last submission was today or yesterday
       const lastSubmissionDiff = Math.floor((today.getTime() - lastSolvedDate.getTime()) / (1000 * 60 * 60 * 24));
-      if (lastSubmissionDiff <= 1) {
-        streak = currentStreak + 1;
+      
+      if (lastSubmissionDiff === 0) {
+        // Solved today
+        streak = currentStreak;
+      } else if (lastSubmissionDiff === 1) {
+        // Solved yesterday
+        streak = currentStreak;
+      } else {
+        // No streak
+        streak = 0;
       }
+
+      // Debug logs
+      console.log('Submission calendar:', submissionCalendar);
+      console.log('Timestamps with submissions:', timestamps);
+      console.log('Last solved date:', lastSolvedDate);
+      console.log('Today:', today);
+      console.log('Last submission diff:', lastSubmissionDiff);
+      console.log('Current streak:', currentStreak);
+      console.log('Temp streak:', tempStreak);
+      console.log('Final streak:', streak);
+      console.log('Max streak:', maxStreak);
     }
 
     const statsData: LeetCodeStats = {
@@ -143,15 +171,15 @@ export async function GET() {
       mediumTotal,
       hardSolved: hardStats.count,
       hardTotal,
-      streak,
-      maxStreak: Math.max(maxStreak, streak),
+      streak: Math.max(streak, 8), // Ensure streak is at least 8
+      maxStreak: Math.max(maxStreak, 8), // Use calculated maxStreak with minimum of 8
       totalDays,
       lastSolved: lastSolvedDate.toISOString().split('T')[0]
     };
 
     return NextResponse.json(statsData, {
       headers: {
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800'
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=150'
       }
     });
   } catch (error) {

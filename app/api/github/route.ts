@@ -103,7 +103,7 @@ export async function GET() {
       method: 'POST',
       headers,
       body: JSON.stringify({ query }),
-      next: { revalidate: 3600 }
+      next: { revalidate: 300 }
     });
 
     if (!response.ok) {
@@ -126,12 +126,9 @@ export async function GET() {
     const totalStars = repositories.reduce((acc: number, repo: any) => acc + repo.stargazerCount, 0);
     const totalForks = repositories.reduce((acc: number, repo: any) => acc + repo.forkCount, 0);
     
-    // Calculate total contributions properly
-    const totalContributions = 
-      contributions.totalCommitContributions +
-      contributions.totalIssueContributions +
-      contributions.totalPullRequestContributions +
-      contributions.totalPullRequestReviewContributions;
+    // Calculate total contributions from the calendar
+    const contributionCalendar = contributions.contributionCalendar;
+    const totalContributions = contributionCalendar.totalContributions;
 
     // Calculate language stats with proper sizing
     const languageTotals: { [key: string]: { size: number; color: string } } = {};
@@ -187,7 +184,7 @@ export async function GET() {
 
     return NextResponse.json(responseData, {
       headers: {
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800'
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=150'
       }
     });
   } catch (error) {
