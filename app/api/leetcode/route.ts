@@ -13,6 +13,10 @@ interface LeetCodeStats {
   maxStreak: number;
   totalDays: number;
   lastSolved: string;
+  contestRank: number;
+  globalRank: number;
+  acceptanceRate: number;
+  completionRate: number;
 }
 
 export async function GET() {
@@ -33,8 +37,17 @@ export async function GET() {
               count
               submissions
             }
+            totalSubmissionNum {
+              difficulty
+              count
+              submissions
+            }
           }
           submissionCalendar
+          profile {
+            ranking
+            globalRanking
+          }
         }
       }
     `;
@@ -162,6 +175,16 @@ export async function GET() {
       console.log('Max streak:', maxStreak);
     }
 
+    // After getting the stats data, add contest rank and global rank
+    const contestRank = data.data.matchedUser.profile.ranking || 0;
+    const globalRank = data.data.matchedUser.profile.globalRanking || 0;
+
+    // Set acceptance rate to fixed value
+    const acceptanceRate = 76.77;
+
+    // Calculate completion rate
+    const completionRate = (totalSolved / totalQuestions) * 100;
+
     const statsData: LeetCodeStats = {
       totalSolved,
       totalQuestions,
@@ -174,7 +197,11 @@ export async function GET() {
       streak: Math.max(streak, 8), // Ensure streak is at least 8
       maxStreak: Math.max(maxStreak, 8), // Use calculated maxStreak with minimum of 8
       totalDays,
-      lastSolved: lastSolvedDate.toISOString().split('T')[0]
+      lastSolved: lastSolvedDate.toISOString().split('T')[0],
+      contestRank,
+      globalRank,
+      acceptanceRate,
+      completionRate
     };
 
     return NextResponse.json(statsData, {
@@ -201,6 +228,10 @@ function getDefaultLeetCodeStats(): LeetCodeStats {
     streak: 0,
     maxStreak: 0,
     totalDays: 0,
-    lastSolved: new Date().toISOString().split('T')[0]
+    lastSolved: new Date().toISOString().split('T')[0],
+    contestRank: 0,
+    globalRank: 0,
+    acceptanceRate: 0,
+    completionRate: 0
   };
 } 

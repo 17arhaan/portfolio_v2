@@ -45,6 +45,10 @@ interface LeetCodeStats {
   maxStreak: number
   totalDays: number
   lastSolved: string
+  contestRank: number
+  globalRank: number
+  acceptanceRate: number
+  completionRate: number
 }
 
 export default function CodeStats() {
@@ -483,12 +487,14 @@ export default function CodeStats() {
                                   <div className="text-center p-4 rounded-lg bg-muted/50">
                                     <p className="text-sm text-muted-foreground mb-1">Completion Rate</p>
                                     <p className="text-3xl font-bold text-primary">
-                                      {((leetcodeStats.totalSolved / leetcodeStats.totalQuestions) * 100).toFixed(1)}%
+                                      {leetcodeStats.completionRate.toFixed(1)}%
                                     </p>
                                   </div>
                                   <div className="text-center p-4 rounded-lg bg-muted/50">
-                                    <p className="text-sm text-muted-foreground mb-1">Problems Left</p>
-                                    <p className="text-3xl font-bold text-primary">{leetcodeStats.totalQuestions - leetcodeStats.totalSolved}</p>
+                                    <p className="text-sm text-muted-foreground mb-1">Acceptance Rate</p>
+                                    <p className="text-3xl font-bold text-primary">
+                                      {leetcodeStats.acceptanceRate.toFixed(1)}%
+                                    </p>
                                   </div>
                                 </div>
                               </CardContent>
@@ -520,6 +526,29 @@ export default function CodeStats() {
                                         month: 'short',
                                         day: 'numeric'
                                       })}
+                                    </p>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+
+                            <Card>
+                              <CardHeader>
+                                <CardTitle>Ranking</CardTitle>
+                                <CardDescription>Competitive Performance</CardDescription>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="text-center p-4 rounded-lg bg-muted/50">
+                                    <p className="text-sm text-muted-foreground mb-1">Global Rank</p>
+                                    <p className="text-3xl font-bold text-primary">
+                                      {leetcodeStats.contestRank.toLocaleString()}
+                                    </p>
+                                  </div>
+                                  <div className="text-center p-4 rounded-lg bg-muted/50">
+                                    <p className="text-sm text-muted-foreground mb-1">Contest Rank</p>
+                                    <p className="text-3xl font-bold text-primary">
+                                      {leetcodeStats.globalRank.toLocaleString()}
                                     </p>
                                   </div>
                                 </div>
