@@ -124,16 +124,17 @@ export default function Experience() {
                   whileHover={{ scale: 1.05 }}
                   className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center border border-border/30 overflow-hidden"
                 >
-                  <Image
-                    src={`/${experience.company === "Buildspace" ? "Buildspaceso_logo" : 
-                          experience.company === "Bharat Electronics Limited" ? "BEL_logo" : 
-                          experience.company === "Invisible Mechanics" ? "IM_logo" :
-                          "placeholder-logo"}.jpg`}
-                    alt={`${experience.company} logo`}
-                    width={32}
-                    height={32}
-                    className={`object-contain ${experience.company === "Coming Soon" ? "invert brightness-0" : ""}`}
-                  />
+                  {experience.company !== "Coming Soon" && (
+                    <Image
+                      src={`/${experience.company === "Buildspace" ? "Buildspaceso_logo" : 
+                            experience.company === "Bharat Electronics Limited" ? "BEL_logo" : 
+                            "IM_logo"}.jpg`}
+                      alt={`${experience.company} logo`}
+                      width={32}
+                      height={32}
+                      className="object-contain"
+                    />
+                  )}
                 </motion.div>
                 <h3 className="text-2xl font-semibold text-primary/80">{experience.company}</h3>
               </motion.div>
@@ -163,7 +164,7 @@ export default function Experience() {
                 />
                 {index === 0 && (
                   <motion.div
-                    className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-6 h-6"
+                    className="absolute -top-1 right-[-24px] w-6 h-6"
                     animate={{ 
                       y: [0, -4, 0],
                       rotate: [0, -5, 0],
