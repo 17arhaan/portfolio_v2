@@ -41,7 +41,7 @@ const certificationsData = [
     date: "April 2025",
     expiryDate: null,
     description: "Strategic digital marketing training focusing on data analysis, consumer behavior, brand measurement, and campaign attribution through practical application of tools and visualization techniques.",
-    credentialId: null,
+    credentialId: "1ME6P85IAKC7 | QDDUU62J27AK | HT1IYP3OUP4U",
     credentialURL: [
       {
         title: "Marketing in Digital World",
@@ -49,7 +49,7 @@ const certificationsData = [
       },
       {
         title: "Digital Marketing Analysis in Theory",
-        url: "#"
+        url: "https://www.coursera.org/account/accomplishments/certificate/QDDUU62J27AK"
       },
       {
         title: "Digital Marketing Analysis in Practice",
