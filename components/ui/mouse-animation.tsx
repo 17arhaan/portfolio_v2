@@ -1,29 +1,40 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function MouseAnimation() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      if (cursorRef.current) {
+        // Direct DOM manipulation for zero latency
+        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    // Use requestAnimationFrame for smooth updates
+    let animationFrameId: number;
+    const animate = () => {
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
+      animationFrameId = requestAnimationFrame(animate);
+    };
+    animate();
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   return (
     <div
-      className="fixed pointer-events-none z-[9999] mix-blend-difference"
+      ref={cursorRef}
+      className="fixed pointer-events-none z-[9999] mix-blend-difference will-change-transform"
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        transform: 'translate(-50%, -50%)',
+        left: '0',
+        top: '0',
+        transform: 'translate3d(0, 0, 0)',
       }}
     >
       <div
@@ -31,6 +42,8 @@ export function MouseAnimation() {
         style={{
           width: '7px',
           height: '7px',
+          transform: 'translate(-50%, -50%)',
+          willChange: 'transform',
         }}
       />
     </div>
