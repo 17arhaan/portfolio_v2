@@ -221,7 +221,7 @@ export default function Certifications() {
                 </CardContent>
                 <CardFooter className="pt-0">
                   <div className="w-full space-y-2">
-                    {[5, 6, 8].includes(cert.id) ? (
+                    {new Date(cert.date) > new Date() ? (
                       <Button variant="outline" size="sm" className="w-full gap-2">
                         <Clock className="h-4 w-4" />
                         Ongoing

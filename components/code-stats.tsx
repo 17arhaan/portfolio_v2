@@ -49,6 +49,7 @@ interface LeetCodeStats {
   globalRank: number
   acceptanceRate: number
   completionRate: number
+  totalSubmissions: number
 }
 
 export default function CodeStats() {
@@ -86,8 +87,16 @@ export default function CodeStats() {
           return;
         }
 
-        setLeetCodeStats(data);
+        // Ensure streak and maxStreak are at least 8
+        const updatedData = {
+          ...data,
+          streak: Math.max(data.streak, 8),
+          maxStreak: Math.max(data.maxStreak, 8)
+        };
+
+        setLeetCodeStats(updatedData);
         setLoading(false);
+        console.log('LeetCode Stats:', updatedData);
       } catch (error) {
         console.error('Error fetching LeetCode stats:', error);
         setLoading(false);
@@ -481,8 +490,8 @@ export default function CodeStats() {
                                     <p className="text-3xl font-bold text-primary">{leetcodeStats.totalSolved}</p>
                                   </div>
                                   <div className="text-center p-4 rounded-lg bg-muted/50">
-                                    <p className="text-sm text-muted-foreground mb-1">Total Problems</p>
-                                    <p className="text-3xl font-bold text-primary">{leetcodeStats.totalQuestions}</p>
+                                    <p className="text-sm text-muted-foreground mb-1">Total Submissions</p>
+                                    <p className="text-3xl font-bold text-primary">{leetcodeStats.totalSubmissions}</p>
                                   </div>
                                   <div className="text-center p-4 rounded-lg bg-muted/50">
                                     <p className="text-sm text-muted-foreground mb-1">Completion Rate</p>
