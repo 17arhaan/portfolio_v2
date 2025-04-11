@@ -155,7 +155,7 @@ export default function Certifications() {
               whileHover={{ y: -5 }}
               className="h-full"
             >
-              <Card className="h-full overflow-hidden border border-border/50 hover:border-primary/50 transition-colors duration-300">
+              <Card className="h-full overflow-hidden border border-border/50 hover:border-primary/50 transition-colors duration-300 relative pb-16">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -183,9 +183,9 @@ export default function Certifications() {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex flex-col h-[200px]">
                   <div
-                    className={`transition-all duration-300 ${expandedId === cert.id ? "max-h-96" : "max-h-24 overflow-hidden"}`}
+                    className={`transition-all duration-300 flex-grow ${expandedId === cert.id ? "max-h-[160px]" : "max-h-24 overflow-hidden"}`}
                   >
                     <p className="text-sm text-muted-foreground mb-4">{cert.description}</p>
 
@@ -214,12 +214,12 @@ export default function Certifications() {
                     variant="ghost"
                     size="sm"
                     onClick={() => toggleExpand(cert.id)}
-                    className="mt-2 text-xs w-full justify-center"
+                    className="text-xs w-full justify-center"
                   >
                     {expandedId === cert.id ? "Show Less" : "Show More"}
                   </Button>
                 </CardContent>
-                <CardFooter className="pt-0">
+                <CardFooter className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border/50 p-4">
                   <div className="w-full space-y-2">
                     {new Date(cert.date) > new Date() ? (
                       <Button variant="outline" size="sm" className="w-full gap-2">
