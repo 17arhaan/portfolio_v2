@@ -3,10 +3,12 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowDown, Github, Linkedin, Code, ChevronRight } from "lucide-react"
+import { ArrowDown, Github, Linkedin, Code, ChevronRight, FileText } from "lucide-react"
+import { EasterEggMessage } from "./easter-egg-message"
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [showEasterEggHint, setShowEasterEggHint] = useState(true)
   const heroRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { scrollYProgress } = useScroll({
@@ -200,6 +202,24 @@ export default function Hero() {
     }
   }, [])
 
+  useEffect(() => {
+    // Show easter egg hint every 2 minutes for 2 seconds
+    const interval = setInterval(() => {
+      setShowEasterEggHint(true)
+      setTimeout(() => {
+        setShowEasterEggHint(false)
+      }, 2000)
+    }, 120000) // 120 seconds = 2 minutes
+
+    // Initial show
+    setShowEasterEggHint(true)
+    setTimeout(() => {
+      setShowEasterEggHint(false)
+    }, 2000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   // Calculate parallax effect based on mouse position
   const parallaxX = mousePosition.x * 20 - 10
   const parallaxY = mousePosition.y * 20 - 10
@@ -298,12 +318,13 @@ export default function Hero() {
               { icon: Linkedin, href: "https://www.linkedin.com/in/arhaan17/", label: "LinkedIn" },
               { icon: Github, href: "https://github.com/17arhaan", label: "GitHub" },
               { icon: Code, href: "https://leetcode.com/arhaan17/", label: "LeetCode" },
+              { icon: FileText, href: "#resume", label: "Resume" },
             ].map((social, index) => (
               <motion.a
                 key={social.label}
                 href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={social.href.startsWith("http") ? "_blank" : undefined}
+                rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="text-muted-foreground hover:text-primary transition-colors relative group"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -339,6 +360,11 @@ export default function Hero() {
           </a>
         </motion.div>
       </div>
+
+      <EasterEggMessage 
+        message="👀 There's an easter egg hidden somewhere on this website..." 
+        isVisible={showEasterEggHint} 
+      />
     </section>
   )
 }
