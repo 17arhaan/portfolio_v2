@@ -211,12 +211,6 @@ export default function Hero() {
       }, 2000)
     }, 120000) // 120 seconds = 2 minutes
 
-    // Initial show
-    setShowEasterEggHint(true)
-    setTimeout(() => {
-      setShowEasterEggHint(false)
-    }, 2000)
-
     return () => clearInterval(interval)
   }, [])
 
