@@ -197,11 +197,13 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    // Show hint immediately when website loads
-    setShowEasterEggHint(true)
+    // Show hint after a short delay when website loads
     const initialTimeout = setTimeout(() => {
-      setShowEasterEggHint(false)
-    }, 2000)
+      setShowEasterEggHint(true)
+      setTimeout(() => {
+        setShowEasterEggHint(false)
+      }, 2000)
+    }, 1000) // 1 second delay
 
     // Set up interval for showing hint every 2 minutes
     const interval = setInterval(() => {
