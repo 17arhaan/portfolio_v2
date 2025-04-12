@@ -10,7 +10,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { MouseAnimation } from "@/components/ui/mouse-animation"
 import { Analytics } from "@vercel/analytics/react"
 import Script from "next/script"
-import { VideoIntro } from "@/components/video-intro"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -166,7 +165,6 @@ export default function RootLayout({
           <div className="relative flex min-h-screen flex-col">
             <MouseAnimation />
             <Navbar />
-            <VideoIntro />
             <main className="flex-1">{children}</main>
             <Footer />
           </div>

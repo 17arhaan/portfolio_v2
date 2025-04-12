@@ -8,7 +8,8 @@ import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Sun, Moon } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
-import { CinematicVideo } from "@/components/cinematic-video"
+import { VideoModal } from "@/components/ui/video-modal"
+import { EasterEggMessage } from "@/components/ui/easter-egg-message"
 
 // Update the navItems array to include all sections including About Me
 const navItems = [
@@ -29,6 +30,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home")
   const { setTheme, theme } = useTheme()
   const [isVideoOpen, setIsVideoOpen] = useState(false)
+  const [easterEggFound, setEasterEggFound] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -109,6 +111,7 @@ export default function Navbar() {
   const handleNameClick = (e: React.MouseEvent) => {
     e.preventDefault()
     setIsVideoOpen(true)
+    setEasterEggFound(true)
   }
 
   return (
@@ -120,14 +123,16 @@ export default function Navbar() {
         )}
       >
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-            <Link
-              href="/"
-              className="text-xl font-bold tracking-tighter transition-colors"
-              onClick={handleNameClick}
-            >
-              <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Arhaan Girdhar</span>
-            </Link>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            transition={{ duration: 0.5 }}
+            onClick={handleNameClick}
+            className="cursor-pointer"
+          >
+            <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent text-xl font-bold tracking-tighter">
+              Arhaan Girdhar
+            </span>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -251,8 +256,8 @@ export default function Navbar() {
         </AnimatePresence>
       </header>
 
-      {/* Cinematic Video Player */}
-      <CinematicVideo isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+      <VideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+      <EasterEggMessage easterEggFound={easterEggFound} />
     </>
   )
 }

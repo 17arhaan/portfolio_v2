@@ -4,12 +4,9 @@ import { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowDown, Github, Linkedin, Code, ChevronRight, FileText } from "lucide-react"
-import { EasterEggMessage } from "./easter-egg-message"
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [showEasterEggHint, setShowEasterEggHint] = useState(false)
-  const [easterEggFound, setEasterEggFound] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { scrollYProgress } = useScroll({
@@ -26,6 +23,7 @@ export default function Hero() {
       const { clientX, clientY } = e
       const { innerWidth, innerHeight } = window
 
+      // Calculate mouse position as percentage of screen
       setMousePosition({
         x: clientX / innerWidth,
         y: clientY / innerHeight,
@@ -52,24 +50,24 @@ export default function Hero() {
     let mouseX = 0
     let mouseY = 0
 
+    // Define Particle class first, before using it
     class Particle {
-      x: number = 0
-      y: number = 0
-      size: number = 0
-      speedX: number = 0
-      speedY: number = 0
-      color: string = "#8a8a8a"
-      originalX: number = 0
-      originalY: number = 0
-      vx: number = 0
-      vy: number = 0
-      force: number = 0
-      angle: number = 0
-      distance: number = 0
-      friction: number = 0.95
+      x: number
+      y: number
+      size: number
+      speedX: number
+      speedY: number
+      color: string
+      originalX: number
+      originalY: number
+      vx: number
+      vy: number
+      force: number
+      angle: number
+      distance: number
+      friction: number
 
       constructor() {
-        if (!canvas) return
         this.x = Math.random() * canvas.width
         this.y = Math.random() * canvas.height
         this.originalX = this.x
@@ -77,10 +75,19 @@ export default function Hero() {
         this.size = Math.random() * 2 + 0.5
         this.speedX = (Math.random() - 0.5) * 0.5
         this.speedY = (Math.random() - 0.5) * 0.5
+        this.color = "#8a8a8a"
+
+        // For mouse interaction
+        this.vx = 0
+        this.vy = 0
+        this.force = 0
+        this.angle = 0
+        this.distance = 0
+        this.friction = 0.95
       }
 
       update() {
-        if (!canvas) return
+        // Mouse interaction with smooth movement
         const dx = mouseX - this.x
         const dy = mouseY - this.y
         this.distance = Math.sqrt(dx * dx + dy * dy)
@@ -92,17 +99,21 @@ export default function Hero() {
           this.vy -= this.force * Math.sin(this.angle) * 0.6
         }
 
+        // Apply friction to slow down particles
         this.vx *= this.friction
         this.vy *= this.friction
 
+        // Move particles
         this.x += this.vx
         this.y += this.vy
 
+        // Slow return to original position
         const dxOrigin = this.originalX - this.x
         const dyOrigin = this.originalY - this.y
         this.x += dxOrigin * 0.01
         this.y += dyOrigin * 0.01
 
+        // Bounce off edges with damping
         if (this.x < 0 || this.x > canvas.width) {
           this.vx *= -0.5
           this.x = this.x < 0 ? 0 : canvas.width
@@ -122,13 +133,14 @@ export default function Hero() {
       }
     }
 
+    // Define the mouse move handler before using it
     const handleMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX
       mouseY = e.clientY
     }
 
+    // Set canvas dimensions
     const handleResize = () => {
-      if (!canvas) return
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
       initParticles()
@@ -163,7 +175,7 @@ export default function Hero() {
     }
 
     function animate() {
-      if (!ctx || !canvas) return
+      if (!ctx) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach((particle) => {
@@ -187,29 +199,6 @@ export default function Hero() {
       cancelAnimationFrame(animationFrameId)
     }
   }, [])
-
-  useEffect(() => {
-    // Set up interval for showing hint every 2 minutes
-    const interval = setInterval(() => {
-      if (!easterEggFound) {
-        setShowEasterEggHint(true)
-        setTimeout(() => {
-          setShowEasterEggHint(false)
-        }, 2000)
-      }
-    }, 120000) // 2 minutes
-
-    // Cleanup
-    return () => {
-      clearInterval(interval)
-    }
-  }, [easterEggFound])
-
-  // Function to handle easter egg discovery
-  const handleEasterEggFound = () => {
-    setEasterEggFound(true)
-    setShowEasterEggHint(false)
-  }
 
   // Calculate parallax effect based on mouse position
   const parallaxX = mousePosition.x * 20 - 10
@@ -351,14 +340,6 @@ export default function Hero() {
           </a>
         </motion.div>
       </div>
-
-      {!easterEggFound && showEasterEggHint && (
-        <EasterEggMessage 
-          message="👀 There's an easter egg hidden somewhere on this website..." 
-          isVisible={showEasterEggHint} 
-          onFound={handleEasterEggFound}
-        />
-      )}
     </section>
   )
 }
