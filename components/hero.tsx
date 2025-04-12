@@ -10,6 +10,7 @@ export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [showEasterEggHint, setShowEasterEggHint] = useState(false)
   const [easterEggFound, setEasterEggFound] = useState(false)
+  const [hasInitialized, setHasInitialized] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { scrollYProgress } = useScroll({
@@ -197,13 +198,7 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    // Show hint after a short delay when website loads
-    const initialTimeout = setTimeout(() => {
-      setShowEasterEggHint(true)
-      setTimeout(() => {
-        setShowEasterEggHint(false)
-      }, 2000)
-    }, 1000) // 1 second delay
+    if (hasInitialized) return
 
     // Set up interval for showing hint every 2 minutes
     const interval = setInterval(() => {
@@ -215,11 +210,12 @@ export default function Hero() {
       }
     }, 120000) // 2 minutes
 
+    setHasInitialized(true)
+
     return () => {
-      clearTimeout(initialTimeout)
       clearInterval(interval)
     }
-  }, [easterEggFound])
+  }, [hasInitialized, easterEggFound])
 
   // Function to handle easter egg discovery
   const handleEasterEggFound = () => {
