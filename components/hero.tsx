@@ -199,6 +199,7 @@ export default function Hero() {
       }
     }, 120000) // 2 minutes
 
+    // Cleanup
     return () => {
       clearInterval(interval)
     }
@@ -351,11 +352,13 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <EasterEggMessage 
-        message="👀 There's an easter egg hidden somewhere on this website..." 
-        isVisible={showEasterEggHint} 
-        onFound={handleEasterEggFound}
-      />
+      {!easterEggFound && showEasterEggHint && (
+        <EasterEggMessage 
+          message="👀 There's an easter egg hidden somewhere on this website..." 
+          isVisible={showEasterEggHint} 
+          onFound={handleEasterEggFound}
+        />
+      )}
     </section>
   )
 }
