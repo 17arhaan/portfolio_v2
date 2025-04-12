@@ -74,6 +74,10 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
 }
 
 /* Custom scrollbar */
@@ -128,16 +132,20 @@ img {
 }
 
 @keyframes shimmer {
-  from {
-    backgroundPosition: 0 0;
+  0% {
+    transform: translateX(-100%);
   }
-  to {
-    backgroundPosition: -200% 0;
+  100% {
+    transform: translateX(100%);
   }
 }
 
 .animate-blob {
   animation: blob 7s infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
 }
 
 /* Custom Cursor Styles */

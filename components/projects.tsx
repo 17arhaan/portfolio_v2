@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence, useInView } from "framer-motion"
+import { motion, AnimatePresence, useInView, useMotionValue, useTransform } from "framer-motion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -9,6 +9,9 @@ import { ExternalLink, Github, Search, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
+import { CodeCard } from "./3d-code-card"
+import { GradientBackground } from "@/components/ui/gradient-background"
+import { GlowEffect } from "./ui/glow-effect"
 
 // Updated project data
 const projectsData = [
@@ -159,8 +162,9 @@ export default function Projects() {
   const selectedProjectData = selectedProject !== null ? projectsData.find((p) => p.id === selectedProject) : null
 
   return (
-    <section id="projects" ref={sectionRef} className="py-20 bg-muted/30">
-      <div className="container px-4 max-w-[2000px] mx-auto">
+    <section id="projects" ref={sectionRef} className="py-20 bg-muted/30 relative overflow-hidden">
+      <GradientBackground />
+      <div className="container px-4 max-w-[2000px] mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -227,76 +231,117 @@ export default function Projects() {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[2000px] mx-auto"
             >
-              {filteredProjects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                  className={cn("h-full", project.featured && "md:col-span-2 lg:col-span-1")}
-                >
-                  <Card
-                    className="h-full overflow-hidden group cursor-pointer border border-border/50 hover:border-primary/50 transition-colors duration-300"
-                    onClick={() => setSelectedProject(project.id)}
+              {filteredProjects.map((project, index) => {
+                const x = useMotionValue(0)
+                const y = useMotionValue(0)
+
+                const rotateX = useTransform(y, [-100, 100], [10, -10])
+                const rotateY = useTransform(x, [-100, 100], [-10, 10])
+
+                const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+                  const rect = event.currentTarget.getBoundingClientRect()
+                  const width = rect.width
+                  const height = rect.height
+                  const mouseX = event.clientX - rect.left
+                  const mouseY = event.clientY - rect.top
+                  const centerX = mouseX - width / 2
+                  const centerY = mouseY - height / 2
+                  x.set(centerX)
+                  y.set(centerY)
+                }
+
+                const handleMouseLeave = () => {
+                  x.set(0)
+                  y.set(0)
+                }
+
+                return (
+                  <motion.div
+                    key={project.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                    className={cn("h-full perspective-1000", project.featured && "md:col-span-2 lg:col-span-1")}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
                   >
-                    <div className="relative overflow-hidden h-64">
-                      <Image
-                        src={project.image || "/placeholder.svg"}
-                        alt={project.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-                    <CardHeader className="space-y-4">
-                      <CardTitle className="group-hover:text-primary transition-colors duration-300 text-xl">
-                        {project.title}
-                      </CardTitle>
-                      <CardDescription className="line-clamp-2 [&>p]:mb-2 last:[&>p]:mb-0 text-sm">
-                        {project.description.split('\n\n').map((line, index) => (
-                          <p key={index}>{line}</p>
-                        ))}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="pb-4">
-                      <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-between pb-6">
-                      <Button variant="ghost" size="sm" className="gap-1" asChild>
-                        <a
-                          href={project.githubLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
+                    <motion.div
+                      style={{
+                        rotateX,
+                        rotateY,
+                        transformStyle: "preserve-3d",
+                      }}
+                      className="h-full"
+                    >
+                      <GlowEffect
+                        glowColor="rgba(99, 102, 241, 0.5)"
+                        intensity={0.7}
+                      >
+                        <Card
+                          className="h-full overflow-hidden group cursor-pointer border border-border/50 hover:border-primary/50 transition-colors duration-300"
+                          onClick={() => setSelectedProject(project.id)}
                         >
-                          <Github className="h-4 w-4" />
-                          <span className="sr-only md:not-sr-only">Code</span>
-                        </a>
-                      </Button>
-                      <Button variant="ghost" size="sm" className="gap-1" asChild disabled={!project.demoLink}>
-                        <a
-                          href={project.demoLink || "#"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className={!project.demoLink ? "pointer-events-none opacity-50" : ""}
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                          <span className="sr-only md:not-sr-only">{project.demoLink ? "View Demo" : "Working on Demo"}</span>
-                        </a>
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </motion.div>
-              ))}
+                          <div className="relative overflow-hidden h-64">
+                            <Image
+                              src={project.image || "/placeholder.svg"}
+                              alt={project.title}
+                              fill
+                              className="object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          </div>
+                          <CardHeader className="space-y-4">
+                            <CardTitle className="group-hover:text-primary transition-colors duration-300 text-xl">
+                              {project.title}
+                            </CardTitle>
+                            <CardDescription className="line-clamp-2 [&>p]:mb-2 last:[&>p]:mb-0 text-sm">
+                              {project.description.split('\n\n').map((line, index) => (
+                                <p key={index}>{line}</p>
+                              ))}
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="pb-4">
+                            <div className="flex flex-wrap gap-2">
+                              {project.tags.map((tag) => (
+                                <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          </CardContent>
+                          <CardFooter className="flex justify-between pb-6">
+                            <Button variant="ghost" size="sm" className="gap-1" asChild>
+                              <a
+                                href={project.githubLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Github className="h-4 w-4" />
+                                <span className="sr-only md:not-sr-only">Code</span>
+                              </a>
+                            </Button>
+                            <Button variant="ghost" size="sm" className="gap-1" asChild disabled={!project.demoLink}>
+                              <a
+                                href={project.demoLink || "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className={!project.demoLink ? "pointer-events-none opacity-50" : ""}
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                                <span className="sr-only md:not-sr-only">{project.demoLink ? "View Demo" : "Working on Demo"}</span>
+                              </a>
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </GlowEffect>
+                    </motion.div>
+                  </motion.div>
+                )
+              })}
             </motion.div>
           ) : (
             <motion.div
@@ -456,6 +501,142 @@ export default function Projects() {
                         )}
                       </ul>
                     </div>
+                    <div className="space-y-3">
+                      <h4 className="font-semibold">Code Snippets</h4>
+                      <div className="space-y-4">
+                        {selectedProjectData.id === 1 && (
+                          <>
+                            <CodeCard
+                              title="Basic Animation"
+                              language="JavaScript"
+                              code={`// Simple animation using requestAnimationFrame
+function animate() {
+  // Update position
+  position += speed;
+  
+  // Draw the character
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(character, position, 100);
+  
+  // Continue animation
+  requestAnimationFrame(animate);
+}
+
+// Start animation
+animate();`}
+                            />
+                            <CodeCard
+                              title="Character Movement"
+                              language="JavaScript"
+                              code={`// Handle keyboard input
+document.addEventListener('keydown', (e) => {
+  switch(e.key) {
+    case 'ArrowLeft':
+      character.x -= 5;
+      break;
+    case 'ArrowRight':
+      character.x += 5;
+      break;
+    case 'ArrowUp':
+      character.y -= 5;
+      break;
+    case 'ArrowDown':
+      character.y += 5;
+      break;
+  }
+});`}
+                            />
+                          </>
+                        )}
+                        {selectedProjectData.id === 2 && (
+                          <>
+                            <CodeCard
+                              title="Voice Command"
+                              language="JavaScript"
+                              code={`// Simple voice command recognition
+const recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+
+recognition.onresult = (event) => {
+  const command = event.results[0][0].transcript;
+  
+  if (command.includes('hello')) {
+    sayHello();
+  } else if (command.includes('time')) {
+    tellTime();
+  }
+};
+
+recognition.start();`}
+                            />
+                            <CodeCard
+                              title="Object Detection"
+                              language="Python"
+                              code={`# Simple object detection
+import cv2
+
+# Load image
+image = cv2.imread('image.jpg')
+
+# Convert to grayscale
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Detect objects
+faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+# Draw rectangles around faces
+for (x,y,w,h) in faces:
+    cv2.rectangle(image, (x,y), (x+w,y+h), (255,0,0), 2)
+
+# Show result
+cv2.imshow('Detected Objects', image)
+cv2.waitKey(0)`}
+                            />
+                          </>
+                        )}
+                        {selectedProjectData.id === 3 && (
+                          <>
+                            <CodeCard
+                              title="API Endpoint"
+                              language="JavaScript"
+                              code={`// Simple API endpoint
+app.get('/api/transactions', async (req, res) => {
+  try {
+    const transactions = await db.transactions.findMany({
+      where: {
+        userId: req.user.id
+      }
+    });
+    res.json(transactions);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});`}
+                            />
+                            <CodeCard
+                              title="Data Visualization"
+                              language="JavaScript"
+                              code={`// Create a simple chart
+const ctx = document.getElementById('myChart');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['Jan', 'Feb', 'Mar'],
+    datasets: [{
+      label: 'Spending',
+      data: [300, 400, 200],
+      borderColor: 'rgb(75, 192, 192)',
+    }]
+  }
+});`}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <h4 className="font-semibold">Technical Details</h4>
                       <ul className="list-disc list-inside text-muted-foreground space-y-2">

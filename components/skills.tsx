@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useState } from "react"
+import { GradientBackground } from "@/components/ui/gradient-background"
 
 // Updated skills data
 const skillsData = {
@@ -88,8 +89,9 @@ export default function Skills() {
   const [activeTab, setActiveTab] = useState("programming")
 
   return (
-    <section id="skills" className="py-20 bg-muted/30">
-      <div className="container px-4">
+    <section id="skills" className="py-20 bg-muted/30 relative overflow-hidden">
+      <GradientBackground />
+      <div className="container px-4 max-w-[2000px] mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

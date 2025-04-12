@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Github, Code, CheckCircle2, GitCommit, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { GradientBackground } from "@/components/ui/gradient-background"
 
 // Types for GitHub data
 interface GitHubStats {
@@ -148,8 +149,9 @@ export default function CodeStats() {
   };
 
   return (
-    <section id="code-stats" className="py-20 bg-muted/30">
-      <div className="container px-4">
+    <section id="code-stats" className="py-20 relative overflow-hidden">
+      <GradientBackground />
+      <div className="container px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

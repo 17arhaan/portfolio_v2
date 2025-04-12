@@ -220,15 +220,6 @@ export default function Hero() {
 
       <motion.div className="container relative z-10 px-4 py-32 md:py-40" style={{ opacity, scale, y }}>
         <div className="max-w-3xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm text-primary backdrop-blur-md"
-          >
-            Welcome to my portfolio
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

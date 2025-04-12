@@ -1,12 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { motion, useMotionValue, useTransform } from "framer-motion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, Award, ExternalLink, CheckCircle, Clock } from "lucide-react"
 import Image from "next/image"
+import { GradientBackground } from "@/components/ui/gradient-background"
+import { GlowEffect } from "./ui/glow-effect"
+import { CodeCard } from "./3d-code-card"
 
 // Sample certifications data
 const certificationsData = [
@@ -129,8 +132,9 @@ export default function Certifications() {
   }
 
   return (
-    <section id="certifications" className="py-20 bg-muted/30">
-      <div className="container px-4 max-w-[2000px] mx-auto">
+    <section id="certifications" className="py-20 bg-muted/30 relative overflow-hidden">
+      <GradientBackground />
+      <div className="container px-4 max-w-[2000px] mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -145,111 +149,159 @@ export default function Certifications() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[2000px] mx-auto">
-          {certificationsData.map((cert, index) => (
-            <motion.div
-              key={cert.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              whileHover={{ y: -5 }}
-              className="h-full"
-            >
-              <Card className="h-full overflow-hidden border border-border/50 hover:border-primary/50 transition-colors duration-300 relative pb-16">
-                <CardHeader className="pb-2">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300">
-                        {cert.title}
-                      </CardTitle>
-                      <CardDescription className="flex items-center mt-1">
-                        <Award className="h-4 w-4 mr-1" />
-                        {cert.issuer}
-                        <span className="mx-2">•</span>
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {cert.date}
-                        {cert.expiryDate && <span> - {cert.expiryDate}</span>}
-                      </CardDescription>
-                    </div>
-                    <div className="flex-shrink-0 ml-4">
-                      <div className="relative h-16 w-16 rounded-md overflow-hidden border border-border/50">
-                        <Image 
-                          src={cert.image || "/placeholder.svg"} 
-                          alt={cert.title} 
-                          fill 
-                          className={`object-contain p-1 ${cert.issuer === "Meta" ? "bg-transparent" : ""}`} 
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex flex-col h-[200px]">
-                  <div
-                    className={`transition-all duration-300 flex-grow ${expandedId === cert.id ? "max-h-[160px]" : "max-h-24 overflow-hidden"}`}
+          {certificationsData.map((cert, index) => {
+            const x = useMotionValue(0)
+            const y = useMotionValue(0)
+
+            const rotateX = useTransform(y, [-100, 100], [10, -10])
+            const rotateY = useTransform(x, [-100, 100], [-10, 10])
+
+            const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+              const rect = event.currentTarget.getBoundingClientRect()
+              const width = rect.width
+              const height = rect.height
+              const mouseX = event.clientX - rect.left
+              const mouseY = event.clientY - rect.top
+              const centerX = mouseX - width / 2
+              const centerY = mouseY - height / 2
+              x.set(centerX)
+              y.set(centerY)
+            }
+
+            const handleMouseLeave = () => {
+              x.set(0)
+              y.set(0)
+            }
+
+            return (
+              <motion.div
+                key={cert.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true, margin: "-100px" }}
+                whileHover={{ y: -5 }}
+                className="h-full perspective-1000"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+              >
+                <motion.div
+                  style={{
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d",
+                  }}
+                  className="h-full"
+                >
+                  <GlowEffect
+                    glowColor="rgba(99, 102, 241, 0.5)"
+                    intensity={0.7}
                   >
-                    <p className="text-sm text-muted-foreground mb-4">{cert.description}</p>
-
-                    {expandedId === cert.id && (
-                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-                        <div className="mb-4">
-                          <p className="text-sm font-medium mb-1">Credential ID</p>
-                          <p className="text-sm text-muted-foreground">{cert.credentialId}</p>
-                        </div>
-
-                        <div className="mb-4">
-                          <p className="text-sm font-medium mb-2">Skills</p>
-                          <div className="flex flex-wrap gap-2">
-                            {cert.skills.map((skill) => (
-                              <Badge key={skill} variant="secondary" className="bg-secondary/50">
-                                {skill}
-                              </Badge>
-                            ))}
+                    <Card className="h-full overflow-hidden border border-border/50 hover:border-primary/50 transition-colors duration-300">
+                      <CardHeader className="pb-2">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300">
+                              {cert.title}
+                            </CardTitle>
+                            <CardDescription className="flex items-center mt-1">
+                              <Award className="h-4 w-4 mr-1" />
+                              {cert.issuer}
+                              <span className="mx-2">•</span>
+                              <Calendar className="h-4 w-4 mr-1" />
+                              {cert.date}
+                              {cert.expiryDate && <span> - {cert.expiryDate}</span>}
+                            </CardDescription>
+                          </div>
+                          <div className="flex-shrink-0 ml-4">
+                            <div className="relative h-16 w-16 rounded-md overflow-hidden border border-border/50">
+                              <Image 
+                                src={cert.image || "/placeholder.svg"} 
+                                alt={cert.title} 
+                                fill 
+                                className={`object-contain p-1 ${cert.issuer === "Meta" ? "bg-transparent" : ""}`} 
+                              />
+                            </div>
                           </div>
                         </div>
-                      </motion.div>
-                    )}
-                  </div>
+                      </CardHeader>
+                      <CardContent className="flex flex-col">
+                        <div
+                          className={`transition-all duration-300 ${
+                            expandedId === cert.id ? "max-h-[500px]" : "max-h-24"
+                          } overflow-hidden`}
+                        >
+                          <p className="text-sm text-muted-foreground mb-4">{cert.description}</p>
 
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => toggleExpand(cert.id)}
-                    className="text-xs w-full justify-center"
-                  >
-                    {expandedId === cert.id ? "Show Less" : "Show More"}
-                  </Button>
-                </CardContent>
-                <CardFooter className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border/50 p-4">
-                  <div className="w-full space-y-2">
-                    {new Date(cert.date) > new Date() ? (
-                      <Button variant="outline" size="sm" className="w-full gap-2">
-                        <Clock className="h-4 w-4" />
-                        Ongoing
-                      </Button>
-                    ) : Array.isArray(cert.credentialURL) ? (
-                      cert.credentialURL.map((credential, index) => (
-                        <Button key={index} variant="outline" size="sm" className="w-full gap-2" asChild>
-                          <a href={credential.url} target="_blank" rel="noopener noreferrer">
-                            <CheckCircle className="h-4 w-4" />
-                            {credential.title}
-                            <ExternalLink className="h-3 w-3 ml-1" />
-                          </a>
+                          {expandedId === cert.id && (
+                            <motion.div 
+                              initial={{ opacity: 0 }} 
+                              animate={{ opacity: 1 }} 
+                              transition={{ duration: 0.3 }}
+                              className="space-y-4"
+                            >
+                              <div className="mb-4">
+                                <p className="text-sm font-medium mb-1">Credential ID</p>
+                                <p className="text-sm text-muted-foreground">{cert.credentialId}</p>
+                              </div>
+
+                              <div className="mb-4">
+                                <p className="text-sm font-medium mb-2">Skills</p>
+                                <div className="flex flex-wrap gap-2">
+                                  {cert.skills.map((skill) => (
+                                    <Badge key={skill} variant="secondary" className="bg-secondary/50">
+                                      {skill}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </div>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleExpand(cert.id)}
+                          className="text-xs w-full justify-center mt-2"
+                        >
+                          {expandedId === cert.id ? "Show Less" : "Show More"}
                         </Button>
-                      ))
-                    ) : (
-                      <Button variant="outline" size="sm" className="w-full gap-2" asChild>
-                        <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
-                          <CheckCircle className="h-4 w-4" />
-                          Verify Credential
-                          <ExternalLink className="h-3 w-3 ml-1" />
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          ))}
+                      </CardContent>
+                      <CardFooter className="pt-0">
+                        <div className="w-full space-y-2">
+                          {new Date(cert.date) > new Date() ? (
+                            <Button variant="outline" size="sm" className="w-full gap-2">
+                              <Clock className="h-4 w-4" />
+                              Ongoing
+                            </Button>
+                          ) : Array.isArray(cert.credentialURL) ? (
+                            cert.credentialURL.map((credential, index) => (
+                              <Button key={index} variant="outline" size="sm" className="w-full gap-2" asChild>
+                                <a href={credential.url} target="_blank" rel="noopener noreferrer">
+                                  <CheckCircle className="h-4 w-4" />
+                                  {credential.title}
+                                  <ExternalLink className="h-3 w-3 ml-1" />
+                                </a>
+                              </Button>
+                            ))
+                          ) : (
+                            <Button variant="outline" size="sm" className="w-full gap-2" asChild>
+                              <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
+                                <CheckCircle className="h-4 w-4" />
+                                Verify Credential
+                                <ExternalLink className="h-3 w-3 ml-1" />
+                              </a>
+                            </Button>
+                          )}
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  </GlowEffect>
+                </motion.div>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>

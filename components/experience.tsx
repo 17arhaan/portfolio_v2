@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Briefcase, Calendar, MapPin } from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
+import { GradientBackground } from "@/components/ui/gradient-background"
 
 // Updated experience data
 const experienceData = [
@@ -63,8 +64,9 @@ export default function Experience() {
   }
 
   return (
-    <section id="experience" className="py-20">
-      <div className="container px-4">
+    <section id="experience" className="py-20 relative overflow-hidden">
+      <GradientBackground />
+      <div className="container px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
