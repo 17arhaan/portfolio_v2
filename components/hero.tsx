@@ -10,7 +10,6 @@ export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [showEasterEggHint, setShowEasterEggHint] = useState(false)
   const [easterEggFound, setEasterEggFound] = useState(false)
-  const [hasInitialized, setHasInitialized] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { scrollYProgress } = useScroll({
@@ -27,7 +26,6 @@ export default function Hero() {
       const { clientX, clientY } = e
       const { innerWidth, innerHeight } = window
 
-      // Calculate mouse position as percentage of screen
       setMousePosition({
         x: clientX / innerWidth,
         y: clientY / innerHeight,
@@ -55,20 +53,20 @@ export default function Hero() {
     let mouseY = 0
 
     class Particle {
-      x: number
-      y: number
-      size: number
-      speedX: number
-      speedY: number
-      color: string
-      originalX: number
-      originalY: number
-      vx: number
-      vy: number
-      force: number
-      angle: number
-      distance: number
-      friction: number
+      x: number = 0
+      y: number = 0
+      size: number = 0
+      speedX: number = 0
+      speedY: number = 0
+      color: string = "#8a8a8a"
+      originalX: number = 0
+      originalY: number = 0
+      vx: number = 0
+      vy: number = 0
+      force: number = 0
+      angle: number = 0
+      distance: number = 0
+      friction: number = 0.95
 
       constructor() {
         if (!canvas) return
@@ -79,13 +77,6 @@ export default function Hero() {
         this.size = Math.random() * 2 + 0.5
         this.speedX = (Math.random() - 0.5) * 0.5
         this.speedY = (Math.random() - 0.5) * 0.5
-        this.color = "#8a8a8a"
-        this.vx = 0
-        this.vy = 0
-        this.force = 0
-        this.angle = 0
-        this.distance = 0
-        this.friction = 0.95
       }
 
       update() {
@@ -198,8 +189,6 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (hasInitialized) return
-
     // Set up interval for showing hint every 2 minutes
     const interval = setInterval(() => {
       if (!easterEggFound) {
@@ -210,12 +199,10 @@ export default function Hero() {
       }
     }, 120000) // 2 minutes
 
-    setHasInitialized(true)
-
     return () => {
       clearInterval(interval)
     }
-  }, [hasInitialized, easterEggFound])
+  }, [easterEggFound])
 
   // Function to handle easter egg discovery
   const handleEasterEggFound = () => {
