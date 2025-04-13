@@ -270,13 +270,19 @@ export default function Projects() {
                 return (
                   <motion.div
                     key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: index * 0.1,
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15
+                    }}
                     viewport={{ once: true, margin: "-100px" }}
                     whileHover={{ 
-                      y: -10,
-                      scale: 1.02,
+                      y: -15,
+                      scale: 1.03,
                       transition: { 
                         duration: 0.3,
                         type: "spring",
@@ -319,7 +325,12 @@ export default function Projects() {
                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                               />
                             </motion.div>
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              whileHover={{ opacity: 1 }}
+                              transition={{ duration: 0.3 }}
+                              className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent"
+                            />
                             <motion.div
                               initial={{ opacity: 0, y: 20 }}
                               whileHover={{ opacity: 1, y: 0 }}
@@ -327,37 +338,71 @@ export default function Projects() {
                               className="absolute bottom-0 left-0 right-0 p-4"
                             >
                               <div className="flex flex-wrap gap-1">
-                                {project.tags.slice(0, 3).map((tag) => (
-                                  <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-[10px] sm:text-xs">
-                                    {tag}
-                                  </Badge>
+                                {project.tags.slice(0, 3).map((tag, tagIndex) => (
+                                  <motion.div
+                                    key={tag}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: tagIndex * 0.1 }}
+                                  >
+                                    <Badge variant="secondary" className="bg-secondary/50 hover:bg-secondary text-[10px] sm:text-xs">
+                                      {tag}
+                                    </Badge>
+                                  </motion.div>
                                 ))}
                               </div>
                             </motion.div>
                           </div>
                           <CardHeader className="space-y-2 p-4">
-                            <CardTitle className="group-hover:text-primary transition-colors duration-300 text-lg sm:text-xl">
-                              {project.title}
-                            </CardTitle>
-                            <CardDescription className="line-clamp-2 [&>p]:mb-2 last:[&>p]:mb-0 text-xs sm:text-sm">
-                              {project.description.split('\n\n').map((line, index) => (
-                                <p key={index}>{line}</p>
-                              ))}
-                            </CardDescription>
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.2 }}
+                            >
+                              <CardTitle className="group-hover:text-primary transition-colors duration-300 text-lg sm:text-xl">
+                                {project.title}
+                              </CardTitle>
+                            </motion.div>
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.3 }}
+                            >
+                              <CardDescription className="line-clamp-2 [&>p]:mb-2 last:[&>p]:mb-0 text-xs sm:text-sm">
+                                {project.description.split('\n\n').map((line, index) => (
+                                  <p key={index}>{line}</p>
+                                ))}
+                              </CardDescription>
+                            </motion.div>
                           </CardHeader>
                           <CardContent className="pb-2 px-4">
-                            <div className="flex flex-wrap gap-1 sm:gap-2">
-                              {project.tags.map((tag) => (
-                                <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-[10px] sm:text-xs">
-                                  {tag}
-                                </Badge>
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.4 }}
+                              className="flex flex-wrap gap-1 sm:gap-2"
+                            >
+                              {project.tags.map((tag, tagIndex) => (
+                                <motion.div
+                                  key={tag}
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: 0.4 + tagIndex * 0.05 }}
+                                >
+                                  <Badge variant="secondary" className="bg-secondary/50 hover:bg-secondary text-[10px] sm:text-xs">
+                                    {tag}
+                                  </Badge>
+                                </motion.div>
                               ))}
-                            </div>
+                            </motion.div>
                           </CardContent>
                           <CardFooter className="flex justify-between p-4">
                             <motion.div
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.5 }}
                             >
                               <Button variant="ghost" size="sm" className="gap-1" asChild>
                                 <a
@@ -374,6 +419,9 @@ export default function Projects() {
                             <motion.div
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0, x: 10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.5 }}
                             >
                               <Button variant="ghost" size="sm" className="gap-1" asChild disabled={!project.demoLink}>
                                 <a
@@ -531,241 +579,8 @@ export default function Projects() {
                             <li>Real-time multiplayer with WebRTC</li>
                           </>
                         )}
-                        {selectedProjectData.id === 6 && (
-                          <>
-                            <li>AI-powered mental health support</li>
-                            <li>24/7 availability and immediate responses</li>
-                            <li>Personalized conversation flow</li>
-                            <li>Privacy-focused design</li>
-                            <li>Emergency resource recommendations</li>
-                            <li>Multi-language support</li>
-                          </>
-                        )}
-                        {selectedProjectData.id === 7 && (
-                          <>
-                            <li>Interactive reaction time test</li>
-                            <li>Random delay system</li>
-                            <li>Performance metrics and feedback</li>
-                            <li>Best times tracking</li>
-                            <li>Dark mode support</li>
-                            <li>Responsive design</li>
-                            <li>Beautiful animations</li>
-                          </>
-                        )}
-                        {selectedProjectData.id === 8 && (
-                          <>
-                            <li>AI-powered mind map generation using Google Gemini API</li>
-                            <li>Interactive node-based visualization with React Flow</li>
-                            <li>Custom node and edge components for enhanced visuals</li>
-                            <li>Export functionality for PNG images</li>
-                            <li>Responsive design with dark mode support</li>
-                            <li>Real-time node expansion and connection management</li>
-                            <li>Comprehensive error handling and user feedback system</li>
-                          </>
-                        )}
                       </ul>
                     </div>
-                    <div className="space-y-3">
-                      <h4 className="font-semibold">Code Snippets</h4>
-                      <div className="space-y-4">
-                        {selectedProjectData.id === 1 && (
-                          <>
-                            <CodeCard
-                              title="Basic Animation"
-                              language="JavaScript"
-                              code={`// Simple animation using requestAnimationFrame
-function animate() {
-  // Update position
-  position += speed;
-  
-  // Draw the character
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(character, position, 100);
-  
-  // Continue animation
-  requestAnimationFrame(animate);
-}
-
-// Start animation
-animate();`}
-                            />
-                            <CodeCard
-                              title="Character Movement"
-                              language="JavaScript"
-                              code={`// Handle keyboard input
-document.addEventListener('keydown', (e) => {
-  switch(e.key) {
-    case 'ArrowLeft':
-      character.x -= 5;
-      break;
-    case 'ArrowRight':
-      character.x += 5;
-      break;
-    case 'ArrowUp':
-      character.y -= 5;
-      break;
-    case 'ArrowDown':
-      character.y += 5;
-      break;
-  }
-});`}
-                            />
-                          </>
-                        )}
-                        {selectedProjectData.id === 2 && (
-                          <>
-                            <CodeCard
-                              title="Voice Command"
-                              language="JavaScript"
-                              code={`// Simple voice command recognition
-const recognition = new webkitSpeechRecognition();
-recognition.continuous = true;
-
-recognition.onresult = (event) => {
-  const command = event.results[0][0].transcript;
-  
-  if (command.includes('hello')) {
-    sayHello();
-  } else if (command.includes('time')) {
-    tellTime();
-  }
-};
-
-recognition.start();`}
-                            />
-                            <CodeCard
-                              title="Object Detection"
-                              language="Python"
-                              code={`# Simple object detection
-import cv2
-
-# Load image
-image = cv2.imread('image.jpg')
-
-# Convert to grayscale
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-# Detect objects
-faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-
-# Draw rectangles around faces
-for (x,y,w,h) in faces:
-    cv2.rectangle(image, (x,y), (x+w,y+h), (255,0,0), 2)
-
-# Show result
-cv2.imshow('Detected Objects', image)
-cv2.waitKey(0)`}
-                            />
-                          </>
-                        )}
-                        {selectedProjectData.id === 3 && (
-                          <>
-                            <CodeCard
-                              title="API Endpoint"
-                              language="JavaScript"
-                              code={`// Simple API endpoint
-app.get('/api/transactions', async (req, res) => {
-  try {
-    const transactions = await db.transactions.findMany({
-      where: {
-        userId: req.user.id
-      }
-    });
-    res.json(transactions);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});`}
-                            />
-                            <CodeCard
-                              title="Data Visualization"
-                              language="JavaScript"
-                              code={`// Create a simple chart
-const ctx = document.getElementById('myChart');
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Jan', 'Feb', 'Mar'],
-    datasets: [{
-      label: 'Spending',
-      data: [300, 400, 200],
-      borderColor: 'rgb(75, 192, 192)',
-    }]
-  }
-});`}
-                            />
-                          </>
-                        )}
-                        {selectedProjectData.id === 8 && (
-                          <>
-                            <CodeCard
-                              title="Mind Map Generation with Error Handling"
-                              language="TypeScript"
-                              code={`// Generate mind map from prompt with error handling
-async function generateMindMap(prompt: string) {
-  try {
-    const response = await gemini.generateContent({
-      contents: [{
-        parts: [{
-          text: \`Create a structured mind map for: \${prompt}\`
-        }]
-      }]
-    });
-    
-    if (!response.response) {
-      throw new Error('No response from Gemini API');
-    }
-    
-    const content = response.response.text();
-    return parseMindMap(content);
-  } catch (error) {
-    console.error('Error generating mind map:', error);
-    throw new Error('Failed to generate mind map. Please try again.');
-  }
-}`}
-                            />
-                            <CodeCard
-                              title="Error Boundary Component"
-                              language="TypeScript"
-                              code={`// Error boundary for handling API errors
-class MindMapErrorBoundary extends React.Component {
-  state = { hasError: false, error: null };
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="p-4 rounded-lg bg-destructive/10 border border-destructive">
-          <h3 className="text-destructive font-semibold">Error</h3>
-          <p className="text-sm text-muted-foreground mt-2">
-            {this.state.error?.message || 'Something went wrong'}
-          </p>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="mt-4"
-            onClick={() => this.setState({ hasError: false })}
-          >
-            Try Again
-          </Button>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}`}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <h4 className="font-semibold">Technical Details</h4>
                       <ul className="list-disc list-inside text-muted-foreground space-y-2">
@@ -817,36 +632,6 @@ class MindMapErrorBoundary extends React.Component {
                             <li>WebRTC for multiplayer with {'<'}100ms latency</li>
                             <li>IndexedDB for offline replay storage</li>
                             <li>Firebase for real-time leaderboard</li>
-                          </>
-                        )}
-                        {selectedProjectData.id === 6 && (
-                          <>
-                            <li>Next.js 14 with App Router</li>
-                            <li>TypeScript for type safety</li>
-                            <li>Tailwind CSS for styling</li>
-                            <li>OpenAI API for AI responses</li>
-                            <li>Vercel for deployment</li>
-                          </>
-                        )}
-                        {selectedProjectData.id === 7 && (
-                          <>
-                            <li>Next.js with App Router</li>
-                            <li>TypeScript for type safety</li>
-                            <li>Tailwind CSS for styling</li>
-                            <li>Framer Motion for animations</li>
-                            <li>shadcn/ui components</li>
-                            <li>Vercel for deployment</li>
-                          </>
-                        )}
-                        {selectedProjectData.id === 8 && (
-                          <>
-                            <li>Next.js 14 with App Router and TypeScript</li>
-                            <li>React Flow for node-based visualization</li>
-                            <li>Google Gemini API with error handling</li>
-                            <li>Tailwind CSS and shadcn/ui for styling</li>
-                            <li>Custom error boundary components</li>
-                            <li>PNG export using html-to-image library</li>
-                            <li>Robust error handling and recovery system</li>
                           </>
                         )}
                       </ul>

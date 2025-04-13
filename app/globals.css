@@ -96,6 +96,7 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Improved focus styles */
@@ -107,12 +108,15 @@ html {
 html {
   width: 100vw;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Better image rendering */
 img {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
+  max-width: 100%;
+  height: auto;
 }
 
 /* Animation keyframes */
@@ -154,8 +158,17 @@ img {
 }
 
 @media (max-width: 768px) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  body {
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   * {
-    cursor: auto !important;
+    scroll-behavior: auto;
   }
 }
 

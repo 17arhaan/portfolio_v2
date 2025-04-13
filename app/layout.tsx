@@ -10,6 +10,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { MouseAnimation } from "@/components/ui/mouse-animation"
 import { Analytics } from "@vercel/analytics/react"
 import Script from "next/script"
+import { SmoothScroll } from "@/components/ui/smooth-scroll"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -103,7 +104,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html lang="en" suppressHydrationWarning className={inter.variable} scroll-smooth>
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
@@ -115,10 +116,12 @@ export default function RootLayout({
           html {
             scroll-behavior: smooth;
             scroll-padding-top: 4rem;
+            -webkit-overflow-scrolling: touch;
           }
           body {
             scroll-behavior: smooth;
             overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
           }
           * {
             scroll-margin-top: 4rem;
@@ -126,11 +129,23 @@ export default function RootLayout({
           .scroll-smooth {
             scroll-behavior: smooth;
             transition: all 0.3s ease-in-out;
+            -webkit-overflow-scrolling: touch;
           }
           .scroll-smooth:hover {
             transition: all 0.3s ease-in-out;
           }
           @media (prefers-reduced-motion: reduce) {
+            html {
+              scroll-behavior: auto;
+            }
+            body {
+              scroll-behavior: auto;
+            }
+            .scroll-smooth {
+              transition: none;
+            }
+          }
+          @media (max-width: 768px) {
             html {
               scroll-behavior: auto;
             }
@@ -162,14 +177,16 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.className} min-h-screen bg-background scroll-smooth`}>
+      <body className={`${inter.className} min-h-screen bg-background scroll-smooth overflow-x-hidden`}>
         <ThemeProvider defaultTheme="system" storageKey="theme">
-          <div className="relative flex min-h-screen flex-col">
-            <MouseAnimation />
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          <MouseAnimation />
+          <SmoothScroll>
+            <div className="relative flex min-h-screen flex-col">
+              <Navbar />
+              <main className="flex-1 overflow-x-hidden">{children}</main>
+              <Footer />
+            </div>
+          </SmoothScroll>
           <Toaster />
           <SpeedInsights />
           <Analytics />

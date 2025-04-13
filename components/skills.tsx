@@ -151,7 +151,7 @@ export default function Skills() {
                   >
                     <Card className="border border-border/50 shadow-sm">
                       <CardContent className="pt-4 sm:pt-6">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                           {skills.map((skill, index) => (
                             <motion.div
                               key={skill.name}
@@ -165,15 +165,15 @@ export default function Skills() {
                               }}
                               className="group"
                             >
-                              <div className="mb-1 sm:mb-2 flex justify-between items-center">
-                                <span className="font-medium group-hover:text-primary transition-colors duration-300 text-xs sm:text-sm">
+                              <div className="mb-2 sm:mb-3 flex justify-between items-center">
+                                <span className="font-medium group-hover:text-primary transition-colors duration-300 text-sm sm:text-base">
                                   {skill.name}
                                 </span>
-                                <span className="text-muted-foreground text-[10px] sm:text-xs">{skill.level}%</span>
+                                <span className="text-muted-foreground text-xs sm:text-sm">{skill.level}%</span>
                               </div>
                               <Progress 
                                 value={skill.level} 
-                                className="h-1 sm:h-2 group-hover:bg-primary/20 transition-colors duration-300" 
+                                className="h-2 sm:h-3 group-hover:bg-primary/20 transition-colors duration-300" 
                               />
                             </motion.div>
                           ))}
