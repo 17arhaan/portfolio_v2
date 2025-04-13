@@ -93,12 +93,24 @@ const projectsData = [
     description:
       "• Built an interactive reaction time test with Next.js and Framer Motion\n\n• Implemented random delay system to prevent anticipation\n\n• Created performance metrics and feedback system\n\n• Added dark mode support and responsive design\n\n• Integrated beautiful animations and transitions\n\n• Developed tracking system for best times\n\n• Deployed on Vercel with automatic CI/CD pipeline",
     image: "/speedy_l.png?height=400&width=600",
-    tags: ["Node.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    tags: ["Node.js", "TypeScript", "Tailwind CSS", "Framer Motion","Next.js","Vercel","CI/CD","React","Animation"],
     demoLink: "https://speedy-green.vercel.app/",
     githubLink: "https://github.com/17arhaan/Speedy",
     categories: ["web"],
     featured: true,
-  }
+  },
+  {
+    id: 8,
+    title: "Mind Mapper",
+    description:
+      "• Built an AI-powered mind map generator using Next.js and React Flow\n\n• Integrated Google Gemini API for intelligent content generation with robust error handling\n\n• Implemented interactive node-based visualization with drag-and-drop functionality\n\n• Created custom node and edge components for enhanced visual appeal\n\n• Added export functionality for saving mind maps as high-quality PNG images\n\n• Developed a responsive design with dark mode support\n\n• Implemented real-time node expansion and connection management\n\n• Added comprehensive error handling and user feedback system",
+    image: "/mindmapper_l.png?height=400&width=600",
+    tags: ["Next.js", "TypeScript", "React Flow", "Google Gemini API", "Tailwind CSS", "shadcn/ui", "Node.js", "AI/ML", "Error Handling"],
+    demoLink: "https://v0-mindmap-app-sigma.vercel.app",
+    githubLink: "https://github.com/17arhaan/Mind_Mapper",
+    categories: ["web", "ai"],
+    featured: true,
+  },
 ]
 
 const categories = [
@@ -499,6 +511,17 @@ export default function Projects() {
                             <li>Beautiful animations</li>
                           </>
                         )}
+                        {selectedProjectData.id === 8 && (
+                          <>
+                            <li>AI-powered mind map generation using Google Gemini API</li>
+                            <li>Interactive node-based visualization with React Flow</li>
+                            <li>Custom node and edge components for enhanced visuals</li>
+                            <li>Export functionality for PNG images</li>
+                            <li>Responsive design with dark mode support</li>
+                            <li>Real-time node expansion and connection management</li>
+                            <li>Comprehensive error handling and user feedback system</li>
+                          </>
+                        )}
                       </ul>
                     </div>
                     <div className="space-y-3">
@@ -632,6 +655,71 @@ new Chart(ctx, {
                             />
                           </>
                         )}
+                        {selectedProjectData.id === 8 && (
+                          <>
+                            <CodeCard
+                              title="Mind Map Generation with Error Handling"
+                              language="TypeScript"
+                              code={`// Generate mind map from prompt with error handling
+async function generateMindMap(prompt: string) {
+  try {
+    const response = await gemini.generateContent({
+      contents: [{
+        parts: [{
+          text: \`Create a structured mind map for: \${prompt}\`
+        }]
+      }]
+    });
+    
+    if (!response.response) {
+      throw new Error('No response from Gemini API');
+    }
+    
+    const content = response.response.text();
+    return parseMindMap(content);
+  } catch (error) {
+    console.error('Error generating mind map:', error);
+    throw new Error('Failed to generate mind map. Please try again.');
+  }
+}`}
+                            />
+                            <CodeCard
+                              title="Error Boundary Component"
+                              language="TypeScript"
+                              code={`// Error boundary for handling API errors
+class MindMapErrorBoundary extends React.Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-4 rounded-lg bg-destructive/10 border border-destructive">
+          <h3 className="text-destructive font-semibold">Error</h3>
+          <p className="text-sm text-muted-foreground mt-2">
+            {this.state.error?.message || 'Something went wrong'}
+          </p>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="mt-4"
+            onClick={() => this.setState({ hasError: false })}
+          >
+            Try Again
+          </Button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}`}
+                            />
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -707,6 +795,17 @@ new Chart(ctx, {
                             <li>Framer Motion for animations</li>
                             <li>shadcn/ui components</li>
                             <li>Vercel for deployment</li>
+                          </>
+                        )}
+                        {selectedProjectData.id === 8 && (
+                          <>
+                            <li>Next.js 14 with App Router and TypeScript</li>
+                            <li>React Flow for node-based visualization</li>
+                            <li>Google Gemini API with error handling</li>
+                            <li>Tailwind CSS and shadcn/ui for styling</li>
+                            <li>Custom error boundary components</li>
+                            <li>PNG export using html-to-image library</li>
+                            <li>Robust error handling and recovery system</li>
                           </>
                         )}
                       </ul>

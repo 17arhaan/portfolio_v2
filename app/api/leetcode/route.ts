@@ -123,6 +123,7 @@ export async function GET() {
       maxStreak = 1;
       currentStreak = 1;
       
+      // Calculate max streak
       for (let i = 1; i < timestamps.length; i++) {
         const currentDate = new Date(timestamps[i] * 1000);
         currentDate.setHours(0, 0, 0, 0);
@@ -135,9 +136,6 @@ export async function GET() {
         if (diffDays === 1) {
           consecutiveDays++;
           maxStreak = Math.max(maxStreak, consecutiveDays);
-          if (i <= 10) { // If this is within the last 11 days
-            currentStreak = consecutiveDays;
-          }
         } else {
           consecutiveDays = 1;
         }
@@ -146,8 +144,44 @@ export async function GET() {
       // Calculate current streak
       const lastSubmissionDiff = Math.floor((today.getTime() - lastSolvedDate.getTime()) / (1000 * 60 * 60 * 24));
       
-      if (lastSubmissionDiff > 1) {
-        // If last submission was more than 1 day ago, reset streak
+      if (lastSubmissionDiff === 0) {
+        // If last submission was today, start counting from today
+        currentStreak = 1;
+        let streakDate = new Date(lastSolvedDate);
+        
+        for (let i = 1; i < timestamps.length; i++) {
+          const prevDate = new Date(timestamps[i] * 1000);
+          prevDate.setHours(0, 0, 0, 0);
+          
+          const diffDays = Math.floor((streakDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
+          
+          if (diffDays === 1) {
+            currentStreak++;
+            streakDate = prevDate;
+          } else {
+            break;
+          }
+        }
+      } else if (lastSubmissionDiff === 1) {
+        // If last submission was yesterday, start counting from yesterday
+        currentStreak = 1;
+        let streakDate = new Date(lastSolvedDate);
+        
+        for (let i = 1; i < timestamps.length; i++) {
+          const prevDate = new Date(timestamps[i] * 1000);
+          prevDate.setHours(0, 0, 0, 0);
+          
+          const diffDays = Math.floor((streakDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
+          
+          if (diffDays === 1) {
+            currentStreak++;
+            streakDate = prevDate;
+          } else {
+            break;
+          }
+        }
+      } else {
+        // If last submission was more than 1 day ago, streak is broken
         currentStreak = 0;
       }
 
