@@ -134,7 +134,7 @@ export default function Certifications() {
   return (
     <section id="certifications" className="py-20 bg-muted/30 relative overflow-hidden">
       <GradientBackground />
-      <div className="container px-4 max-w-[2000px] mx-auto relative z-10">
+      <div className="container px-12 max-w-[2000px] mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
