@@ -49,10 +49,10 @@ export const metadata: Metadata = {
     siteName: "Arhaan Girdhar Portfolio",
     images: [
       {
-        url: "/favicon.png",
+        url: "/meta.png",
         width: 1200,
-        height: 1200,
-        alt: "Arhaan Girdhar",
+        height: 630,
+        alt: "Arhaan Girdhar Portfolio",
       },
     ],
   },
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     title: "Arhaan Girdhar | Portfolio",
     description: "A showcase of my work, skills, and professional experience as a software engineer specializing in AI & ML. Explore my projects, skills, and get in touch for collaborations.",
     creator: "@Arrhhaan",
-    images: ["/favicon.png"],
+    images: ["/meta.png"],
   },
   robots: {
     index: true,
@@ -77,16 +77,18 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon.png', type: 'image/png' },
+      { url: '/favicon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon.png', type: 'image/png', sizes: '192x192' },
+      { url: '/favicon.png', type: 'image/png', sizes: '512x512' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png' },
+      { url: '/favicon.png', sizes: '180x180' },
     ],
     shortcut: '/favicon.ico',
     other: [
       {
         rel: 'mask-icon',
-        url: '/safari-pinned-tab.svg',
+        url: '/favicon.svg',
         color: '#000000'
       }
     ],

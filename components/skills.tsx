@@ -114,12 +114,12 @@ export default function Skills() {
         >
           <Tabs defaultValue="programming" className="w-full" onValueChange={setActiveTab}>
             <div className="relative">
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 mb-8 bg-muted/20 relative overflow-x-auto">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-1 sm:gap-2 mb-4 sm:mb-8 bg-muted/20 relative">
                 {Object.keys(skillsData).map((category) => (
                   <TabsTrigger
                     key={category}
                     value={category}
-                    className="text-xs sm:text-sm font-medium relative z-10 transition-colors duration-300 whitespace-nowrap"
+                    className="text-[10px] sm:text-xs md:text-sm font-medium relative z-10 transition-colors duration-300 py-1 sm:py-2"
                   >
                     {category.charAt(0).toUpperCase() + category.slice(1)}
                   </TabsTrigger>
@@ -150,8 +150,8 @@ export default function Skills() {
                     }}
                   >
                     <Card className="border border-border/50 shadow-sm">
-                      <CardContent className="pt-6">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                      <CardContent className="pt-4 sm:pt-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                           {skills.map((skill, index) => (
                             <motion.div
                               key={skill.name}
@@ -165,15 +165,15 @@ export default function Skills() {
                               }}
                               className="group"
                             >
-                              <div className="mb-2 flex justify-between items-center">
-                                <span className="font-medium group-hover:text-primary transition-colors duration-300 text-sm sm:text-base">
+                              <div className="mb-1 sm:mb-2 flex justify-between items-center">
+                                <span className="font-medium group-hover:text-primary transition-colors duration-300 text-xs sm:text-sm">
                                   {skill.name}
                                 </span>
-                                <span className="text-muted-foreground text-xs sm:text-sm">{skill.level}%</span>
+                                <span className="text-muted-foreground text-[10px] sm:text-xs">{skill.level}%</span>
                               </div>
                               <Progress 
                                 value={skill.level} 
-                                className="h-2 group-hover:bg-primary/20 transition-colors duration-300" 
+                                className="h-1 sm:h-2 group-hover:bg-primary/20 transition-colors duration-300" 
                               />
                             </motion.div>
                           ))}

@@ -176,7 +176,7 @@ export default function Projects() {
   return (
     <section id="projects" ref={sectionRef} className="py-20 bg-muted/30 relative overflow-hidden">
       <GradientBackground />
-      <div className="container px-4 max-w-[2000px] mx-auto relative z-10">
+      <div className="container px-4 sm:px-8 lg:px-16 max-w-[2000px] mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -241,7 +241,7 @@ export default function Projects() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[2000px] mx-auto"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 max-w-[2000px] mx-auto"
             >
               {filteredProjects.map((project, index) => {
                 const x = useMotionValue(0)
@@ -274,8 +274,17 @@ export default function Projects() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true, margin: "-100px" }}
-                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                    className={cn("h-full perspective-1000", project.featured && "md:col-span-2 lg:col-span-1")}
+                    whileHover={{ 
+                      y: -10,
+                      scale: 1.02,
+                      transition: { 
+                        duration: 0.3,
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20
+                      }
+                    }}
+                    className={cn("h-full perspective-1000", project.featured && "sm:col-span-2 lg:col-span-1")}
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseLeave}
                   >
@@ -284,6 +293,7 @@ export default function Projects() {
                         rotateX,
                         rotateY,
                         transformStyle: "preserve-3d",
+                        transition: "transform 0.1s ease-out"
                       }}
                       className="h-full"
                     >
@@ -292,61 +302,92 @@ export default function Projects() {
                         intensity={0.7}
                       >
                         <Card
-                          className="h-full overflow-hidden group cursor-pointer border border-border/50 hover:border-primary/50 transition-colors duration-300"
+                          className="h-full overflow-hidden group cursor-pointer border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10"
                           onClick={() => setSelectedProject(project.id)}
                         >
-                          <div className="relative overflow-hidden h-64">
-                            <Image
-                              src={project.image || "/placeholder.svg"}
-                              alt={project.title}
-                              fill
-                              className="object-cover transition-transform duration-700 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="relative overflow-hidden h-48 sm:h-56">
+                            <motion.div
+                              initial={{ scale: 1 }}
+                              whileHover={{ scale: 1.1 }}
+                              transition={{ duration: 0.5 }}
+                              className="absolute inset-0"
+                            >
+                              <Image
+                                src={project.image || "/placeholder.svg"}
+                                alt={project.title}
+                                fill
+                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                              />
+                            </motion.div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                            <motion.div
+                              initial={{ opacity: 0, y: 20 }}
+                              whileHover={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="absolute bottom-0 left-0 right-0 p-4"
+                            >
+                              <div className="flex flex-wrap gap-1">
+                                {project.tags.slice(0, 3).map((tag) => (
+                                  <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-[10px] sm:text-xs">
+                                    {tag}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </motion.div>
                           </div>
-                          <CardHeader className="space-y-4">
-                            <CardTitle className="group-hover:text-primary transition-colors duration-300 text-xl">
+                          <CardHeader className="space-y-2 p-4">
+                            <CardTitle className="group-hover:text-primary transition-colors duration-300 text-lg sm:text-xl">
                               {project.title}
                             </CardTitle>
-                            <CardDescription className="line-clamp-2 [&>p]:mb-2 last:[&>p]:mb-0 text-sm">
+                            <CardDescription className="line-clamp-2 [&>p]:mb-2 last:[&>p]:mb-0 text-xs sm:text-sm">
                               {project.description.split('\n\n').map((line, index) => (
                                 <p key={index}>{line}</p>
                               ))}
                             </CardDescription>
                           </CardHeader>
-                          <CardContent className="pb-4">
-                            <div className="flex flex-wrap gap-2">
+                          <CardContent className="pb-2 px-4">
+                            <div className="flex flex-wrap gap-1 sm:gap-2">
                               {project.tags.map((tag) => (
-                                <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-xs">
+                                <Badge key={tag} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-[10px] sm:text-xs">
                                   {tag}
                                 </Badge>
                               ))}
                             </div>
                           </CardContent>
-                          <CardFooter className="flex justify-between pb-6">
-                            <Button variant="ghost" size="sm" className="gap-1" asChild>
-                              <a
-                                href={project.githubLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <Github className="h-4 w-4" />
-                                <span className="sr-only md:not-sr-only">Code</span>
-                              </a>
-                            </Button>
-                            <Button variant="ghost" size="sm" className="gap-1" asChild disabled={!project.demoLink}>
-                              <a
-                                href={project.demoLink || "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                                className={!project.demoLink ? "pointer-events-none opacity-50" : ""}
-                              >
-                                <ExternalLink className="h-4 w-4" />
-                                <span className="sr-only md:not-sr-only">{project.demoLink ? "View Demo" : "Working on Demo"}</span>
-                              </a>
-                            </Button>
+                          <CardFooter className="flex justify-between p-4">
+                            <motion.div
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <Button variant="ghost" size="sm" className="gap-1" asChild>
+                                <a
+                                  href={project.githubLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <Github className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="sr-only sm:not-sr-only text-xs">Code</span>
+                                </a>
+                              </Button>
+                            </motion.div>
+                            <motion.div
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <Button variant="ghost" size="sm" className="gap-1" asChild disabled={!project.demoLink}>
+                                <a
+                                  href={project.demoLink || "#"}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className={!project.demoLink ? "pointer-events-none opacity-50" : ""}
+                                >
+                                  <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="sr-only sm:not-sr-only text-xs">{project.demoLink ? "View Demo" : "Working on Demo"}</span>
+                                </a>
+                              </Button>
+                            </motion.div>
                           </CardFooter>
                         </Card>
                       </GlowEffect>
